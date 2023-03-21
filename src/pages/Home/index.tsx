@@ -1,15 +1,45 @@
 import { HeaderButton } from "../../components/buttons/HeaderButton";
-import { HeaderButtonsContainer } from "./styles";
+import { MessageItem } from "../../components/MessageItem";
+import {
+  Container,
+  Header,
+  HeaderButtonsContainer,
+  MessagesList,
+  Title,
+  TitleContainer,
+} from "./styles";
 
 function Home() {
   return (
-    <HeaderButtonsContainer>
-      <HeaderButton title="Messages" isSelected />
-      <HeaderButton title="Messages" />
-      <HeaderButton title="Messages" />
-      <HeaderButton title="Messages" />
-      <HeaderButton title="Messages" />
-    </HeaderButtonsContainer>
+    <Container>
+      <Header>
+        <TitleContainer>
+          <Title>TextMe</Title>
+        </TitleContainer>
+
+        <HeaderButtonsContainer>
+          <HeaderButton title="Messages" isSelected />
+          <HeaderButton title="Messages" />
+          <HeaderButton title="Messages" />
+          <HeaderButton title="Messages" />
+          <HeaderButton title="Messages" />
+        </HeaderButtonsContainer>
+      </Header>
+
+      <MessagesList>
+        <MessageItem />
+        <MessageItem />
+        <MessageItem />
+        <MessageItem />
+        <MessageItem />
+        <MessageItem />
+        <MessageItem />
+        <MessageItem />
+        <MessageItem />
+        <MessageItem />
+        <MessageItem />
+      </MessagesList>
+    </Container>
   );
 }
 

@@ -13,7 +13,7 @@ export const Main = styled.main`
   height: 80vh;
   background-color: #1e222a;
   border-radius: 40px;
-  padding: 30px 20px;
+  padding: 30px 0px;
 
   @media (max-width: 450px) {
     width: 100%;
