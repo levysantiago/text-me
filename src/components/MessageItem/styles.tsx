@@ -21,10 +21,11 @@ export const ProfileImage = styled.div`
 `;
 
 export const ContentContainer = styled.div`
-  width: 80%;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 5px;
+  flex: 1;
 `;
 
 export const ContactName = styled.span`
@@ -43,7 +44,7 @@ export const MessagePreview = styled.span`
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
-  width: 250px;
+  width: 200px;
 `;
 
 export const Time = styled.span`
