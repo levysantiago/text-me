@@ -1,7 +1,16 @@
-import { Title } from "./styles";
+import { HeaderButton } from "../../components/buttons/HeaderButton";
+import { HeaderButtonsContainer } from "./styles";
 
 function Home() {
-  return <Title>Home</Title>;
+  return (
+    <HeaderButtonsContainer>
+      <HeaderButton title="Messages" isSelected />
+      <HeaderButton title="Messages" />
+      <HeaderButton title="Messages" />
+      <HeaderButton title="Messages" />
+      <HeaderButton title="Messages" />
+    </HeaderButtonsContainer>
+  );
 }
 
 export default Home;
