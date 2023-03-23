@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { createAvatar } from "../../lib/create-avatar";
 import {
   ContactName,
   Container,
@@ -8,15 +10,18 @@ import {
 } from "./styles";
 
 interface IMessageItemProps {
+  contactName: string;
   onClick?: () => void;
 }
 
-export function MessageItem({ onClick }: IMessageItemProps) {
+export function MessageItem({ onClick, contactName }: IMessageItemProps) {
+  const [avatar, setAvatar] = useState(createAvatar(contactName));
+
   return (
     <Container onClick={onClick}>
-      <ProfileImage />
+      <ProfileImage src={avatar} alt="avatar" />
       <ContentContainer>
-        <ContactName>John Duo</ContactName>
+        <ContactName>{contactName}</ContactName>
         <div style={{ display: "flex", flex: "2" }}>
           <MessagePreview>
             Message aasldkjasldj alskdjald jaskl jalsk jasl aldkasjd laksjdlas

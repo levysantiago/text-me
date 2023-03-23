@@ -1,4 +1,6 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import { createAvatar } from "../../lib/create-avatar";
 import {
   BackIcon,
   BackIconContainer,
@@ -18,6 +20,21 @@ import {
 
 export function Chat() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const [avatar, setAvatar] = useState("");
+  const [contactName, setContactName] = useState("");
+
+  useEffect(() => {
+    const _contactName = searchParams.get("contactName");
+
+    if (!_contactName) {
+      navigate("/");
+      return;
+    }
+
+    setContactName(_contactName);
+    setAvatar(createAvatar(_contactName));
+  }, []);
 
   return (
     <Container>
@@ -29,8 +46,8 @@ export function Chat() {
         >
           <BackIcon />
         </BackIconContainer>
-        <ProfileImage />
-        <ContactName>Name</ContactName>
+        <ProfileImage src={avatar} alt="Avatar image" />
+        <ContactName>{contactName}</ContactName>
       </Header>
 
       <ChatMessagesContainer>

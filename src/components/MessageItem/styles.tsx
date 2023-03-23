@@ -17,10 +17,10 @@ export const Container = styled.button.attrs({ type: "button" })`
   }
 `;
 
-export const ProfileImage = styled.div`
+export const ProfileImage = styled.img`
   width: 30px;
   height: 30px;
-  background-color: #000;
+  /* background-color: #000; */
   border-radius: 100%;
 `;
 

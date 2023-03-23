@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { createSearchParams, useNavigate } from "react-router-dom";
 import { HeaderButton } from "../../components/buttons/HeaderButton";
 import { MessageItem } from "../../components/MessageItem";
 import {
@@ -28,20 +28,24 @@ function Home() {
 
       <MessagesList>
         <MessageItem
+          contactName="John Duo"
           onClick={() => {
-            navigate("/chat");
+            navigate({
+              pathname: "/chat",
+              search: `${createSearchParams({ contactName: "John Duo" })}`,
+            });
           }}
         />
-        <MessageItem />
-        <MessageItem />
-        <MessageItem />
-        <MessageItem />
-        <MessageItem />
-        <MessageItem />
-        <MessageItem />
-        <MessageItem />
-        <MessageItem />
-        <MessageItem />
+        <MessageItem contactName="John Duo2" />
+        <MessageItem contactName="John Duo3" />
+        <MessageItem contactName="John Duo4" />
+        <MessageItem contactName="John Duo5" />
+        <MessageItem contactName="John Duo6" />
+        <MessageItem contactName="John Duo7" />
+        <MessageItem contactName="John Duo8" />
+        <MessageItem contactName="John Duo9" />
+        <MessageItem contactName="John Duo10" />
+        <MessageItem contactName="John Duo11" />
       </MessagesList>
     </Container>
   );

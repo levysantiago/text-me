@@ -45,10 +45,9 @@ export const BackIcon = styled.img.attrs({
   height: 15px;
 `;
 
-export const ProfileImage = styled.div`
+export const ProfileImage = styled.img`
   width: 30px;
   height: 30px;
-  background-color: #fafafa;
   border-radius: 100%;
 `;
 
