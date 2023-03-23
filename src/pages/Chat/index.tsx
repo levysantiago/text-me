@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom";
 import {
   BackIcon,
+  BackIconContainer,
   ChatMessagesContainer,
   ContactName,
   Container,
@@ -11,13 +13,22 @@ import {
   MessageBlockContent,
   ProfileImage,
   SendIcon,
+  SendIconContainer,
 } from "./styles";
 
 export function Chat() {
+  const navigate = useNavigate();
+
   return (
     <Container>
       <Header>
-        <BackIcon />
+        <BackIconContainer
+          onClick={() => {
+            navigate("/");
+          }}
+        >
+          <BackIcon />
+        </BackIconContainer>
         <ProfileImage />
         <ContactName>Name</ContactName>
       </Header>
@@ -44,7 +55,9 @@ export function Chat() {
 
       <InputMessageContainer>
         <InputMessage />
-        <SendIcon />
+        <SendIconContainer>
+          <SendIcon />
+        </SendIconContainer>
       </InputMessageContainer>
     </Container>
   );

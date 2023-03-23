@@ -1,12 +1,16 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const Container = styled.button.attrs({ type: "button" })`
   position: relative;
   padding: 20px 10px;
   display: flex;
   gap: 10px;
   align-items: center;
   cursor: pointer;
+  border: none;
+  background-color: transparent;
+  text-align: start;
+  width: 100%;
 
   &:hover {
     background-color: #303540;

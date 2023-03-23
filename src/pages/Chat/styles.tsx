@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import arrow_left_icon from "../../assets/arrow-left.svg";
+import send_icon from "../../assets/send.svg";
 
 interface IChatProps {
   isUserMessage?: boolean;
@@ -23,11 +25,23 @@ export const Header = styled.div`
   gap: 10px;
 `;
 
-export const BackIcon = styled.div`
+export const BackIconContainer = styled.div`
   width: 25px;
   height: 25px;
-  background-color: #8a4de6;
+  background-color: transparent;
   border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+`;
+
+export const BackIcon = styled.img.attrs({
+  src: arrow_left_icon,
+  alt: "Back icon",
+})`
+  width: 15px;
+  height: 15px;
 `;
 
 export const ProfileImage = styled.div`
@@ -68,11 +82,21 @@ export const InputMessage = styled.input`
   color: #fafafa;
 `;
 
-export const SendIcon = styled.div`
+export const SendIconContainer = styled.div`
   width: 50px;
   height: 50px;
   background-color: #8a4de6;
   border-radius: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+`;
+
+export const SendIcon = styled.img.attrs({ src: send_icon, alt: "Send icon" })`
+  width: 25px;
+  height: 25px;
+  margin-left: 3px;
 `;
 
 // CHAT MESSAGES

@@ -7,9 +7,13 @@ import {
   ProfileImage,
 } from "./styles";
 
-export function MessageItem() {
+interface IMessageItemProps {
+  onClick?: () => void;
+}
+
+export function MessageItem({ onClick }: IMessageItemProps) {
   return (
-    <Container>
+    <Container onClick={onClick}>
       <ProfileImage />
       <ContentContainer>
         <ContactName>John Duo</ContactName>

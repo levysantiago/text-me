@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { HeaderButton } from "../../components/buttons/HeaderButton";
 import { MessageItem } from "../../components/MessageItem";
 import {
@@ -10,6 +11,8 @@ import {
 } from "./styles";
 
 function Home() {
+  const navigate = useNavigate();
+
   return (
     <Container>
       <Header>
@@ -19,15 +22,16 @@ function Home() {
 
         <HeaderButtonsContainer>
           <HeaderButton title="Messages" isSelected />
-          <HeaderButton title="Messages" />
-          <HeaderButton title="Messages" />
-          <HeaderButton title="Messages" />
-          <HeaderButton title="Messages" />
+          <HeaderButton title="Status" />
         </HeaderButtonsContainer>
       </Header>
 
       <MessagesList>
-        <MessageItem />
+        <MessageItem
+          onClick={() => {
+            navigate("/chat");
+          }}
+        />
         <MessageItem />
         <MessageItem />
         <MessageItem />
