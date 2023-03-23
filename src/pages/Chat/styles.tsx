@@ -25,7 +25,7 @@ export const Header = styled.div`
   gap: 10px;
 `;
 
-export const BackIconContainer = styled.div`
+export const BackIconContainer = styled.button.attrs({ type: "button" })`
   width: 25px;
   height: 25px;
   background-color: transparent;
@@ -34,6 +34,7 @@ export const BackIconContainer = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  border: none;
 `;
 
 export const BackIcon = styled.img.attrs({
@@ -82,7 +83,7 @@ export const InputMessage = styled.input`
   color: #fafafa;
 `;
 
-export const SendIconContainer = styled.div`
+export const SendIconContainer = styled.button.attrs({ type: "button" })`
   width: 50px;
   height: 50px;
   background-color: #8a4de6;
@@ -91,6 +92,7 @@ export const SendIconContainer = styled.div`
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  border: none;
 `;
 
 export const SendIcon = styled.img.attrs({ src: send_icon, alt: "Send icon" })`
