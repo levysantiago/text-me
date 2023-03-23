@@ -22,7 +22,7 @@ function Home() {
 
         <HeaderButtonsContainer>
           <HeaderButton title="Messages" isSelected />
-          <HeaderButton title="Status" />
+          <HeaderButton title="Add contact" />
         </HeaderButtonsContainer>
       </Header>
 
