@@ -7,11 +7,12 @@ interface IHeaderButtonProps {
   isSelected?: boolean;
 }
 
-export const Title = styled.span`
+export const Title = styled.span((props: IHeaderButtonProps) => `
   font-family: ${robotoRegular.style.fontFamily};
   font-weight: 400;
   font-size: 12px;
-`;
+  color: ${props.isSelected ? "#1E222A" : "#fafafa"};
+`);
 
 export const Container = styled.button(
   (props: IHeaderButtonProps) => `
@@ -25,10 +26,6 @@ export const Container = styled.button(
 
   &:hover {
     background-color: ${props.isSelected ? "#8a4de6" : "#303540"};
-  }
-
-  ${Title} {
-    color: ${props.isSelected ? "#1E222A" : "#fafafa"};
   }
 `
 );

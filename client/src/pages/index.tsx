@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { createSearchParams } from "react-router-dom";
-import { HeaderButton } from "../components/buttons/HeaderButton";
-import { MessageItem } from "../components/MessageItem";
+import { useEffect } from 'react'
+import { createSearchParams } from 'react-router-dom'
+import { HeaderButton } from '../components/buttons/HeaderButton'
+import { MessageItem } from '../components/MessageItem'
 import {
   Container,
   Header,
@@ -9,27 +9,25 @@ import {
   MessagesList,
   Title,
   TitleContainer,
-} from "./styles";
-import io, { Socket } from "socket.io-client"
-import Head from "next/head";
-import { useRouter } from "next/router";
-import { WebsiteContainer } from "@/templates/website-container";
+} from './styles'
+// import io, { Socket } from 'socket.io-client'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { WebsiteContainer } from '@/templates/website-container'
 
 function Home() {
-  const router = useRouter();
-  const [socket, setSocket] = useState<Socket>()
+  const router = useRouter()
+  // const [socket, setSocket] = useState<Socket>()
 
   useEffect(() => {
     // const _socket = io("http://localhost:3333")
     // console.log(_socket);
-
     // setSocket(_socket)
   }, [])
 
-  useEffect(() => {
-    socket?.emit("newMessage", { content: "asd" })
-
-  }, [socket])
+  // useEffect(() => {
+  //   socket?.emit('newMessage', { content: 'asd' })
+  // }, [socket])
 
   return (
     <>
@@ -56,12 +54,10 @@ function Home() {
             <MessageItem
               contactName="John Duo"
               onClick={() => {
-                router.push(
-                  {
-                    pathname: `/chat`,
-                    search: `${createSearchParams({ contactName: "John Duo" })
-                      }`,
-                  })
+                router.push({
+                  pathname: `/chat`,
+                  search: `${createSearchParams({ contactName: 'John Duo' })}`,
+                })
               }}
             />
             <MessageItem contactName="John Duo2" />
@@ -78,7 +74,7 @@ function Home() {
         </Container>
       </WebsiteContainer>
     </>
-  );
+  )
 }
 
-export default Home;
+export default Home

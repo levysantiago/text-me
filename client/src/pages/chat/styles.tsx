@@ -1,18 +1,18 @@
-import styled from "@emotion/styled";
-import { Roboto } from "next/font/google"
+import styled from '@emotion/styled'
+import { Roboto } from 'next/font/google'
 
-const robotoMedium = Roboto({ weight: "500", subsets: ["latin"], })
-const robotoRegular = Roboto({ weight: "400", subsets: ["latin"], })
+const robotoMedium = Roboto({ weight: '500', subsets: ['latin'] })
+const robotoRegular = Roboto({ weight: '400', subsets: ['latin'] })
 
 interface IChatProps {
-  isUserMessage?: boolean;
+  isUserMessage?: boolean
 }
 
 export const Container = styled.div`
   width: 100%;
   height: 95%;
   padding: 30px 0px 0px 0px;
-`;
+`
 
 export const Header = styled.div`
   background-color: #0a0d14;
@@ -25,7 +25,7 @@ export const Header = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-`;
+`
 
 export const BackIconContainer = styled.button`
   width: 25px;
@@ -37,25 +37,25 @@ export const BackIconContainer = styled.button`
   justify-content: center;
   cursor: pointer;
   border: none;
-`;
+`
 
 export const BackIcon = styled.img`
   width: 15px;
   height: 15px;
-`;
+`
 
 export const ProfileImage = styled.img`
   width: 30px;
   height: 30px;
   border-radius: 100%;
-`;
+`
 
 export const ContactName = styled.span`
   font-family: ${robotoMedium.style.fontFamily};
   font-weight: 500;
   font-size: 14px;
   color: #fafafa;
-`;
+`
 
 export const InputMessageContainer = styled.div`
   display: flex;
@@ -65,7 +65,7 @@ export const InputMessageContainer = styled.div`
   padding: 0px 10px;
   gap: 5px;
   align-items: center;
-`;
+`
 
 export const InputMessage = styled.input`
   background-color: #0a0d14;
@@ -79,7 +79,7 @@ export const InputMessage = styled.input`
   font-weight: 400;
   font-size: 14px;
   color: #fafafa;
-`;
+`
 
 export const SendIconContainer = styled.button`
   width: 50px;
@@ -91,13 +91,13 @@ export const SendIconContainer = styled.button`
   justify-content: center;
   cursor: pointer;
   border: none;
-`;
+`
 
 export const SendIcon = styled.img`
   width: 25px;
   height: 25px;
   margin-left: 3px;
-`;
+`
 
 // CHAT MESSAGES
 
@@ -107,7 +107,7 @@ export const ChatMessagesContainer = styled.div`
   height: 88%;
   width: 100%;
   justify-content: flex-end;
-`;
+`
 
 export const MessageBlock = styled.div`
   width: 50%;
@@ -116,23 +116,23 @@ export const MessageBlock = styled.div`
   border-radius: 8px;
   display: flex;
   align-items: center;
-`;
+`
 
 export const MessageBlockContent = styled.span`
   font-family: ${robotoRegular.style.fontFamily};
   font-weight: 400;
   font-size: 12px;
   color: #fafafa;
-`;
+`
 
 export const MessageBlockContainer = styled.div(
   (props: IChatProps) => `
   display: flex;
   padding: 5px 10px;
-  justify-content: ${props.isUserMessage ? "flex-end" : "flex-start"};
+  justify-content: ${props.isUserMessage ? 'flex-end' : 'flex-start'};
   
   ${MessageBlock}{
-    background-color: ${props.isUserMessage ? "#8a4de6" : "#2e323a"};
+    background-color: ${props.isUserMessage ? '#8a4de6' : '#2e323a'};
   }
-`
-);
+`,
+)

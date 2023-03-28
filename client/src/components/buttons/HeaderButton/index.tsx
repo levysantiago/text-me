@@ -8,7 +8,7 @@ interface IHeaderButtonProps {
 export function HeaderButton({ title, isSelected }: IHeaderButtonProps) {
   return (
     <Container type="button" isSelected={isSelected}>
-      <Title>{title}</Title>
+      <Title isSelected={isSelected}>{title}</Title>
     </Container>
   );
 }

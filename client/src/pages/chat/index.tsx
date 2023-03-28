@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import { createAvatar } from "../../lib/create-avatar";
-import arrow_left_icon from "@/assets/arrow-left.svg";
-import send_icon from "@/assets/send.svg";
+import { useEffect, useState } from 'react'
+import { createAvatar } from '../../lib/create-avatar'
+import arrowLeftIcon from '@/assets/arrow-left.svg'
+import sendIcon from '@/assets/send.svg'
 import {
   BackIcon,
   BackIconContainer,
@@ -17,27 +17,29 @@ import {
   ProfileImage,
   SendIcon,
   SendIconContainer,
-} from "./styles";
-import { useRouter } from "next/router";
-import { WebsiteContainer } from "@/templates/website-container";
-import Head from "next/head";
+} from './styles'
+import { useRouter } from 'next/router'
+import { WebsiteContainer } from '@/templates/website-container'
+import Head from 'next/head'
 
 export default function Chat() {
-  const router = useRouter();
-  const [avatar, setAvatar] = useState("");
-  const [contactName, setContactName] = useState("");
+  const router = useRouter()
+  const [avatar, setAvatar] = useState('')
+  const [contactName, setContactName] = useState('')
 
   useEffect(() => {
-    const _contactName = new URL(location.href).searchParams.get("contactName")
+    const _contactName = new URL(window.location.href).searchParams.get(
+      'contactName',
+    )
 
-    if (!_contactName || typeof _contactName !== "string") {
-      router.push("/");
-      return;
+    if (!_contactName || typeof _contactName !== 'string') {
+      router.push('/')
+      return
     }
 
-    setContactName(_contactName);
-    setAvatar(createAvatar(_contactName));
-  }, []);
+    setContactName(_contactName)
+    setAvatar(createAvatar(_contactName))
+  }, [])
 
   return (
     <>
@@ -53,11 +55,10 @@ export default function Chat() {
             <BackIconContainer
               type="button"
               onClick={() => {
-                router.push("/");
+                router.push('/')
               }}
             >
-              <BackIcon src={arrow_left_icon.src}
-                alt={"Back icon"} />
+              <BackIcon src={arrowLeftIcon.src} alt={'Back icon'} />
             </BackIconContainer>
             <ProfileImage src={avatar} alt="Avatar image" />
             <ContactName>{contactName}</ContactName>
@@ -86,11 +87,11 @@ export default function Chat() {
           <InputMessageContainer>
             <InputMessage />
             <SendIconContainer type="button">
-              <SendIcon src={send_icon.src} alt={"Send icon"} />
+              <SendIcon src={sendIcon.src} alt={'Send icon'} />
             </SendIconContainer>
           </InputMessageContainer>
         </Container>
       </WebsiteContainer>
     </>
-  );
+  )
 }
