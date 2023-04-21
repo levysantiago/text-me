@@ -1,4 +1,3 @@
-import { HttpException, HttpStatus } from '@nestjs/common';
 import { User } from 'src/app/entities/user';
 import { UserRepository } from 'src/app/repositories/user-repository';
 
