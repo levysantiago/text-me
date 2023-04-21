@@ -1,7 +1,4 @@
 import styled from '@emotion/styled'
-import { Roboto } from 'next/font/google'
-
-const robotoRegular = Roboto({ weight: '400', subsets: ['latin'] })
 
 export const InputContainer = styled.div`
   display: flex;
@@ -16,8 +13,8 @@ export const InputItem = styled.input`
   background-color: #0d1015;
   border: none;
   color: #fafafa;
-  font-family: ${robotoRegular.style.fontFamily};
-  font-weight: ${robotoRegular.style.fontWeight};
+  font-family: Roboto, sans-serif;
+  font-weight: 400;
   font-size: 14px;
 
   ::placeholder {

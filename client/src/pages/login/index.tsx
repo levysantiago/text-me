@@ -1,7 +1,4 @@
-import { DefaultButton } from '@/components/buttons/DefaultButton'
-import { Input } from '@/components/Input'
-import { WebsiteContainer } from '@/templates/website-container'
-import Head from 'next/head'
+'use client'
 import { useState } from 'react'
 import {
   ButtonContainer,
@@ -10,25 +7,26 @@ import {
   Title,
   TitleContainer,
 } from './styles'
+import { Input } from 'components/Input'
+import { DefaultButton } from 'components/buttons/DefaultButton'
+import { WebsiteContainer } from 'templates/WebsiteContainer'
 
-export default function Login() {
+export default async function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  function handleSubmit() {
-    console.log(email)
-    console.log(password)
+  async function handleSubmit() {
+    // appCookies.set('access_token', 'asd')
+    // console.log(appCookies)
+    // console.log(setAccessToken)
+    // console.log(accessToken)
+    // const responseData = await loginService({ email, password })
+    // console.log(responseData)
+    // setAccessToken(responseData.data.access_token)
   }
 
   return (
     <>
-      <Head>
-        <title>TextMe</title>
-        <meta name="description" content="TextMe chat" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <WebsiteContainer>
         <TitleContainer>
           <Title>TextMe</Title>

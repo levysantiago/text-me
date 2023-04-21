@@ -1,7 +1,4 @@
-import styled from "@emotion/styled";
-import { Roboto } from "next/font/google";
-const robotoRegular = Roboto({ weight: "400", subsets: ["latin"], })
-const robotoMedium = Roboto({ weight: "500", subsets: ["latin"], })
+import styled from '@emotion/styled'
 
 export const Container = styled.button`
   position: relative;
@@ -18,14 +15,21 @@ export const Container = styled.button`
   &:hover {
     background-color: #303540;
   }
-`;
+`
 
 export const ProfileImage = styled.img`
   width: 30px;
   height: 30px;
   /* background-color: #000; */
   border-radius: 100%;
-`;
+`
+
+export const ProfileImageDefault = styled.div`
+  width: 30px;
+  height: 30px;
+  background-color: #000;
+  border-radius: 100%;
+`
 
 export const ContentContainer = styled.div`
   width: 100%;
@@ -33,17 +37,17 @@ export const ContentContainer = styled.div`
   flex-direction: column;
   gap: 5px;
   flex: 1;
-`;
+`
 
 export const ContactName = styled.span`
-  font-family: ${robotoMedium.style.fontFamily};
+  font-family: Roboto, sans-serif;
   font-weight: 500;
   font-size: 12px;
   color: #fafafa;
-`;
+`
 
 export const MessagePreview = styled.span`
-  font-family: ${robotoRegular.style.fontFamily};
+  font-family: Roboto, sans-serif;
   font-size: 11px;
   font-weight: 400;
   color: #4f5257;
@@ -52,14 +56,14 @@ export const MessagePreview = styled.span`
   white-space: nowrap;
   overflow: hidden;
   width: 200px;
-`;
+`
 
 export const Time = styled.span`
   position: absolute;
   top: 10px;
   right: 10px;
-  font-family: ${robotoRegular.style.fontFamily};
+  font-family: Roboto, sans-serif;
   font-weight: 400;
   font-size: 10px;
   color: #4f5257;
-`;
+`

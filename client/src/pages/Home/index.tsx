@@ -1,7 +1,5 @@
 import { useEffect } from 'react'
-import { createSearchParams } from 'react-router-dom'
-import { HeaderButton } from '../components/buttons/HeaderButton'
-import { MessageItem } from '../components/MessageItem'
+import { createSearchParams, useNavigate } from 'react-router-dom'
 import {
   Container,
   Header,
@@ -10,13 +8,13 @@ import {
   Title,
   TitleContainer,
 } from './styles'
+import { WebsiteContainer } from 'templates/WebsiteContainer'
+import { HeaderButton } from 'components/buttons/HeaderButton'
+import { MessageItem } from 'components/MessageItem'
 // import io, { Socket } from 'socket.io-client'
-import Head from 'next/head'
-import { useRouter } from 'next/router'
-import { WebsiteContainer } from '@/templates/website-container'
 
 function Home() {
-  const router = useRouter()
+  const navigate = useNavigate()
   // const [socket, setSocket] = useState<Socket>()
 
   useEffect(() => {
@@ -31,12 +29,6 @@ function Home() {
 
   return (
     <>
-      <Head>
-        <title>TextMe</title>
-        <meta name="description" content="TextMe chat" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <WebsiteContainer>
         <Container>
           <Header>
@@ -54,9 +46,11 @@ function Home() {
             <MessageItem
               contactName="John Duo"
               onClick={() => {
-                router.push({
+                navigate({
                   pathname: `/chat`,
-                  search: `${createSearchParams({ contactName: 'John Duo' })}`,
+                  search: `${createSearchParams({
+                    contactName: 'John Duo',
+                  })}`,
                 })
               }}
             />

@@ -1,8 +1,4 @@
 import styled from '@emotion/styled'
-import { Roboto } from 'next/font/google'
-
-const robotoMedium = Roboto({ weight: '500', subsets: ['latin'] })
-const robotoRegular = Roboto({ weight: '400', subsets: ['latin'] })
 
 interface IChatProps {
   isUserMessage?: boolean
@@ -51,7 +47,7 @@ export const ProfileImage = styled.img`
 `
 
 export const ContactName = styled.span`
-  font-family: ${robotoMedium.style.fontFamily};
+  font-family: Roboto, sans-serif;
   font-weight: 500;
   font-size: 14px;
   color: #fafafa;
@@ -75,7 +71,7 @@ export const InputMessage = styled.input`
   border: none;
   border-radius: 100px;
   padding: 5px 20px;
-  font-family: ${robotoMedium.style.fontFamily};
+  font-family: Roboto, sans-serif;
   font-weight: 400;
   font-size: 14px;
   color: #fafafa;
@@ -119,7 +115,7 @@ export const MessageBlock = styled.div`
 `
 
 export const MessageBlockContent = styled.span`
-  font-family: ${robotoRegular.style.fontFamily};
+  font-family: Roboto, sans-serif;
   font-weight: 400;
   font-size: 12px;
   color: #fafafa;

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import { createAvatar } from '../../lib/create-avatar'
-import arrowLeftIcon from '@/assets/arrow-left.svg'
-import sendIcon from '@/assets/send.svg'
+import arrowLeftIcon from 'assets/arrow-left.svg'
+import sendIcon from 'assets/send.svg'
 import {
   BackIcon,
   BackIconContainer,
@@ -18,12 +17,12 @@ import {
   SendIcon,
   SendIconContainer,
 } from './styles'
-import { useRouter } from 'next/router'
-import { WebsiteContainer } from '@/templates/website-container'
-import Head from 'next/head'
+import { useNavigate } from 'react-router-dom'
+import { createAvatar } from 'lib/create-avatar'
+import { WebsiteContainer } from 'templates/WebsiteContainer'
 
 export default function Chat() {
-  const router = useRouter()
+  const navigate = useNavigate()
   const [avatar, setAvatar] = useState('')
   const [contactName, setContactName] = useState('')
 
@@ -33,7 +32,7 @@ export default function Chat() {
     )
 
     if (!_contactName || typeof _contactName !== 'string') {
-      router.push('/')
+      navigate('/')
       return
     }
 
@@ -43,22 +42,16 @@ export default function Chat() {
 
   return (
     <>
-      <Head>
-        <title>TextMe</title>
-        <meta name="description" content="TextMe chat" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <WebsiteContainer>
         <Container>
           <Header>
             <BackIconContainer
               type="button"
               onClick={() => {
-                router.push('/')
+                navigate('/')
               }}
             >
-              <BackIcon src={arrowLeftIcon.src} alt={'Back icon'} />
+              <BackIcon src={arrowLeftIcon} alt={'Back icon'} />
             </BackIconContainer>
             <ProfileImage src={avatar} alt="Avatar image" />
             <ContactName>{contactName}</ContactName>
@@ -87,7 +80,7 @@ export default function Chat() {
           <InputMessageContainer>
             <InputMessage />
             <SendIconContainer type="button">
-              <SendIcon src={sendIcon.src} alt={'Send icon'} />
+              <SendIcon src={sendIcon} alt={'Send icon'} />
             </SendIconContainer>
           </InputMessageContainer>
         </Container>

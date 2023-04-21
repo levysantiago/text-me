@@ -1,8 +1,8 @@
-import { Container, Title } from "./styles";
+import { Container, Title } from './styles'
 
 interface IHeaderButtonProps {
-  title: string;
-  isSelected?: boolean;
+  title: string
+  isSelected?: boolean
 }
 
 export function HeaderButton({ title, isSelected }: IHeaderButtonProps) {
@@ -10,5 +10,5 @@ export function HeaderButton({ title, isSelected }: IHeaderButtonProps) {
     <Container type="button" isSelected={isSelected}>
       <Title isSelected={isSelected}>{title}</Title>
     </Container>
-  );
+  )
 }

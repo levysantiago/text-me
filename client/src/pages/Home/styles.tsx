@@ -1,9 +1,6 @@
 import styled from '@emotion/styled'
-import { Roboto } from 'next/font/google'
 
-const robotoBold = Roboto({ weight: '700', subsets: ['latin'] })
-
-export const Container = styled.main`
+export const Container = styled.div`
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -17,7 +14,7 @@ export const TitleContainer = styled.div`
 `
 
 export const Title = styled.h1`
-  font-family: ${robotoBold.style.fontFamily};
+  font-family: Roboto, sans-serif;
   font-weight: 700;
   font-size: 25px;
   color: #8a4de6;
