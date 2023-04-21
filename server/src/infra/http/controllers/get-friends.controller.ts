@@ -7,7 +7,7 @@ interface IRequest extends ExpressRequest {
   user: { userId: string; sub: string };
 }
 
-@Controller()
+@Controller('api')
 export class GetFriendsController {
   constructor(private getFriendsService: GetFriendsService) {}
 

@@ -57,7 +57,7 @@ export class CacheUserRepository implements UserRepository {
       });
 
       if (!user.length) {
-        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+        reject(null);
       }
 
       resolve(user[0]);

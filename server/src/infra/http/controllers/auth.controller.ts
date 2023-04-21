@@ -10,7 +10,7 @@ import { Response } from 'express';
 import { AuthService } from 'src/app/services/auth.service';
 import { z } from 'zod';
 
-@Controller()
+@Controller('api')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
@@ -34,6 +34,8 @@ export class AuthController {
           HttpStatus.BAD_REQUEST,
         );
       }
+
+      throw e;
     }
   }
 }
