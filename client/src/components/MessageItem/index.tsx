@@ -3,7 +3,6 @@ import {
   ContactName,
   Container,
   ContentContainer,
-  Time,
   MessagePreview,
   ProfileImage,
 } from './styles'
@@ -30,7 +29,7 @@ export function MessageItem({ onClick, contactName }: IMessageItemProps) {
         </div>
       </ContentContainer>
 
-      <Time>11/11/11</Time>
+      {/* <Time>11/11/11</Time> */}
     </Container>
   )
 }

@@ -18,7 +18,7 @@ interface INewMessageBody {
 }
 
 interface IClientData {
-  [x: string]: Socket;
+  [x: string]: string;
 }
 
 @WebSocketGateway({ cors: { origin: 'http://localhost:3000' } })
@@ -45,7 +45,7 @@ export class MyGateway implements OnModuleInit {
           secret: env.JWT_SECRET,
         });
 
-        this.clients[userId] = socket;
+        this.clients[userId] = socket.id;
       } catch (e) {
         console.log(e);
       }
@@ -55,7 +55,7 @@ export class MyGateway implements OnModuleInit {
   @SubscribeMessage('newMessage')
   async onNewMessage(
     @MessageBody() body: INewMessageBody,
-    @ConnectedSocket() fromClient,
+    @ConnectedSocket() fromClient: Socket,
   ) {
     try {
       const { sub: userId } = this.jwtService.verify(body.access_token, {
@@ -77,8 +77,9 @@ export class MyGateway implements OnModuleInit {
 
       // Emiting event for user that received message
       const clientTo = this.clients[body.to];
+
       if (clientTo) {
-        clientTo.emit('handleCreatedMessage', {
+        this.server.to(clientTo).emit('handleCreatedMessage', {
           fromUserId: userId,
           toUserId: body.to,
           content: body.content,

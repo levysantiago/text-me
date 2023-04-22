@@ -108,10 +108,12 @@ export default function Chat() {
               content,
             },
           ])
+
+          console.log(fromUserId)
         },
       )
     }
-  }, [socket, setMessages])
+  }, [socket])
 
   return (
     <>
