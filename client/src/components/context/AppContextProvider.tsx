@@ -10,7 +10,7 @@ interface IAppContextProviderProps {
 
 export function AppContextProvider({ children }: IAppContextProviderProps) {
   const [isLogged, setIsLogged] = useState(false)
-  const [, setSocket] = useState<Socket>()
+  const [socket, setSocket] = useState<Socket>()
 
   async function checkLogin() {
     try {
@@ -22,12 +22,6 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
         query: { access_token: accessToken },
       })
       setSocket(_socket)
-      // _socket.on(
-      //   'receivedMessage',
-      //   ({ fromUserId, content }: IReceivedMessageData) => {
-      //     console.log({ fromUserId, content })
-      //   },
-      // )
     } catch (e) {
       setIsLogged(false)
     }
@@ -42,7 +36,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
   // }, [accessToken])
 
   return (
-    <AppContext.Provider value={{ isLogged, setIsLogged }}>
+    <AppContext.Provider value={{ isLogged, setIsLogged, socket }}>
       {children}
     </AppContext.Provider>
   )

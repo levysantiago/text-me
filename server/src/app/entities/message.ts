@@ -1,5 +1,6 @@
 import { Exclude, instanceToPlain } from 'class-transformer';
-import { randomUUID } from 'crypto';
+import { randomUUID } from 'node:crypto';
+import { getConversationFromUsers } from 'src/lib/get-conversation-from-users-helper';
 
 interface ICreateMessageDTO {
   fromUserId: string;
@@ -14,6 +15,10 @@ export class Message {
     this.fromUserId = props.fromUserId;
     this.toUserId = props.toUserId;
     this.content = props.content;
+    this.conversation = getConversationFromUsers({
+      fromUserId: this.fromUserId,
+      toUserId: this.toUserId,
+    });
 
     this.id = id ?? randomUUID();
     this.created_at = props.created_at ?? new Date();
@@ -26,6 +31,8 @@ export class Message {
   fromUserId: string;
 
   toUserId: string;
+
+  conversation: string;
 
   content: string;
 

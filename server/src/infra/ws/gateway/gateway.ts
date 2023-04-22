@@ -1,4 +1,4 @@
-import { OnModuleInit, Query } from '@nestjs/common';
+import { OnModuleInit } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {
   ConnectedSocket,
@@ -38,7 +38,7 @@ export class MyGateway implements OnModuleInit {
   onModuleInit() {
     this.server.on('connection', (socket: Socket) => {
       // console.log(socket);
-      console.log('connected');
+      // console.log('connected');
       try {
         const accessToken = socket.handshake.query['access_token'] as string;
         const { sub: userId } = this.jwtService.verify(accessToken, {
@@ -53,21 +53,34 @@ export class MyGateway implements OnModuleInit {
   }
 
   @SubscribeMessage('newMessage')
-  async onNewMessage(@MessageBody() body: INewMessageBody) {
+  async onNewMessage(
+    @MessageBody() body: INewMessageBody,
+    @ConnectedSocket() fromClient,
+  ) {
     try {
       const { sub: userId } = this.jwtService.verify(body.access_token, {
         secret: env.JWT_SECRET,
       });
+
       await this.createMessageService.execute({
         fromUserId: userId,
         toUserId: body.to,
         content: body.content,
       });
 
+      // Emiting event for user that sent message
+      fromClient.emit('handleCreatedMessage', {
+        fromUserId: userId,
+        toUserId: body.to,
+        content: body.content,
+      });
+
+      // Emiting event for user that received message
       const clientTo = this.clients[body.to];
       if (clientTo) {
-        clientTo.emit('receivedMessage', {
+        clientTo.emit('handleCreatedMessage', {
           fromUserId: userId,
+          toUserId: body.to,
           content: body.content,
         });
       }

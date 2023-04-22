@@ -102,17 +102,30 @@ export const ChatMessagesContainer = styled.div`
   flex-direction: column;
   height: 88%;
   width: 100%;
-  justify-content: flex-end;
+
+  overflow-x: hidden;
+  overflow: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 `
 
-export const MessageBlock = styled.div`
+export const MessageBlock = styled.div(
+  (props: IChatProps) => `
   width: 50%;
   padding: 10px;
-  background-color: #8a4de6;
   border-radius: 8px;
   display: flex;
   align-items: center;
-`
+
+  background-color: ${props.isUserMessage ? '#8a4de6' : '#2e323a'};
+`,
+)
 
 export const MessageBlockContent = styled.span`
   font-family: Roboto, sans-serif;
@@ -126,9 +139,5 @@ export const MessageBlockContainer = styled.div(
   display: flex;
   padding: 5px 10px;
   justify-content: ${props.isUserMessage ? 'flex-end' : 'flex-start'};
-  
-  ${MessageBlock}{
-    background-color: ${props.isUserMessage ? '#8a4de6' : '#2e323a'};
-  }
 `,
 )

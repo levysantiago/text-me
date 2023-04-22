@@ -8,6 +8,8 @@ import { GetFriendsService } from 'src/app/services/get-friends.service';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { GetFriendsController } from './controllers/get-friends.controller';
 import { CheckLoginController } from './controllers/check-login.controller';
+import { GetMessagesService } from 'src/app/services/get-messages.service';
+import { GetMessagesController } from './controllers/get-messages.controller';
 
 @Module({
   imports: [
@@ -17,7 +19,12 @@ import { CheckLoginController } from './controllers/check-login.controller';
       signOptions: { expiresIn: '1h' },
     }),
   ],
-  controllers: [AuthController, GetFriendsController, CheckLoginController],
-  providers: [AuthService, GetFriendsService, JwtStrategy],
+  controllers: [
+    AuthController,
+    GetFriendsController,
+    CheckLoginController,
+    GetMessagesController,
+  ],
+  providers: [AuthService, GetFriendsService, GetMessagesService, JwtStrategy],
 })
 export class HttpModule {}

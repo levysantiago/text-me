@@ -5,17 +5,23 @@ export class CacheUserRepository implements UserRepository {
   private cache: User[] = [];
 
   constructor() {
-    const user = new User({
-      email: 'john@gmail.com',
-      name: 'John',
-      password: '123',
-    });
+    const user = new User(
+      {
+        email: 'john@gmail.com',
+        name: 'John',
+        password: '123',
+      },
+      '6c02ce1a-8caf-4e6e-8850-a4bd6c69fce6',
+    );
 
-    const user2 = new User({
-      email: 'mary@gmail.com',
-      name: 'Mary',
-      password: '123',
-    });
+    const user2 = new User(
+      {
+        email: 'mary@gmail.com',
+        name: 'Mary',
+        password: '123',
+      },
+      '7c02ce1a-8caf-4e6e-8850-a4bd6c69fce6',
+    );
 
     this.cache.push(user);
     this.cache.push(user2);

@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+/* eslint-disable no-undef */
+import { useContext, useEffect, useState } from 'react'
 import arrowLeftIcon from 'assets/arrow-left.svg'
 import sendIcon from 'assets/send.svg'
 import {
@@ -20,25 +21,84 @@ import {
 import { useNavigate } from 'react-router-dom'
 import { createAvatar } from 'lib/create-avatar'
 import { WebsiteContainer } from 'templates/WebsiteContainer'
+import { AppContext } from 'components/context/AppContext'
+import { IMessage, getMessagesService } from 'services/getMessagesService'
+
+interface IReceivedMessageData {
+  content: string
+  fromUserId: string
+  toUserId: string
+}
 
 export default function Chat() {
   const navigate = useNavigate()
+  const { socket } = useContext(AppContext)
   const [avatar, setAvatar] = useState('')
-  const [contactName, setContactName] = useState('')
+  const [friendName, setFriendName] = useState('')
+  const [friendId, setFriendId] = useState('')
+  const [messageContent, setMessageContent] = useState('')
+  const [messages, setMessages] = useState<IMessage[]>([])
 
   useEffect(() => {
-    const _contactName = new URL(window.location.href).searchParams.get(
-      'contactName',
+    const _friendName = new URL(window.location.href).searchParams.get(
+      'friendName',
     )
+    const _friendId = new URL(window.location.href).searchParams.get('friendId')
 
-    if (!_contactName || typeof _contactName !== 'string') {
+    if (
+      !_friendName ||
+      typeof _friendName !== 'string' ||
+      !_friendId ||
+      typeof _friendId !== 'string'
+    ) {
       navigate('/')
       return
     }
 
-    setContactName(_contactName)
-    setAvatar(createAvatar(_contactName))
-  }, [])
+    setFriendName(_friendName)
+    setFriendId(_friendId)
+    setAvatar(createAvatar(_friendName))
+    fetchMessages()
+  }, [friendId])
+
+  async function fetchMessages() {
+    const _messages = await getMessagesService({ fromUserId: friendId })
+    setMessages(_messages)
+  }
+
+  function submitMessage() {
+    if (!messageContent || !messageContent.length) {
+      return
+    }
+
+    const accessToken = localStorage.getItem('access_token')
+
+    socket?.emit('newMessage', {
+      to: friendId,
+      content: messageContent,
+      access_token: accessToken,
+    })
+
+    setMessageContent('')
+  }
+
+  useEffect(() => {
+    if (socket) {
+      socket.on(
+        'handleCreatedMessage',
+        ({ fromUserId, toUserId, content }: IReceivedMessageData) => {
+          setMessages((messages) => [
+            ...messages,
+            {
+              fromUserId,
+              toUserId,
+              content,
+            },
+          ])
+        },
+      )
+    }
+  }, [socket, setMessages])
 
   return (
     <>
@@ -54,32 +114,33 @@ export default function Chat() {
               <BackIcon src={arrowLeftIcon} alt={'Back icon'} />
             </BackIconContainer>
             <ProfileImage src={avatar} alt="Avatar image" />
-            <ContactName>{contactName}</ContactName>
+            <ContactName>{friendName}</ContactName>
           </Header>
 
           <ChatMessagesContainer>
-            <MessageBlockContainer>
-              <MessageBlock>
-                <MessageBlockContent>Olá</MessageBlockContent>
-              </MessageBlock>
-            </MessageBlockContainer>
-
-            <MessageBlockContainer isUserMessage>
-              <MessageBlock>
-                <MessageBlockContent>Olá</MessageBlockContent>
-              </MessageBlock>
-            </MessageBlockContainer>
-
-            <MessageBlockContainer>
-              <MessageBlock>
-                <MessageBlockContent>Tudo bom?</MessageBlockContent>
-              </MessageBlock>
-            </MessageBlockContainer>
+            {messages.map((message, index) => {
+              return (
+                <MessageBlockContainer
+                  isUserMessage={friendId === message.toUserId}
+                  key={`message-block-${index}`}
+                >
+                  <MessageBlock isUserMessage={friendId === message.toUserId}>
+                    <MessageBlockContent>{message.content}</MessageBlockContent>
+                  </MessageBlock>
+                </MessageBlockContainer>
+              )
+            })}
           </ChatMessagesContainer>
 
           <InputMessageContainer>
-            <InputMessage />
-            <SendIconContainer type="button">
+            <InputMessage
+              value={messageContent}
+              type="text"
+              onChange={(e) => {
+                setMessageContent(e.target.value)
+              }}
+            />
+            <SendIconContainer type="button" onClick={submitMessage}>
               <SendIcon src={sendIcon} alt={'Send icon'} />
             </SendIconContainer>
           </InputMessageContainer>

@@ -5,4 +5,5 @@ import { IAppContext } from './IAppContext'
 export const AppContext = createContext<IAppContext>({
   isLogged: false,
   setIsLogged: () => { },
+  socket: undefined
 })

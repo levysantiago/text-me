@@ -26,12 +26,10 @@ export class CacheMessageRepository implements MessageRepository {
     });
   }
 
-  findByUsers(fromUserId: string, toUserId: string): Promise<Message[]> {
+  findByConversation(conversation: string): Promise<Message[]> {
     return new Promise((resolve, reject) => {
       const messages = this.cache.filter((_message) => {
-        return (
-          _message.fromUserId === fromUserId && _message.toUserId === toUserId
-        );
+        return _message.conversation === conversation;
       });
 
       if (!messages.length) {

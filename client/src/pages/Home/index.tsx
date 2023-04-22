@@ -22,6 +22,7 @@ function Home() {
 
   async function fetchFriends() {
     const _friends = await getFriendsService()
+
     setFriends(_friends)
   }
 
@@ -87,7 +88,8 @@ function Home() {
                     navigate({
                       pathname: `/chat`,
                       search: `${createSearchParams({
-                        contactName: friend.name,
+                        friendName: friend.name,
+                        friendId: friend.id,
                       })}`,
                     })
                   }}
