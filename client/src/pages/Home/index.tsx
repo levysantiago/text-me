@@ -34,35 +34,6 @@ function Home() {
     fetchFriends()
   }, [isLogged])
 
-  // useEffect(() => {
-  //   checkLogin().then(() => {
-  //     fetchFriends()
-  //     const accessToken = localStorage.getItem('access_token')
-  //     const _socket = io('http://localhost:3333', {
-  //       query: { access_token: accessToken },
-  //     })
-  //     setSocket(_socket)
-
-  //     _socket.on(
-  //       'receivedMessage',
-  //       ({ fromUserId, content }: IReceivedMessageData) => {
-  //         console.log({ fromUserId, content })
-  //       },
-  //     )
-  //   })
-  // }, [])
-
-  // useEffect(() => {
-  //   if (socket && friends.length) {
-  //     const accessToken = localStorage.getItem('access_token')
-  //     socket.emit('newMessage', {
-  //       to: friends[0].id,
-  //       content: 'asd',
-  //       access_token: accessToken,
-  //     })
-  //   }
-  // }, [socket, friends])
-
   return (
     <>
       <WebsiteContainer>

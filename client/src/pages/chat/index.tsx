@@ -32,7 +32,7 @@ interface IReceivedMessageData {
 
 export default function Chat() {
   const navigate = useNavigate()
-  const { socket } = useContext(AppContext)
+  const { socket, isLogged } = useContext(AppContext)
   const [avatar, setAvatar] = useState('')
   const [friendName, setFriendName] = useState('')
   const [friendId, setFriendId] = useState('')
@@ -40,6 +40,10 @@ export default function Chat() {
   const [messages, setMessages] = useState<IMessage[]>([])
 
   useEffect(() => {
+    if (!isLogged) {
+      navigate('/login')
+    }
+
     const _friendName = new URL(window.location.href).searchParams.get(
       'friendName',
     )
@@ -59,7 +63,7 @@ export default function Chat() {
     setFriendId(_friendId)
     setAvatar(createAvatar(_friendName))
     fetchMessages()
-  }, [friendId])
+  }, [friendId, isLogged])
 
   async function fetchMessages() {
     const _messages = await getMessagesService({ fromUserId: friendId })
