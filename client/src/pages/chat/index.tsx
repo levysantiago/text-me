@@ -83,6 +83,15 @@ export default function Chat() {
   }
 
   useEffect(() => {
+    const chatMessagesContainer = document.getElementById(
+      'chat-messages-container',
+    )
+    if (chatMessagesContainer) {
+      chatMessagesContainer.scrollTop = chatMessagesContainer.scrollHeight
+    }
+  }, [messages])
+
+  useEffect(() => {
     if (socket) {
       socket.on(
         'handleCreatedMessage',
@@ -117,7 +126,7 @@ export default function Chat() {
             <ContactName>{friendName}</ContactName>
           </Header>
 
-          <ChatMessagesContainer>
+          <ChatMessagesContainer id="chat-messages-container">
             {messages.map((message, index) => {
               return (
                 <MessageBlockContainer
