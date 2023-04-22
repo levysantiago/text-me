@@ -1,5 +1,5 @@
-'use client'
-import { useContext, useState } from 'react'
+/* eslint-disable no-undef */
+import { useContext, useEffect, useState } from 'react'
 import {
   ButtonContainer,
   InputsTitle,
@@ -11,19 +11,26 @@ import { Input } from 'components/Input'
 import { DefaultButton } from 'components/buttons/DefaultButton'
 import { WebsiteContainer } from 'templates/WebsiteContainer'
 import { loginService } from 'services/loginService'
-import { AppContext } from 'components/context/AppContext'
 import { useNavigate } from 'react-router-dom'
+import { AppContext } from 'components/context/AppContext'
 
 export default function Login() {
-  const { setAccessToken } = useContext(AppContext)
+  const { isLogged, setIsLogged } = useContext(AppContext)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const navigate = useNavigate()
 
+  useEffect(() => {
+    if (isLogged) {
+      navigate('/')
+    }
+  }, [isLogged])
+
   async function handleSubmit() {
     try {
       const responseData = await loginService({ email, password })
-      setAccessToken(responseData.data.access_token)
+      localStorage.setItem('access_token', responseData.data.access_token)
+      setIsLogged(true)
       navigate('/')
     } catch (e: any) {
       console.log(e.response.data)

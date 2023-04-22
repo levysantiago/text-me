@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 import { Container, Main } from './styles'
+import { AppContextProvider } from 'components/context/AppContextProvider'
 
 interface IWebsiteContainerProps {
   children: ReactNode
@@ -7,8 +8,10 @@ interface IWebsiteContainerProps {
 
 export function WebsiteContainer({ children }: IWebsiteContainerProps) {
   return (
-    <Container style={{ backgroundColor: '#383b41' }}>
-      <Main>{children}</Main>
-    </Container>
+    <AppContextProvider>
+      <Container style={{ backgroundColor: '#383b41' }}>
+        <Main>{children}</Main>
+      </Container>
+    </AppContextProvider>
   )
 }

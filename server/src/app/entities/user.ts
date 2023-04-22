@@ -20,13 +20,13 @@ export class User {
     this.updated_at = props.updated_at ?? new Date();
   }
 
-  @Exclude()
   id: string;
 
   email: string;
 
   name: string;
 
+  @Exclude()
   password: string;
 
   @Exclude()

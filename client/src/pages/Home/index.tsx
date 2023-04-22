@@ -1,4 +1,5 @@
-import { useEffect } from 'react'
+/* eslint-disable no-undef */
+import { useContext, useEffect, useState } from 'react'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 import {
   Container,
@@ -11,21 +12,55 @@ import {
 import { WebsiteContainer } from 'templates/WebsiteContainer'
 import { HeaderButton } from 'components/buttons/HeaderButton'
 import { MessageItem } from 'components/MessageItem'
-// import io, { Socket } from 'socket.io-client'
+import { IFriend, getFriendsService } from 'services/getFriendsService'
+import { AppContext } from 'components/context/AppContext'
 
 function Home() {
   const navigate = useNavigate()
-  // const [socket, setSocket] = useState<Socket>()
+  const { isLogged } = useContext(AppContext)
+  const [friends, setFriends] = useState<IFriend[]>([])
+
+  async function fetchFriends() {
+    const _friends = await getFriendsService()
+    setFriends(_friends)
+  }
 
   useEffect(() => {
-    // const _socket = io("http://localhost:3333")
-    // console.log(_socket);
-    // setSocket(_socket)
-  }, [])
+    if (!isLogged) {
+      navigate('/login')
+    }
+
+    fetchFriends()
+  }, [isLogged])
 
   // useEffect(() => {
-  //   socket?.emit('newMessage', { content: 'asd' })
-  // }, [socket])
+  //   checkLogin().then(() => {
+  //     fetchFriends()
+  //     const accessToken = localStorage.getItem('access_token')
+  //     const _socket = io('http://localhost:3333', {
+  //       query: { access_token: accessToken },
+  //     })
+  //     setSocket(_socket)
+
+  //     _socket.on(
+  //       'receivedMessage',
+  //       ({ fromUserId, content }: IReceivedMessageData) => {
+  //         console.log({ fromUserId, content })
+  //       },
+  //     )
+  //   })
+  // }, [])
+
+  // useEffect(() => {
+  //   if (socket && friends.length) {
+  //     const accessToken = localStorage.getItem('access_token')
+  //     socket.emit('newMessage', {
+  //       to: friends[0].id,
+  //       content: 'asd',
+  //       access_token: accessToken,
+  //     })
+  //   }
+  // }, [socket, friends])
 
   return (
     <>
@@ -43,27 +78,22 @@ function Home() {
           </Header>
 
           <MessagesList>
-            <MessageItem
-              contactName="John Duo"
-              onClick={() => {
-                navigate({
-                  pathname: `/chat`,
-                  search: `${createSearchParams({
-                    contactName: 'John Duo',
-                  })}`,
-                })
-              }}
-            />
-            <MessageItem contactName="John Duo2" />
-            <MessageItem contactName="John Duo3" />
-            <MessageItem contactName="John Duo4" />
-            <MessageItem contactName="John Duo5" />
-            <MessageItem contactName="John Duo6" />
-            <MessageItem contactName="John Duo7" />
-            <MessageItem contactName="John Duo8" />
-            <MessageItem contactName="John Duo9" />
-            <MessageItem contactName="John Duo10" />
-            <MessageItem contactName="John Duo11" />
+            {friends.map((friend, index) => {
+              return (
+                <MessageItem
+                  key={`message-item-${index}`}
+                  contactName={friend.name}
+                  onClick={() => {
+                    navigate({
+                      pathname: `/chat`,
+                      search: `${createSearchParams({
+                        contactName: friend.name,
+                      })}`,
+                    })
+                  }}
+                />
+              )
+            })}
           </MessagesList>
         </Container>
       </WebsiteContainer>
