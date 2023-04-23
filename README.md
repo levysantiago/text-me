@@ -10,3 +10,16 @@ This application is still in development and there are some pages not available 
 <img src="https://github.com/levysantiago/text-me/blob/main/assets/usersList.png" alt="Demo of users list page" width="250px">
 <img src="https://github.com/levysantiago/text-me/blob/main/assets/chat.png" alt="Demo of chat page" width="250px">
 </div>
+
+Some technologies used in this project: 
+
+- ReactJS
+- NestJS
+- Socket.io
+
+## Getting started
+
+Checkout the description of the client side and server side:
+
+- [Client](./client)
+- [Server](./server)
