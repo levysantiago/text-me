@@ -3,6 +3,7 @@ import { ReactNode, useEffect, useState } from 'react'
 import { AppContext } from './AppContext'
 import { checkLoginService } from 'services/checkLoginService'
 import { Socket, io } from 'socket.io-client'
+import { emitter } from 'lib/event-emitter'
 
 interface IAppContextProviderProps {
   children: ReactNode
@@ -19,8 +20,19 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
 
       const accessToken = localStorage.getItem('access_token')
       const _socket = io('http://localhost:3333', {
-        query: { access_token: accessToken },
+        query: { access_token: accessToken as string },
       })
+
+      _socket.on(
+        'handleCreatedMessage',
+        ({ fromUserId, toUserId, content }: any) => {
+          emitter.emit('handleCreatedMessage', {
+            fromUserId,
+            toUserId,
+            content,
+          })
+        },
+      )
       setSocket(_socket)
     } catch (e) {
       setIsLogged(false)
@@ -30,10 +42,6 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
   useEffect(() => {
     checkLogin()
   }, [])
-
-  // useEffect(() => {
-  //   console.log(accessToken)
-  // }, [accessToken])
 
   return (
     <AppContext.Provider value={{ isLogged, setIsLogged, socket }}>

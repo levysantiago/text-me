@@ -23,6 +23,7 @@ import { createAvatar } from 'lib/create-avatar'
 import { WebsiteContainer } from 'templates/WebsiteContainer'
 import { AppContext } from 'components/context/AppContext'
 import { IMessage, getMessagesService } from 'services/getMessagesService'
+import { emitter } from 'lib/event-emitter'
 
 interface IReceivedMessageData {
   content: string
@@ -97,7 +98,7 @@ export default function Chat() {
 
   useEffect(() => {
     if (socket) {
-      socket.on(
+      emitter.on(
         'handleCreatedMessage',
         ({ fromUserId, toUserId, content }: IReceivedMessageData) => {
           setMessages((messages) => [
@@ -108,8 +109,6 @@ export default function Chat() {
               content,
             },
           ])
-
-          console.log(fromUserId)
         },
       )
     }
