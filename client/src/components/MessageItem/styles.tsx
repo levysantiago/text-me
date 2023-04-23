@@ -58,12 +58,23 @@ export const MessagePreview = styled.span`
   width: 200px;
 `
 
-export const Time = styled.span`
-  position: absolute;
-  top: 10px;
-  right: 10px;
+export const MessagesAmountText = styled.span`
   font-family: Roboto, sans-serif;
   font-weight: 400;
   font-size: 10px;
-  color: #4f5257;
+  color: #fafafa;
+`
+
+export const MessagesAmountContainer = styled.div`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: green;
+  width: auto;
+  padding: 0px 3px;
+  height: 15px;
+  border-radius: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `

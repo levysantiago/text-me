@@ -4,16 +4,23 @@ import {
   Container,
   ContentContainer,
   MessagePreview,
+  MessagesAmountContainer,
+  MessagesAmountText,
   ProfileImage,
 } from './styles'
 import { createAvatar } from 'lib/create-avatar'
 
 interface IMessageItemProps {
   contactName: string
+  unseenMessagesAmount?: number
   onClick?: () => void
 }
 
-export function MessageItem({ onClick, contactName }: IMessageItemProps) {
+export function MessageItem({
+  onClick,
+  contactName,
+  unseenMessagesAmount,
+}: IMessageItemProps) {
   const [avatar] = useState(createAvatar(contactName))
 
   return (
@@ -29,7 +36,11 @@ export function MessageItem({ onClick, contactName }: IMessageItemProps) {
         </div>
       </ContentContainer>
 
-      {/* <Time>11/11/11</Time> */}
+      {unseenMessagesAmount ? (
+        <MessagesAmountContainer>
+          <MessagesAmountText>{unseenMessagesAmount}</MessagesAmountText>
+        </MessagesAmountContainer>
+      ) : null}
     </Container>
   )
 }

@@ -9,11 +9,17 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { CreateMessageService } from 'src/app/services/create-message.service';
+import { VisualizeMessagesService } from 'src/app/services/visualize-messages.service';
 import { env } from 'src/env';
 
 interface INewMessageBody {
   toUserId: string;
   content: string;
+  access_token: string;
+}
+
+interface IVisualizeChatBody {
+  conversationId: string;
   access_token: string;
 }
 
@@ -27,6 +33,7 @@ export class MyGateway implements OnModuleInit {
 
   constructor(
     private createMessageService: CreateMessageService,
+    private visualizeMessagesService: VisualizeMessagesService,
     private jwtService: JwtService,
   ) {
     this.usersSocketsIds = {};
@@ -87,6 +94,21 @@ export class MyGateway implements OnModuleInit {
       }
     } catch (e) {
       // console.log(e);
+    }
+  }
+
+  @SubscribeMessage('visualizeChat')
+  async onVisualizeMessage(@MessageBody() body: IVisualizeChatBody) {
+    try {
+      this.jwtService.verify(body.access_token, {
+        secret: env.JWT_SECRET,
+      });
+
+      await this.visualizeMessagesService.execute({
+        conversationId: body.conversationId,
+      });
+    } catch (e) {
+      console.log(e);
     }
   }
 }

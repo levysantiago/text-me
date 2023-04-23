@@ -1,13 +1,6 @@
 import { Exclude, instanceToPlain } from 'class-transformer';
 import { randomUUID } from 'crypto';
-
-interface ICreateUserDTO {
-  email: string;
-  password: string;
-  name: string;
-  created_at?: Date;
-  updated_at?: Date;
-}
+import { ICreateUserDTO } from '../dtos/icreate-user-dto';
 
 export class User {
   constructor(props: ICreateUserDTO, id?: string) {

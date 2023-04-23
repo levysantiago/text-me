@@ -98,6 +98,9 @@ export default function Chat() {
 
   useEffect(() => {
     if (socket) {
+      const accessToken = localStorage.getItem('access_token')
+      socket.emit('visualizeChat', { access_token: accessToken })
+
       emitter.on(
         'handleCreatedMessage',
         ({ fromUserId, toUserId, content }: IReceivedMessageData) => {

@@ -10,6 +10,8 @@ import { GetFriendsController } from './controllers/get-friends.controller';
 import { CheckLoginController } from './controllers/check-login.controller';
 import { GetMessagesService } from 'src/app/services/get-messages.service';
 import { GetMessagesController } from './controllers/get-messages.controller';
+import { GetAmountOfUnseenMessagesService } from 'src/app/services/get-amount-of-unseen-messages.service';
+import { GetAmountOfUnseenMessagesController } from './controllers/get-amount-of-unseen-messages.controller';
 
 @Module({
   imports: [
@@ -24,7 +26,14 @@ import { GetMessagesController } from './controllers/get-messages.controller';
     GetFriendsController,
     CheckLoginController,
     GetMessagesController,
+    GetAmountOfUnseenMessagesController,
   ],
-  providers: [AuthService, GetFriendsService, GetMessagesService, JwtStrategy],
+  providers: [
+    AuthService,
+    GetFriendsService,
+    GetMessagesService,
+    GetAmountOfUnseenMessagesService,
+    JwtStrategy,
+  ],
 })
 export class HttpModule {}

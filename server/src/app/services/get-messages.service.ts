@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MessageRepository } from '../repositories/message-repository';
 import { getConversationFromUsers } from 'src/lib/get-conversation-from-users-helper';
 
@@ -22,15 +22,15 @@ export class GetMessagesService {
   constructor(private messageRepository: MessageRepository) {}
 
   async execute({ fromUserId, toUserId }: IRequest): Promise<IResponse> {
-    let messages = [];
     try {
       const conversation = getConversationFromUsers({ fromUserId, toUserId });
 
-      messages = await this.messageRepository.findByConversation(conversation);
+      const messages = await this.messageRepository.findByConversation(
+        conversation,
+      );
+      return { data: messages };
     } catch (e) {
-      // console.log(e);
+      throw new HttpException('MESSAGES_NOT_FOUND', HttpStatus.NOT_FOUND);
     }
-
-    return { data: messages };
   }
 }
