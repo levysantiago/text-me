@@ -79,7 +79,7 @@ export default function Chat() {
     const accessToken = localStorage.getItem('access_token')
 
     socket?.emit('newMessage', {
-      to: friendId,
+      toUserId: friendId,
       content: messageContent,
       access_token: accessToken,
     })

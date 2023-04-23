@@ -12,7 +12,7 @@ import { CreateMessageService } from 'src/app/services/create-message.service';
 import { env } from 'src/env';
 
 interface INewMessageBody {
-  to: string;
+  toUserId: string;
   content: string;
   access_token: string;
 }
@@ -23,13 +23,13 @@ interface IClientData {
 
 @WebSocketGateway({ cors: { origin: 'http://localhost:3000' } })
 export class MyGateway implements OnModuleInit {
-  private clients: IClientData;
+  private usersSocketsIds: IClientData;
 
   constructor(
     private createMessageService: CreateMessageService,
     private jwtService: JwtService,
   ) {
-    this.clients = {};
+    this.usersSocketsIds = {};
   }
 
   @WebSocketServer()
@@ -45,7 +45,7 @@ export class MyGateway implements OnModuleInit {
           secret: env.JWT_SECRET,
         });
 
-        this.clients[userId] = socket.id;
+        this.usersSocketsIds[userId] = socket.id;
       } catch (e) {
         console.log(e);
       }
@@ -58,30 +58,30 @@ export class MyGateway implements OnModuleInit {
     @ConnectedSocket() fromClient: Socket,
   ) {
     try {
-      const { sub: userId } = this.jwtService.verify(body.access_token, {
+      const { sub: fromUserId } = this.jwtService.verify(body.access_token, {
         secret: env.JWT_SECRET,
       });
 
       await this.createMessageService.execute({
-        fromUserId: userId,
-        toUserId: body.to,
+        fromUserId,
+        toUserId: body.toUserId,
         content: body.content,
       });
 
       // Emiting event for user that sent message
       fromClient.emit('handleCreatedMessage', {
-        fromUserId: userId,
-        toUserId: body.to,
+        fromUserId,
+        toUserId: body.toUserId,
         content: body.content,
       });
 
       // Emiting event for user that received message
-      const clientTo = this.clients[body.to];
+      const receiverSocketId = this.usersSocketsIds[body.toUserId];
 
-      if (clientTo) {
-        this.server.to(clientTo).emit('handleCreatedMessage', {
-          fromUserId: userId,
-          toUserId: body.to,
+      if (receiverSocketId) {
+        this.server.to(receiverSocketId).emit('handleCreatedMessage', {
+          fromUserId,
+          toUserId: body.toUserId,
           content: body.content,
         });
       }
