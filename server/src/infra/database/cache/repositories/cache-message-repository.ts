@@ -53,8 +53,8 @@ export class CacheMessageRepository implements MessageRepository {
       })[0];
       if (!message) reject(null);
 
-      message.content = content;
-      message.visualized = visualized;
+      content ? (message.content = content) : null;
+      visualized !== undefined ? (message.visualized = visualized) : null;
 
       resolve();
     });

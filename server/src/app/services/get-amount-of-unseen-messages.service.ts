@@ -34,7 +34,7 @@ export class GetAmountOfUnseenMessagesService {
       const data = {};
       friends.map((friend) => {
         const unseenMessages = messages.filter((m) => {
-          return m.fromUserId === friend.id;
+          return m.fromUserId === friend.id && !m.visualized;
         });
         data[friend.id] = unseenMessages.length;
       });

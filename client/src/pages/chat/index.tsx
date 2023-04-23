@@ -66,6 +66,14 @@ export default function Chat() {
     fetchMessages()
   }, [friendId, isLogged])
 
+  useEffect(() => {
+    const accessToken = localStorage.getItem('access_token')
+    socket?.emit('visualizeChat', {
+      access_token: accessToken,
+      fromUserId: friendId,
+    })
+  }, [socket, friendId])
+
   async function fetchMessages() {
     const _messages = await getMessagesService({ fromUserId: friendId })
     setMessages(_messages)
@@ -98,9 +106,6 @@ export default function Chat() {
 
   useEffect(() => {
     if (socket) {
-      const accessToken = localStorage.getItem('access_token')
-      socket.emit('visualizeChat', { access_token: accessToken })
-
       emitter.on(
         'handleCreatedMessage',
         ({ fromUserId, toUserId, content }: IReceivedMessageData) => {
