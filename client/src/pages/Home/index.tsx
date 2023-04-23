@@ -15,11 +15,14 @@ import { MessageItem } from 'components/MessageItem'
 import { IFriend, getFriendsService } from 'services/getFriendsService'
 import { AppContext } from 'components/context/AppContext'
 import { emitter } from 'lib/event-emitter'
-import { getAmountOfUnseenMessagesService } from 'services/getAmountOfUnseenMessagesService'
+import {
+  IResume,
+  getAmountOfUnseenMessagesService,
+} from 'services/getAmountOfUnseenMessagesService'
 import { IReceivedMessageData } from 'components/context/IAppContext'
 
 interface IFriendAmountOfUnseenMessages {
-  [x: string]: number
+  [x: string]: IResume
 }
 
 function Home() {
@@ -55,7 +58,8 @@ function Home() {
             const _friendsAmountOfUnseenMessages = {
               ...friendsAmountOfUnseenMessages,
             }
-            _friendsAmountOfUnseenMessages[fromUserId] += 1
+            _friendsAmountOfUnseenMessages[fromUserId].unseenMessages += 1
+            _friendsAmountOfUnseenMessages[fromUserId].lastMessage = content
             return _friendsAmountOfUnseenMessages
           })
         },
@@ -83,7 +87,10 @@ function Home() {
               return (
                 <MessageItem
                   unseenMessagesAmount={
-                    friendsAmountOfUnseenMessages[friend.id]
+                    friendsAmountOfUnseenMessages[friend.id].unseenMessages
+                  }
+                  messageContent={
+                    friendsAmountOfUnseenMessages[friend.id].lastMessage
                   }
                   key={`message-item-${index}`}
                   contactName={friend.name}

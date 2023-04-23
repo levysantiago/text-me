@@ -7,8 +7,13 @@ export interface IMessage {
   toUserId: string
 }
 
+export interface IResume {
+  unseenMessages: number
+  lastMessage: string
+}
+
 interface IResponseData {
-  [x: string]: number
+  [x: string]: IResume
 }
 
 export const getAmountOfUnseenMessagesService =

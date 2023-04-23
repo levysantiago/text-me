@@ -12,6 +12,7 @@ import { createAvatar } from 'lib/create-avatar'
 
 interface IMessageItemProps {
   contactName: string
+  messageContent: string
   unseenMessagesAmount?: number
   onClick?: () => void
 }
@@ -19,6 +20,7 @@ interface IMessageItemProps {
 export function MessageItem({
   onClick,
   contactName,
+  messageContent,
   unseenMessagesAmount,
 }: IMessageItemProps) {
   const [avatar] = useState(createAvatar(contactName))
@@ -29,10 +31,7 @@ export function MessageItem({
       <ContentContainer>
         <ContactName>{contactName}</ContactName>
         <div style={{ display: 'flex', flex: '2' }}>
-          <MessagePreview>
-            Message aasldkjasldj alskdjald jaskl jalsk jasl aldkasjd laksjdlas
-            ja
-          </MessagePreview>
+          <MessagePreview>{messageContent}</MessagePreview>
         </div>
       </ContentContainer>
 

@@ -6,8 +6,13 @@ interface IRequest {
   toUserId: string;
 }
 
+interface IResume {
+  unseenMessages: number;
+  lastMessage: string;
+}
+
 interface IResponseData {
-  [x: string]: number;
+  [x: string]: IResume;
 }
 
 interface IResponse {
@@ -15,7 +20,7 @@ interface IResponse {
 }
 
 @Injectable()
-export class GetAmountOfUnseenMessagesService {
+export class GetFriendsMessagesResumeService {
   constructor(
     private messageRepository: MessageRepository,
     private userRepository: UserRepository,
@@ -33,14 +38,26 @@ export class GetAmountOfUnseenMessagesService {
 
       const data = {};
       friends.map((friend) => {
-        const unseenMessages = messages.filter((m) => {
-          return m.fromUserId === friend.id && !m.visualized;
+        const friendMessages = messages.filter((m) => {
+          return m.fromUserId === friend.id;
         });
-        data[friend.id] = unseenMessages.length;
+        const unseenMessages = friendMessages.filter((m) => {
+          return !m.visualized;
+        });
+
+        const resume: IResume = {
+          unseenMessages: unseenMessages.length,
+          lastMessage: friendMessages[friendMessages.length - 1]
+            ? friendMessages[friendMessages.length - 1].content
+            : '',
+        };
+        data[friend.id] = resume;
       });
 
       return { data };
     } catch (e) {
+      console.log(e);
+
       throw new HttpException('MESSAGES_NOT_FOUND', HttpStatus.NOT_FOUND);
     }
   }
