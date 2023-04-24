@@ -12,6 +12,10 @@ import { GetMessagesService } from 'src/app/services/get-messages.service';
 import { GetMessagesController } from './controllers/get-messages.controller';
 import { GetFriendsMessagesResumeService } from 'src/app/services/get-friends-messages-resume.service';
 import { GetFriendsMessagesResumeController } from './controllers/get-amount-of-unseen-messages.controller';
+import { CreateUserService } from 'src/app/services/create-user.service';
+import { CreateUserController } from './controllers/create-user.controller';
+import { UpdateUserService } from 'src/app/services/update-user.service';
+import { UpdateUserController } from './controllers/update-user.controller';
 
 @Module({
   imports: [
@@ -27,12 +31,16 @@ import { GetFriendsMessagesResumeController } from './controllers/get-amount-of-
     CheckLoginController,
     GetMessagesController,
     GetFriendsMessagesResumeController,
+    CreateUserController,
+    UpdateUserController,
   ],
   providers: [
     AuthService,
     GetFriendsService,
     GetMessagesService,
     GetFriendsMessagesResumeService,
+    CreateUserService,
+    UpdateUserService,
     JwtStrategy,
   ],
 })

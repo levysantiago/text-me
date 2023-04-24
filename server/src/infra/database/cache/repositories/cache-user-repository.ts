@@ -1,3 +1,5 @@
+import { HttpException, HttpStatus } from '@nestjs/common';
+import { IUpdateUserDTO } from 'src/app/dtos/iupdate-user-dto';
 import { User } from 'src/app/entities/user';
 import { UserRepository } from 'src/app/repositories/user-repository';
 
@@ -47,7 +49,6 @@ export class CacheUserRepository implements UserRepository {
       });
 
       if (!user.length) {
-        // throw new HttpException('User not found', HttpStatus.NOT_FOUND);
         reject();
       }
 
@@ -55,17 +56,33 @@ export class CacheUserRepository implements UserRepository {
     });
   }
 
-  findByEmail(email: string): Promise<User> {
+  findByEmail(email: string): Promise<User | null> {
     return new Promise((resolve, reject) => {
       const user = this.cache.filter((_user) => {
         return _user.email === email;
       });
 
       if (!user.length) {
-        reject(null);
+        reject(new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND));
       }
 
       resolve(user[0]);
+    });
+  }
+
+  save(id: string, { name, password }: IUpdateUserDTO): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const user = this.cache.filter((_user) => {
+        return _user.id === id;
+      })[0];
+      if (!user) {
+        reject(new HttpException('USER_NOT_FOUND', HttpStatus.NOT_FOUND));
+      }
+
+      name ? (user.name = name) : null;
+      password ? (user.password = password) : null;
+
+      resolve();
     });
   }
 }
