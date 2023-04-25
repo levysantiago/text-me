@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { MessageRepository } from '../repositories/message-repository';
 import { UserRepository } from '../repositories/user-repository';
+import { FriendshipRepository } from '../repositories/friendship-repository';
 
 interface IRequest {
   toUserId: string;
@@ -23,23 +24,21 @@ interface IResponse {
 export class GetFriendsMessagesResumeService {
   constructor(
     private messageRepository: MessageRepository,
-    private userRepository: UserRepository,
+    private friendshipRepository: FriendshipRepository,
   ) {}
 
   async execute({ toUserId }: IRequest): Promise<IResponse> {
     try {
       const messages = await this.messageRepository.findAllOfUser(toUserId);
 
-      const users = await this.userRepository.findAll();
-
-      const friends = users.filter((friend) => {
-        return friend.id !== toUserId;
-      });
+      const friendships = await this.friendshipRepository.findAllOfUser(
+        toUserId,
+      );
 
       const data = {};
-      friends.map((friend) => {
+      friendships.map((friendship) => {
         const friendMessages = messages.filter((m) => {
-          return m.fromUserId === friend.id;
+          return m.fromUserId === friendship.friendId;
         });
         const unseenMessages = friendMessages.filter((m) => {
           return !m.visualized;
@@ -51,7 +50,7 @@ export class GetFriendsMessagesResumeService {
             ? friendMessages[friendMessages.length - 1].content
             : '',
         };
-        data[friend.id] = resume;
+        data[friendship.friendId] = resume;
       });
 
       return { data };
