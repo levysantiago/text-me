@@ -1,6 +1,7 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User } from '../entities/user';
 import { UserRepository } from '../repositories/user-repository';
+import { FriendshipRepository } from '../repositories/friendship-repository';
 
 interface IResponse {
   data: User[];
@@ -8,19 +9,23 @@ interface IResponse {
 
 @Injectable()
 export class GetFriendsService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(
+    private userRepository: UserRepository,
+    private friendshipRepository: FriendshipRepository,
+  ) {}
 
   async execute(userId: string): Promise<IResponse> {
-    const users = await this.userRepository.findAll();
+    const friendships = await this.friendshipRepository.findAllOfUser(userId);
 
-    const friends = users.filter((friend) => {
-      return friend.id !== userId;
-    });
-
-    return {
-      data: friends.map((friend) => {
+    const friends = await Promise.all(
+      friendships.map(async (friendship) => {
+        const friend = await this.userRepository.find(friendship.friendId);
         return friend.toHTTP();
       }),
+    );
+
+    return {
+      data: friends,
     };
   }
 }

@@ -42,14 +42,14 @@ export class CacheUserRepository implements UserRepository {
     });
   }
 
-  findBy(id: string): Promise<User> {
-    return new Promise((resolve, reject) => {
+  find(id: string): Promise<User | null> {
+    return new Promise((resolve) => {
       const user = this.cache.filter((_user) => {
         return _user.id === id;
       });
 
       if (!user.length) {
-        reject();
+        resolve(null);
       }
 
       resolve(user[0]);

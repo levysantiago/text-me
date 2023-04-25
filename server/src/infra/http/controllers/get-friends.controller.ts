@@ -12,7 +12,7 @@ export class GetFriendsController {
   constructor(private getFriendsService: GetFriendsService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get('friends')
+  @Get('friend')
   async handle(@Request() req: IRequest) {
     const { data } = await this.getFriendsService.execute(req.user.userId);
 

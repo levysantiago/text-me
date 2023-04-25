@@ -16,6 +16,8 @@ import { CreateUserService } from 'src/app/services/create-user.service';
 import { CreateUserController } from './controllers/create-user.controller';
 import { UpdateUserService } from 'src/app/services/update-user.service';
 import { UpdateUserController } from './controllers/update-user.controller';
+import { AddFriendService } from 'src/app/services/add-friend.service';
+import { AddFriendshipController } from './controllers/add-friendship.controller';
 
 @Module({
   imports: [
@@ -33,6 +35,7 @@ import { UpdateUserController } from './controllers/update-user.controller';
     GetFriendsMessagesResumeController,
     CreateUserController,
     UpdateUserController,
+    AddFriendshipController,
   ],
   providers: [
     AuthService,
@@ -41,6 +44,7 @@ import { UpdateUserController } from './controllers/update-user.controller';
     GetFriendsMessagesResumeService,
     CreateUserService,
     UpdateUserService,
+    AddFriendService,
     JwtStrategy,
   ],
 })

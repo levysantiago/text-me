@@ -2,7 +2,7 @@ import { IUpdateUserDTO } from '../dtos/iupdate-user-dto';
 import { User } from '../entities/user';
 
 export abstract class UserRepository {
-  abstract findBy(id: string): Promise<User>;
+  abstract find(id: string): Promise<User | null>;
   abstract findByEmail(email: string): Promise<User | null>;
   abstract create(user: User): Promise<void>;
   abstract findAll(): Promise<User[]>;
