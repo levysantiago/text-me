@@ -8,11 +8,16 @@ interface IDefaultButtonProps
     HTMLButtonElement
   > {
   title: string
+  backgroundColor?: string
 }
 
-export function DefaultButton({ title, ...buttonProps }: IDefaultButtonProps) {
+export function DefaultButton({
+  title,
+  backgroundColor,
+  ...buttonProps
+}: IDefaultButtonProps) {
   return (
-    <ButtonContainer {...buttonProps}>
+    <ButtonContainer {...buttonProps} backgroundColor={backgroundColor}>
       <Title>{title}</Title>
     </ButtonContainer>
   )

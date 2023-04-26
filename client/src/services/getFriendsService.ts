@@ -16,7 +16,7 @@ export const getFriendsService = async (): Promise<IResponseData> => {
   }
 
   // Executing sign in route
-  const response = await server.get('/friends', {
+  const response = await server.get('/friend', {
     headers: { Authorization: `Bearer ${accessToken}` },
   })
   if (response.status !== 200) {

@@ -45,7 +45,7 @@ export default function Login() {
         </TitleContainer>
 
         <InputTitleContainer>
-          <InputsTitle color="#fafafa">Sign in</InputsTitle>
+          <InputsTitle color="#fafafa">Login</InputsTitle>
           <Input
             placeholder="Email"
             type="email"
@@ -61,7 +61,16 @@ export default function Login() {
             }}
           />
           <ButtonContainer>
-            <DefaultButton title="Sign in" onClick={handleSubmit} />
+            <DefaultButton title="Login" onClick={handleSubmit} />
+          </ButtonContainer>
+          <ButtonContainer>
+            <DefaultButton
+              title="Signup"
+              onClick={() => {
+                navigate('/signup')
+              }}
+              backgroundColor="#727272"
+            />
           </ButtonContainer>
         </InputTitleContainer>
       </WebsiteContainer>
