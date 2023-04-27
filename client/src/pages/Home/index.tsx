@@ -94,11 +94,18 @@ function Home() {
     fetchFriends()
   }, [isLogged])
 
-  function eventListener({
+  async function eventListener({
     fromUserId,
     toUserId,
     content,
   }: IReceivedMessageData) {
+    const isThisMyFriend = friends.filter((friend) => {
+      return friend.id === fromUserId
+    })[0]
+    if (!isThisMyFriend) {
+      await fetchFriends()
+    }
+
     setfriendsAmountOfUnseenMessages((friendsAmountOfUnseenMessages) => {
       const _friendsAmountOfUnseenMessages = {
         ...friendsAmountOfUnseenMessages,

@@ -8,8 +8,10 @@ import {
   WebSocketServer,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { AddFriendService } from 'src/app/services/add-friend.service';
 import { CreateMessageService } from 'src/app/services/create-message.service';
 import { GetFriendsService } from 'src/app/services/get-friends.service';
+import { GetUserService } from 'src/app/services/get-user.service';
 import { VisualizeMessagesService } from 'src/app/services/visualize-messages.service';
 import { env } from 'src/env';
 
@@ -36,6 +38,8 @@ export class MyGateway implements OnModuleInit {
     private createMessageService: CreateMessageService,
     private getFriendsService: GetFriendsService,
     private visualizeMessagesService: VisualizeMessagesService,
+    private getUserService: GetUserService,
+    private addFriendService: AddFriendService,
     private jwtService: JwtService,
   ) {
     this.usersSocketsIds = {};
@@ -89,17 +93,25 @@ export class MyGateway implements OnModuleInit {
       );
       const areTheyFriends = friendsOfReceiver.data.filter((friend) => {
         return friend.id === fromUserId;
-      });
-      if (areTheyFriends.length) {
-        // Emiting event for user that received message
-        const receiverSocketId = this.usersSocketsIds[body.toUserId];
-        if (receiverSocketId) {
-          this.server.to(receiverSocketId).emit('handleCreatedMessage', {
-            fromUserId,
-            toUserId: body.toUserId,
-            content: body.content,
-          });
-        }
+      })[0];
+      if (!areTheyFriends) {
+        const friend = await this.getUserService.execute({
+          userId: fromUserId,
+        });
+        await this.addFriendService.execute({
+          userId: body.toUserId,
+          friendEmail: friend.email,
+        });
+      }
+
+      // Emiting event for user that received message
+      const receiverSocketId = this.usersSocketsIds[body.toUserId];
+      if (receiverSocketId) {
+        this.server.to(receiverSocketId).emit('handleCreatedMessage', {
+          fromUserId,
+          toUserId: body.toUserId,
+          content: body.content,
+        });
       }
     } catch (e) {
       // console.log(e);
