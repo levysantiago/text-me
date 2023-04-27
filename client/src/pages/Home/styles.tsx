@@ -64,6 +64,14 @@ export const AddFriendContainer = styled.div(
 `,
 )
 
+export const AddFriendTitle = styled.h1`
+  font-family: Roboto, sans-serif;
+  font-weight: 700;
+  font-size: 25px;
+  color: #8a4de6;
+  margin: 20px 0px;
+`
+
 export const AddFriendContent = styled.div`
   width: 100%;
   visibility: hidden;
@@ -77,7 +85,6 @@ export const FriendEmailInputContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
-  margin-top: 40px;
 `
 
 export const CloseFriendContainerIcon = styled.img`

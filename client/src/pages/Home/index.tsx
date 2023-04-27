@@ -5,6 +5,7 @@ import {
   AddFriendButtonsContainer,
   AddFriendContainer,
   AddFriendContent,
+  AddFriendTitle,
   Container,
   FriendEmailInputContainer,
   FriendEmailInputTitle,
@@ -52,7 +53,10 @@ function Home() {
   }
 
   async function sumbitAddFriend() {
-    if (!friendEmail) alert("Please, type your friend's email.")
+    if (!friendEmail) {
+      alert("Please, type your friend's email.")
+      return
+    }
 
     try {
       await addFriendService({ friendEmail })
@@ -138,7 +142,7 @@ function Home() {
             <HeaderButtonsContainer>
               <HeaderButton title="Messages" isSelected />
               <HeaderButton
-                title="Add friend"
+                title="Add Friend"
                 onClick={handleOnClickAddFriend}
               />
             </HeaderButtonsContainer>
@@ -172,6 +176,7 @@ function Home() {
         </Container>
         <AddFriendContainer id="add-friend-container">
           <AddFriendContent id="add-friend-content">
+            <AddFriendTitle>Add Friend</AddFriendTitle>
             <FriendEmailInputContainer>
               <FriendEmailInputTitle>
                 Type your friend's email:
