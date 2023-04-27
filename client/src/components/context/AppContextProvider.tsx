@@ -36,13 +36,14 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
 
       setSocket(_socket)
     } catch (e) {
+      console.log(e)
       setIsLogged(false)
     }
   }
 
   useEffect(() => {
     checkLogin()
-  }, [])
+  }, [isLogged])
 
   return (
     <AppContext.Provider value={{ isLogged, setIsLogged, socket }}>

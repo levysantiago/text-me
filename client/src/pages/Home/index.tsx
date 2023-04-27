@@ -96,7 +96,7 @@ function Home() {
     }
 
     fetchFriends()
-  }, [isLogged])
+  }, [isLogged, localStorage])
 
   async function eventListener({
     fromUserId,
