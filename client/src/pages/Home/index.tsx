@@ -138,7 +138,7 @@ function Home() {
             <HeaderButtonsContainer>
               <HeaderButton title="Messages" isSelected />
               <HeaderButton
-                title="Add contact"
+                title="Add friend"
                 onClick={handleOnClickAddFriend}
               />
             </HeaderButtonsContainer>
