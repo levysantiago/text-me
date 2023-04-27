@@ -6,9 +6,7 @@ This application is still in development and there are some pages not available 
 
 
 <div align="center" style="display: flex;">
-<img src="https://github.com/levysantiago/text-me/blob/main/assets/login.png" alt="Demo of login page" width="250px">
-<img src="https://github.com/levysantiago/text-me/blob/main/assets/usersList.png" alt="Demo of users list page" width="250px">
-<img src="https://github.com/levysantiago/text-me/blob/main/assets/chat.png" alt="Demo of chat page" width="250px">
+<img src="https://github.com/levysantiago/text-me/blob/main/assets/demo.gif" alt="Demo TextMe application" width="300px">
 </div>
 
 Some technologies used in this project: 
