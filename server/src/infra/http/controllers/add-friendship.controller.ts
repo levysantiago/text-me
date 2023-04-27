@@ -19,8 +19,8 @@ interface IRequest extends ExpressRequest {
 export class AddFriendshipController {
   constructor(private addFriendService: AddFriendService) {}
 
-  @Post('friend')
   @UseGuards(JwtAuthGuard)
+  @Post('friend')
   async handle(
     @Body() body: CreateFriendshipDTO,
     @Req() req: IRequest,

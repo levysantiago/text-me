@@ -33,6 +33,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
           })
         },
       )
+
       setSocket(_socket)
     } catch (e) {
       setIsLogged(false)

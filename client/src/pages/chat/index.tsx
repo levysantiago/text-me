@@ -67,11 +67,13 @@ export default function Chat() {
   }, [friendId, isLogged])
 
   useEffect(() => {
-    const accessToken = localStorage.getItem('access_token')
-    socket?.emit('visualizeChat', {
-      access_token: accessToken,
-      fromUserId: friendId,
-    })
+    if (socket) {
+      const accessToken = localStorage.getItem('access_token')
+      socket.emit('visualizeChat', {
+        access_token: accessToken,
+        fromUserId: friendId,
+      })
+    }
   }, [socket, friendId])
 
   async function fetchMessages() {
@@ -84,15 +86,19 @@ export default function Chat() {
       return
     }
 
-    const accessToken = localStorage.getItem('access_token')
+    if (socket) {
+      const accessToken = localStorage.getItem('access_token')
 
-    socket?.emit('newMessage', {
-      toUserId: friendId,
-      content: messageContent,
-      access_token: accessToken,
-    })
+      socket.emit('newMessage', {
+        toUserId: friendId,
+        content: messageContent,
+        access_token: accessToken,
+      })
 
-    setMessageContent('')
+      setMessageContent('')
+    } else {
+      console.log('NO SOCKET FOUND')
+    }
   }
 
   useEffect(() => {
@@ -104,23 +110,37 @@ export default function Chat() {
     }
   }, [messages])
 
+  function eventListener({
+    fromUserId,
+    toUserId,
+    content,
+  }: IReceivedMessageData) {
+    setMessages((messages) => [
+      ...messages,
+      {
+        fromUserId,
+        toUserId,
+        content,
+      },
+    ])
+
+    if (socket) {
+      socket.emit('visualizeChat', {
+        access_token: localStorage.getItem('access_token'),
+        fromUserId: friendId,
+      })
+    }
+  }
+
   useEffect(() => {
     if (socket) {
-      emitter.on(
-        'handleCreatedMessage',
-        ({ fromUserId, toUserId, content }: IReceivedMessageData) => {
-          setMessages((messages) => [
-            ...messages,
-            {
-              fromUserId,
-              toUserId,
-              content,
-            },
-          ])
-        },
-      )
+      emitter.on('handleCreatedMessage', eventListener)
     }
-  }, [socket])
+
+    return () => {
+      emitter.removeAllListeners()
+    }
+  }, [socket, friendId])
 
   return (
     <>

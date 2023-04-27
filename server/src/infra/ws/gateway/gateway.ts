@@ -9,6 +9,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { CreateMessageService } from 'src/app/services/create-message.service';
+import { GetFriendsService } from 'src/app/services/get-friends.service';
 import { VisualizeMessagesService } from 'src/app/services/visualize-messages.service';
 import { env } from 'src/env';
 
@@ -33,6 +34,7 @@ export class MyGateway implements OnModuleInit {
 
   constructor(
     private createMessageService: CreateMessageService,
+    private getFriendsService: GetFriendsService,
     private visualizeMessagesService: VisualizeMessagesService,
     private jwtService: JwtService,
   ) {
@@ -82,15 +84,22 @@ export class MyGateway implements OnModuleInit {
         content: body.content,
       });
 
-      // Emiting event for user that received message
-      const receiverSocketId = this.usersSocketsIds[body.toUserId];
-
-      if (receiverSocketId) {
-        this.server.to(receiverSocketId).emit('handleCreatedMessage', {
-          fromUserId,
-          toUserId: body.toUserId,
-          content: body.content,
-        });
+      const friendsOfReceiver = await this.getFriendsService.execute(
+        body.toUserId,
+      );
+      const areTheyFriends = friendsOfReceiver.data.filter((friend) => {
+        return friend.id === fromUserId;
+      });
+      if (areTheyFriends.length) {
+        // Emiting event for user that received message
+        const receiverSocketId = this.usersSocketsIds[body.toUserId];
+        if (receiverSocketId) {
+          this.server.to(receiverSocketId).emit('handleCreatedMessage', {
+            fromUserId,
+            toUserId: body.toUserId,
+            content: body.content,
+          });
+        }
       }
     } catch (e) {
       // console.log(e);

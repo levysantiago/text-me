@@ -2,15 +2,17 @@
 import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react'
 import { ButtonContainer, Title } from './styles'
 
-interface IDefaultButtonProps
+interface IHollowButtonProps
   extends DetailedHTMLProps<
     ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   > {
   title: string
+  backgroundColor?: string
+  titleColor?: string
 }
 
-export function DefaultButton({ title, ...buttonProps }: IDefaultButtonProps) {
+export function HollowButton({ title, ...buttonProps }: IHollowButtonProps) {
   return (
     <ButtonContainer {...buttonProps}>
       <Title>{title}</Title>

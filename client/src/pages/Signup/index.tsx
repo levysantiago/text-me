@@ -13,6 +13,7 @@ import { useContext, useEffect, useState } from 'react'
 import { signupService } from 'services/signupService'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from 'components/context/AppContext'
+import { HollowButton } from 'components/buttons/HollowButton'
 
 export default function Signup() {
   const { isLogged } = useContext(AppContext)
@@ -96,12 +97,11 @@ export default function Signup() {
           <DefaultButton title="Signup" onClick={onSubmit} />
         </ButtonContainer>
         <ButtonContainer>
-          <DefaultButton
-            title="Login"
+          <HollowButton
+            title="Login instead"
             onClick={() => {
               navigate('/login')
             }}
-            backgroundColor="#727272"
           />
         </ButtonContainer>
       </InputTitleContainer>

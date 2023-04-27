@@ -13,6 +13,7 @@ import { WebsiteContainer } from 'templates/WebsiteContainer'
 import { loginService } from 'services/loginService'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from 'components/context/AppContext'
+import { HollowButton } from 'components/buttons/HollowButton'
 
 export default function Login() {
   const { isLogged, setIsLogged } = useContext(AppContext)
@@ -64,12 +65,13 @@ export default function Login() {
             <DefaultButton title="Login" onClick={handleSubmit} />
           </ButtonContainer>
           <ButtonContainer>
-            <DefaultButton
-              title="Signup"
+            <HollowButton
+              title="Don't have login? Signup here"
               onClick={() => {
                 navigate('/signup')
               }}
               backgroundColor="#727272"
+              titleColor="#c8c8c8"
             />
           </ButtonContainer>
         </InputTitleContainer>
