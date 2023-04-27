@@ -4,23 +4,30 @@ import { getConversationFromUsers } from 'src/lib/get-conversation-from-users-he
 
 interface IRequest {
   fromUserId: string;
-  toUserId: string;
+  userId: string;
 }
 
 @Injectable()
 export class VisualizeMessagesService {
   constructor(private messageRepository: MessageRepository) {}
 
-  async execute({ fromUserId, toUserId }: IRequest): Promise<void> {
+  async execute({ fromUserId, userId }: IRequest): Promise<void> {
     try {
-      const conversationId = getConversationFromUsers({ fromUserId, toUserId });
+      const conversationId = getConversationFromUsers({
+        fromUserId,
+        toUserId: userId,
+      });
 
       const messages = await this.messageRepository.findByConversation(
         conversationId,
       );
 
+      const friendsMessages = messages.filter((message) => {
+        return message.fromUserId === fromUserId;
+      });
+
       await Promise.all(
-        messages.map(async (m) => {
+        friendsMessages.map(async (m) => {
           await this.messageRepository.save(m.id, { visualized: true });
         }),
       );

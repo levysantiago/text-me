@@ -108,16 +108,16 @@ function Home() {
     })[0]
     if (!isThisMyFriend) {
       await fetchFriends()
+    } else {
+      setfriendsAmountOfUnseenMessages((friendsAmountOfUnseenMessages) => {
+        const _friendsAmountOfUnseenMessages = {
+          ...friendsAmountOfUnseenMessages,
+        }
+        _friendsAmountOfUnseenMessages[fromUserId].unseenMessages += 1
+        _friendsAmountOfUnseenMessages[fromUserId].lastMessage = content
+        return _friendsAmountOfUnseenMessages
+      })
     }
-
-    setfriendsAmountOfUnseenMessages((friendsAmountOfUnseenMessages) => {
-      const _friendsAmountOfUnseenMessages = {
-        ...friendsAmountOfUnseenMessages,
-      }
-      _friendsAmountOfUnseenMessages[fromUserId].unseenMessages += 1
-      _friendsAmountOfUnseenMessages[fromUserId].lastMessage = content
-      return _friendsAmountOfUnseenMessages
-    })
   }
 
   useEffect(() => {

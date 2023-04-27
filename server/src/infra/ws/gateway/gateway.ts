@@ -121,13 +121,13 @@ export class MyGateway implements OnModuleInit {
   @SubscribeMessage('visualizeChat')
   async onVisualizeMessage(@MessageBody() body: IVisualizeChatBody) {
     try {
-      const { sub: toUserId } = this.jwtService.verify(body.access_token, {
+      const { sub: userId } = this.jwtService.verify(body.access_token, {
         secret: env.JWT_SECRET,
       });
 
       await this.visualizeMessagesService.execute({
         fromUserId: body.fromUserId,
-        toUserId,
+        userId,
       });
     } catch (e) {
       console.log(e);

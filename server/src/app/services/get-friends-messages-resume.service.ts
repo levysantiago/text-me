@@ -40,6 +40,7 @@ export class GetFriendsMessagesResumeService {
         const friendMessages = messages.filter((m) => {
           return m.fromUserId === friendship.friendId;
         });
+
         const unseenMessages = friendMessages.filter((m) => {
           return !m.visualized;
         });
