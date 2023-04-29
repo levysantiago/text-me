@@ -7,6 +7,7 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
+import * as moment from 'moment';
 import { Server, Socket } from 'socket.io';
 import { AddFriendService } from 'src/app/services/add-friend.service';
 import { CreateMessageService } from 'src/app/services/create-message.service';
@@ -26,13 +27,27 @@ interface IVisualizeChatBody {
   access_token: string;
 }
 
+interface ITypingBody {
+  toUserId: string;
+  access_token: string;
+}
+
 interface IClientData {
   [x: string]: string;
 }
 
+interface IClientInterval {
+  [x: string]: { interval: NodeJS.Timer; lastTypingTime: Date | undefined };
+}
+
 @WebSocketGateway({ cors: { origin: 'http://localhost:3000' } })
 export class MyGateway implements OnModuleInit {
+  @WebSocketServer()
+  private server: Server;
+
   private usersSocketsIds: IClientData;
+
+  private usersIntervals: IClientInterval;
 
   constructor(
     private createMessageService: CreateMessageService,
@@ -43,10 +58,8 @@ export class MyGateway implements OnModuleInit {
     private jwtService: JwtService,
   ) {
     this.usersSocketsIds = {};
+    this.usersIntervals = {};
   }
-
-  @WebSocketServer()
-  private server: Server;
 
   onModuleInit() {
     this.server.on('connection', (socket: Socket) => {
@@ -112,7 +125,13 @@ export class MyGateway implements OnModuleInit {
           toUserId: body.toUserId,
           content: body.content,
         });
+        this.server.to(receiverSocketId).emit('friendStoppedTyping', {
+          fromUserId,
+        });
       }
+      clearInterval(this.usersIntervals[fromUserId].interval);
+      this.usersIntervals[fromUserId].interval = undefined;
+      this.usersIntervals[fromUserId].lastTypingTime = undefined;
     } catch (e) {
       // console.log(e);
     }
@@ -129,6 +148,59 @@ export class MyGateway implements OnModuleInit {
         fromUserId: body.fromUserId,
         userId,
       });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  @SubscribeMessage('typing')
+  async onChatTyping(@MessageBody() body: ITypingBody) {
+    try {
+      const { sub: userId } = this.jwtService.verify(body.access_token, {
+        secret: env.JWT_SECRET,
+      });
+      if (!this.usersIntervals[userId]) {
+        this.usersIntervals[userId] = {
+          interval: undefined,
+          lastTypingTime: undefined,
+        };
+      }
+
+      if (this.usersIntervals[userId].lastTypingTime) {
+        this.usersIntervals[userId].lastTypingTime = new Date();
+      }
+
+      // Emiting event for user that will receive the message
+      const receiverSocketId = this.usersSocketsIds[body.toUserId];
+      if (receiverSocketId) {
+        this.server.to(receiverSocketId).emit('friendIsTyping', {
+          fromUserId: userId,
+        });
+      }
+
+      if (!this.usersIntervals[userId].lastTypingTime) {
+        this.usersIntervals[userId].lastTypingTime = new Date();
+        const interval = setInterval(() => {
+          if (
+            moment(new Date()).diff(
+              moment(this.usersIntervals[userId].lastTypingTime),
+              'seconds',
+            ) > 2
+          ) {
+            const receiverSocketId = this.usersSocketsIds[body.toUserId];
+            if (receiverSocketId) {
+              this.server.to(receiverSocketId).emit('friendStoppedTyping', {
+                fromUserId: userId,
+              });
+            }
+            clearInterval(interval);
+            this.usersIntervals[userId].lastTypingTime = undefined;
+            this.usersIntervals[userId].interval = undefined;
+          }
+        }, 1000);
+
+        this.usersIntervals[userId].interval = interval;
+      }
     } catch (e) {
       console.log(e);
     }
