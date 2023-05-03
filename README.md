@@ -12,9 +12,8 @@ Some technologies used in this project:
 - ReactJS
 - NestJS
 - Socket.io
-
-
-Note: The app is still using cache to save data. I'm working to add Prisma and SQLite (or other DB) to this application.
+- Prisma
+- SQLite
 
 ## Getting started
 
