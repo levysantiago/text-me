@@ -33,11 +33,11 @@ interface ITypingBody {
 }
 
 interface IClientData {
-  [x: string]: string;
-}
-
-interface IClientInterval {
-  [x: string]: { interval: NodeJS.Timer; lastTypingTime: Date | undefined };
+  [x: string]: {
+    socketId: string;
+    interval: NodeJS.Timer;
+    lastTypingTime: Date | undefined;
+  };
 }
 
 @WebSocketGateway({ cors: { origin: 'http://localhost:3000' } })
@@ -45,9 +45,7 @@ export class MyGateway implements OnModuleInit {
   @WebSocketServer()
   private server: Server;
 
-  private usersSocketsIds: IClientData;
-
-  private usersIntervals: IClientInterval;
+  private clientsStateData: IClientData;
 
   constructor(
     private createMessageService: CreateMessageService,
@@ -57,8 +55,7 @@ export class MyGateway implements OnModuleInit {
     private addFriendService: AddFriendService,
     private jwtService: JwtService,
   ) {
-    this.usersSocketsIds = {};
-    this.usersIntervals = {};
+    this.clientsStateData = {};
   }
 
   /**
@@ -74,7 +71,11 @@ export class MyGateway implements OnModuleInit {
           secret: env.JWT_SECRET,
         });
 
-        this.usersSocketsIds[userId] = socket.id;
+        this.clientsStateData[userId] = {
+          socketId: socket.id,
+          interval: undefined,
+          lastTypingTime: undefined,
+        };
       } catch (e) {
         console.log(e);
       }
@@ -137,7 +138,7 @@ export class MyGateway implements OnModuleInit {
       }
 
       // Getting the user receiver socket id
-      const receiverSocketId = this.usersSocketsIds[body.toUserId];
+      const receiverSocketId = this.clientsStateData[body.toUserId].socketId;
       if (receiverSocketId) {
         // Emiting event for user that received message
         this.server.to(receiverSocketId).emit('handleCreatedMessage', {
@@ -151,10 +152,10 @@ export class MyGateway implements OnModuleInit {
         });
       }
       // Clearing typing verifier interval
-      clearInterval(this.usersIntervals[fromUserId].interval);
+      clearInterval(this.clientsStateData[fromUserId].interval);
       // Reseting interval and lastTypingTime
-      this.usersIntervals[fromUserId].interval = undefined;
-      this.usersIntervals[fromUserId].lastTypingTime = undefined;
+      this.clientsStateData[fromUserId].interval = undefined;
+      this.clientsStateData[fromUserId].lastTypingTime = undefined;
     } catch (e) {
       console.log(e);
     }
@@ -197,23 +198,14 @@ export class MyGateway implements OnModuleInit {
         secret: env.JWT_SECRET,
       });
 
-      // If the userId is not registered yet in intervals dictionary,
-      // we inicialize a new object with this key.
-      if (!this.usersIntervals[userId]) {
-        this.usersIntervals[userId] = {
-          interval: undefined,
-          lastTypingTime: undefined,
-        };
-      }
-
       // If the lastTypingTime exists, we redefine it as current date
-      if (this.usersIntervals[userId].lastTypingTime) {
-        this.usersIntervals[userId].lastTypingTime = new Date();
+      if (this.clientsStateData[userId].lastTypingTime) {
+        this.clientsStateData[userId].lastTypingTime = new Date();
       }
 
       // Emiting event for user that will receive the message to warn that
       // his/her friend is typing
-      const receiverSocketId = this.usersSocketsIds[body.toUserId];
+      const receiverSocketId = this.clientsStateData[body.toUserId].socketId;
       if (receiverSocketId) {
         this.server.to(receiverSocketId).emit('friendIsTyping', {
           fromUserId: userId,
@@ -223,21 +215,22 @@ export class MyGateway implements OnModuleInit {
       // If there is no lastTypingTime, we start an interval to keep verifying
       // if user is still typing. The lastTypingTime will keep being updated
       // each time the user types something.
-      if (!this.usersIntervals[userId].lastTypingTime) {
-        this.usersIntervals[userId].lastTypingTime = new Date();
+      if (!this.clientsStateData[userId].lastTypingTime) {
+        this.clientsStateData[userId].lastTypingTime = new Date();
         const interval = setInterval(() => {
           // When the user stops typing, the interval will stop after the
           // difference of lastDateTime and currentDate is above 2.
           if (
             moment(new Date()).diff(
-              moment(this.usersIntervals[userId].lastTypingTime),
+              moment(this.clientsStateData[userId].lastTypingTime),
               'seconds',
             ) > 2
           ) {
             // After the user stopped typing, the interval emits the event
             // "friendStoppedTyping" to warn his/her friend that he/she
             // stopped typing.
-            const receiverSocketId = this.usersSocketsIds[body.toUserId];
+            const receiverSocketId =
+              this.clientsStateData[body.toUserId].socketId;
             if (receiverSocketId) {
               this.server.to(receiverSocketId).emit('friendStoppedTyping', {
                 fromUserId: userId,
@@ -246,13 +239,13 @@ export class MyGateway implements OnModuleInit {
             // Clearing the interval
             clearInterval(interval);
             // Reseting the userIntervals control info
-            this.usersIntervals[userId].lastTypingTime = undefined;
-            this.usersIntervals[userId].interval = undefined;
+            this.clientsStateData[userId].lastTypingTime = undefined;
+            this.clientsStateData[userId].interval = undefined;
           }
         }, 1000);
 
         // Saving the interval id in state
-        this.usersIntervals[userId].interval = interval;
+        this.clientsStateData[userId].interval = interval;
       }
     } catch (e) {
       console.log(e);
