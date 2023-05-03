@@ -8,7 +8,7 @@ export class Message {
     this.fromUserId = props.fromUserId;
     this.toUserId = props.toUserId;
     this.content = props.content;
-    this.visualized = false;
+    this.visualized = props.visualized ?? false;
     this.conversation = getConversationFromUsers({
       fromUserId: this.fromUserId,
       toUserId: this.toUserId,

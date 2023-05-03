@@ -40,3 +40,7 @@ lerna-debug.log*
 #locks
 yarn.lock
 package-json.lock
+
+#database
+*.db
+dev.db-journal

@@ -22,6 +22,18 @@ export class CacheFriendshipRepository implements FriendshipRepository {
     });
   }
 
+  findByUsers(userId: string, friendId: string): Promise<Friendship | null> {
+    return new Promise((resolve) => {
+      const friendship = this.cache.filter((_friendship) => {
+        return (
+          _friendship.userId === userId && _friendship.friendId === friendId
+        );
+      })[0];
+
+      resolve(friendship);
+    });
+  }
+
   delete(userId: string, friendId: string): Promise<void> {
     return new Promise((resolve) => {
       let indexToRemove: number | undefined;
