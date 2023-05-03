@@ -28,6 +28,7 @@ export class CreateUserService {
       await this.userRepository.create(user);
     } catch (e) {
       if (e instanceof HttpException) throw e;
+      console.log(e);
       throw new HttpException('SERVER_ERROR', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }

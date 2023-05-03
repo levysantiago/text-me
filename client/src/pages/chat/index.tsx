@@ -1,5 +1,8 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable no-unmodified-loop-condition */
+/* eslint-disable no-empty */
 /* eslint-disable no-undef */
-import { useContext, useEffect, useState } from 'react'
+import { ChangeEvent, useContext, useEffect, useState } from 'react'
 import arrowLeftIcon from 'assets/arrow-left.svg'
 import sendIcon from 'assets/send.svg'
 import {
@@ -24,6 +27,7 @@ import { WebsiteContainer } from 'templates/WebsiteContainer'
 import { AppContext } from 'components/context/AppContext'
 import { IMessage, getMessagesService } from 'services/getMessagesService'
 import { emitter } from 'lib/event-emitter'
+import { Comment } from 'react-loader-spinner'
 
 interface IReceivedMessageData {
   content: string
@@ -39,6 +43,7 @@ export default function Chat() {
   const [friendId, setFriendId] = useState('')
   const [messageContent, setMessageContent] = useState('')
   const [messages, setMessages] = useState<IMessage[]>([])
+  const [isFriendTyping, setIsFriendTyping] = useState<boolean>(false)
 
   useEffect(() => {
     if (!isLogged) {
@@ -75,6 +80,17 @@ export default function Chat() {
       })
     }
   }, [socket, friendId])
+
+  function onChangeMessage(e: ChangeEvent<HTMLInputElement>) {
+    setMessageContent(e.target.value)
+
+    if (socket) {
+      socket.emit('typing', {
+        toUserId: friendId,
+        access_token: localStorage.getItem('access_token'),
+      })
+    }
+  }
 
   async function fetchMessages() {
     const _messages = await getMessagesService({ fromUserId: friendId })
@@ -135,6 +151,16 @@ export default function Chat() {
   useEffect(() => {
     if (socket) {
       emitter.on('handleCreatedMessage', eventListener)
+      emitter.on('friendIsTyping', ({ fromUserId }) => {
+        if (fromUserId === friendId) {
+          setIsFriendTyping(true)
+        }
+      })
+      emitter.on('friendStoppedTyping', ({ fromUserId }) => {
+        if (fromUserId === friendId) {
+          setIsFriendTyping(false)
+        }
+      })
     }
 
     return () => {
@@ -157,6 +183,18 @@ export default function Chat() {
             </BackIconContainer>
             <ProfileImage src={avatar} alt="Avatar image" />
             <ContactName>{friendName}</ContactName>
+            {isFriendTyping ? (
+              <Comment
+                visible={true}
+                height="20"
+                width="20"
+                ariaLabel="comment-loading"
+                wrapperStyle={{}}
+                wrapperClass="comment-wrapper"
+                color="#fff"
+                backgroundColor="#8a4de6"
+              />
+            ) : null}
           </Header>
 
           <ChatMessagesContainer id="chat-messages-container">
@@ -178,9 +216,7 @@ export default function Chat() {
             <InputMessage
               value={messageContent}
               type="text"
-              onChange={(e) => {
-                setMessageContent(e.target.value)
-              }}
+              onChange={onChangeMessage}
             />
             <SendIconContainer type="button" onClick={submitMessage}>
               <SendIcon src={sendIcon} alt={'Send icon'} />

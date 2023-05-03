@@ -46,15 +46,26 @@ export class CacheMessageRepository implements MessageRepository {
     });
   }
 
-  save(id: string, { content, visualized }: IUpdateMessageDTO): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const message = this.cache.filter((m) => {
-        return m.id === id;
-      })[0];
-      if (!message) reject(null);
+  visualizeMessages(fromUserId: string, toUserId: string): Promise<void> {
+    return new Promise(() => {
+      this.cache.map((_message) => {
+        if (
+          _message.fromUserId === fromUserId &&
+          _message.toUserId === toUserId
+        ) {
+          _message.visualized = true;
+        }
+      });
+    });
+  }
 
-      content ? (message.content = content) : null;
-      visualized !== undefined ? (message.visualized = visualized) : null;
+  save(message: Message): Promise<void> {
+    return new Promise((resolve, reject) => {
+      let messageToUpdate = this.cache.filter((m) => {
+        return m.id === message.id;
+      })[0];
+      if (!messageToUpdate) reject(null);
+      messageToUpdate = message;
 
       resolve();
     });

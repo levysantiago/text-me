@@ -12,7 +12,10 @@ export class UpdateUserService {
 
   async execute({ id, name, password }: IRequest): Promise<void> {
     try {
-      await this.userRepository.save(id, { name, password });
+      const user = await this.userRepository.find(id);
+      name ? (user.name = name) : null;
+      password ? (user.password = password) : null;
+      await this.userRepository.save(user);
     } catch (e) {
       if (e instanceof HttpException) throw e;
       throw new HttpException('SERVER_ERROR', HttpStatus.INTERNAL_SERVER_ERROR);

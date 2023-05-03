@@ -3,6 +3,11 @@
   padding: 0px;
 }
 
+.comment-wrapper{
+  transform: scaleX(-1);
+  -webkit-transform: scaleX(-1);
+}
+
 /*CUSTOMIZING SCROLLBAR*/
 /* width */
 ::-webkit-scrollbar {

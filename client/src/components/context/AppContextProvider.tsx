@@ -34,6 +34,18 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
         },
       )
 
+      _socket.on('friendIsTyping', ({ fromUserId }: any) => {
+        emitter.emit('friendIsTyping', {
+          fromUserId,
+        })
+      })
+
+      _socket.on('friendStoppedTyping', ({ fromUserId }: any) => {
+        emitter.emit('friendStoppedTyping', {
+          fromUserId,
+        })
+      })
+
       setSocket(_socket)
     } catch (e) {
       console.log(e)

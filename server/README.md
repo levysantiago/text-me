@@ -1,11 +1,11 @@
 # TextMe Server
 
-This is the server side of TextMe application. It was build in TypeScript and NestJS, and also using the following tools:
+This is the server side of TextMe application. It was build in TypeScript and NestJS, and also using the following technologies:
 
 - Socket.io: Internally used by NestJS.
 - Zod: To validate data.
-
-OBS: For now the server is using cache to store the database data, but the goal is to use Prisma to manage database storages and, as it is a small project yet, it's going to use SQLite as database.
+- Prisma: CRM to connect to Database
+- SQLite: Local Database
 
 
 ## Installation
@@ -17,6 +17,12 @@ or
 
 ```bash
 $ npm install
+```
+
+## Executing migrations
+
+```bash
+npx prisma migrate dev
 ```
 
 ## Running the app

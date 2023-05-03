@@ -1,0 +1,48 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String      @id
+  email       String      @unique
+  name        String
+  password    String
+  created_at  DateTime    @default(now())
+  updated_at  DateTime    @default(now())
+  friendships Friendship?
+
+  @@map("users")
+}
+
+model Message {
+  id           String   @id
+  fromUserId   String
+  toUserId     String
+  conversation String
+  visualized   Boolean
+  content      String
+  created_at   DateTime @default(now())
+  updated_at   DateTime @default(now())
+
+  @@map("messages")
+}
+
+model Friendship {
+  id         String   @id
+  userId     String   @unique
+  friendId   String   @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("friendships")
+}
