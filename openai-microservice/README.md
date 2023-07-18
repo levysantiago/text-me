@@ -1,6 +1,8 @@
 # OpenAI Microservice
 This is a OpenAI Microsservice created to participate in the chat as another user.
 
+This microservice is still being improved to use services like messaging streaming and database.
+
 # Getting started
 
 ## Instalations
