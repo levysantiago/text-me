@@ -46,9 +46,6 @@ export async function startClientSocketHook() {
 
       if (contextJson) {
         context = JSON.parse(contextJson)
-
-        // Pushing new message
-        context.push({ role: 'user', content })
       } else {
         // Getting messages context
         const response = await textmeServer.get('chat', {
@@ -72,6 +69,9 @@ export async function startClientSocketHook() {
         await cacheProvider.save('context', JSON.stringify(context))
       }
 
+      // Pushing new message
+      context.push({ role: 'user', content })
+
       // If who sent the message is not the microsservice
       if (fromUserId !== myId) {
         // Emiting typing event
@@ -82,7 +82,6 @@ export async function startClientSocketHook() {
 
         // Recovering response from AI
         const response = await openaiService.sendMessage(context)
-        console.log(response.data.choices)
 
         if (response.data.choices[0].message) {
           // Emiting new Message
