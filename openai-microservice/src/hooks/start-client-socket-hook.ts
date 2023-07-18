@@ -2,6 +2,8 @@ import { container } from 'tsyringe'
 import { ICacheProvider } from '../providers/CacheProvider/types/icache-provider'
 import { io } from 'socket.io-client'
 import OpenAiService from '../services/openai-service'
+import { textmeServer } from '../api/textme-server'
+import { ChatCompletionRequestMessage } from 'openai'
 
 export async function startClientSocketHook() {
   // Catching cache provider
@@ -38,6 +40,38 @@ export async function startClientSocketHook() {
         await cacheProvider.save('my_id', toUserId)
       }
 
+      // Getting context from cache if exists
+      const contextJson = await cacheProvider.retrieve('context')
+      let context: ChatCompletionRequestMessage[] = []
+
+      if (contextJson) {
+        context = JSON.parse(contextJson)
+
+        // Pushing new message
+        context.push({ role: 'user', content })
+      } else {
+        // Getting messages context
+        const response = await textmeServer.get('chat', {
+          params: { fromUserId },
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+
+        // Recreating context
+        context = []
+        response.data.data.map((message: any) => {
+          if (fromUserId !== myId) {
+            context.push({ role: 'user', content: message.content })
+          } else {
+            context.push({ role: 'assistant', content: message.content })
+          }
+
+          return message
+        })
+
+        // Saving context to cache
+        await cacheProvider.save('context', JSON.stringify(context))
+      }
+
       // If who sent the message is not the microsservice
       if (fromUserId !== myId) {
         // Emiting typing event
@@ -47,9 +81,7 @@ export async function startClientSocketHook() {
         })
 
         // Recovering response from AI
-        const response = await openaiService.sendMessage([
-          { role: 'user', content },
-        ])
+        const response = await openaiService.sendMessage(context)
         console.log(response.data.choices)
 
         if (response.data.choices[0].message) {
