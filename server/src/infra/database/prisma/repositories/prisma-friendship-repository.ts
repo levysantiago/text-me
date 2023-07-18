@@ -23,7 +23,7 @@ export class PrismaFriendshipRepository implements FriendshipRepository {
     userId: string,
     friendId: string,
   ): Promise<Friendship | null> {
-    const rawFriendship = await this.prismaService.friendship.findUnique({
+    const rawFriendship = await this.prismaService.friendship.findFirst({
       where: { userId, friendId },
     });
     if (!rawFriendship) return null;
@@ -31,6 +31,8 @@ export class PrismaFriendshipRepository implements FriendshipRepository {
   }
 
   async delete(userId: string, friendId: string): Promise<void> {
-    await this.prismaService.friendship.delete({ where: { userId, friendId } });
+    await this.prismaService.friendship.deleteMany({
+      where: { userId, friendId },
+    });
   }
 }

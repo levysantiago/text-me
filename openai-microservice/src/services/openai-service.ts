@@ -6,8 +6,10 @@ import {
   OpenAIApi,
 } from 'openai'
 import { env } from '../env'
+import { singleton } from 'tsyringe'
 
-export class OpenAiService {
+@singleton()
+class OpenAiService {
   private openai: OpenAIApi
 
   constructor() {
@@ -30,3 +32,5 @@ export class OpenAiService {
     return response
   }
 }
+
+export default OpenAiService

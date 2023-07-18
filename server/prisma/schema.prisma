@@ -11,13 +11,12 @@ datasource db {
 }
 
 model User {
-  id          String      @id
-  email       String      @unique
-  name        String
-  password    String
-  created_at  DateTime    @default(now())
-  updated_at  DateTime    @default(now())
-  friendships Friendship?
+  id         String   @id
+  email      String   @unique
+  name       String
+  password   String
+  created_at DateTime @default(now())
+  updated_at DateTime @default(now())
 
   @@map("users")
 }
@@ -37,12 +36,10 @@ model Message {
 
 model Friendship {
   id         String   @id
-  userId     String   @unique
-  friendId   String   @unique
+  userId     String
+  friendId   String
   created_at DateTime @default(now())
   updated_at DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id])
 
   @@map("friendships")
 }
