@@ -1,0 +1,8 @@
+# locks
+yarn.lock
+
+# dependencies
+node_modules/
+
+# environmental variables
+.env
