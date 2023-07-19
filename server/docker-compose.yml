@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  text-me-server:
+    build: .
+    command: yarn start:prod
+    ports:
+      - 3333:3333
+    volumes:
+      - .:/usr/text-me/server
