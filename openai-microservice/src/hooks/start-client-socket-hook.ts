@@ -4,6 +4,7 @@ import { io } from 'socket.io-client'
 import OpenAiService from '../services/openai-service'
 import { textmeServer } from '../api/textme-server'
 import { ChatCompletionRequestMessage } from 'openai'
+import { env } from '../env'
 
 export async function startClientSocketHook() {
   // Catching cache provider
@@ -34,18 +35,19 @@ export async function startClientSocketHook() {
       toUserId: string
       content: string
     }) => {
-      // Getting or saving microsservice user id
-      const myId = await cacheProvider.retrieve('my_id')
-      if (!myId) {
-        await cacheProvider.save('my_id', toUserId)
-      }
-
       // Getting context from cache if exists
       const contextJson = await cacheProvider.retrieve('context')
       let context: ChatCompletionRequestMessage[] = []
 
       if (contextJson) {
         context = JSON.parse(contextJson)
+
+        // Pushing new message
+        if (fromUserId !== env.USER_ID) {
+          context.push({ role: 'user', content })
+        } else {
+          context.push({ role: 'assistant', content })
+        }
       } else {
         // Getting messages context
         const response = await textmeServer.get('chat', {
@@ -56,7 +58,7 @@ export async function startClientSocketHook() {
         // Recreating context
         context = []
         response.data.data.map((message: any) => {
-          if (fromUserId !== myId) {
+          if (message.fromUserId !== env.USER_ID) {
             context.push({ role: 'user', content: message.content })
           } else {
             context.push({ role: 'assistant', content: message.content })
@@ -69,19 +71,20 @@ export async function startClientSocketHook() {
         await cacheProvider.save('context', JSON.stringify(context))
       }
 
-      // Pushing new message
-      context.push({ role: 'user', content })
-
       // If who sent the message is not the microsservice
-      if (fromUserId !== myId) {
+      if (fromUserId !== env.USER_ID) {
         // Emiting typing event
-        socket.emit('typing', {
-          toUserId: fromUserId,
-          access_token: accessToken,
-        })
+        const typingInterval = setInterval(() => {
+          socket.emit('typing', {
+            toUserId: fromUserId,
+            access_token: accessToken,
+          })
+        }, 1000)
 
         // Recovering response from AI
         const response = await openaiService.sendMessage(context)
+
+        clearInterval(typingInterval)
 
         if (response.data.choices[0].message) {
           // Emiting new Message

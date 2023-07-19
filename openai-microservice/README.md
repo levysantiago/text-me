@@ -23,12 +23,13 @@ Create a `.env` file in root project:
 
 ```
 NODE_ENV=development
+USER_ID=
 USER_EMAIL=
 USER_PASSWORD=
 OPENAI_KEY=
 ```
 
-Define the user email and password for login in TextMe. And define your OpenAI key.
+Define the user ID, email and password for login in TextMe. And define your OpenAI key.
 
 ## Running project
 Remember to run the TextMe server first!

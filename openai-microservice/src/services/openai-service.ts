@@ -23,10 +23,23 @@ class OpenAiService {
   async sendMessage(
     context: ChatCompletionRequestMessage[],
   ): Promise<AxiosResponse<CreateChatCompletionResponse, any>> {
+    const startupContext: ChatCompletionRequestMessage[] = [
+      {
+        role: 'system',
+        content: `
+          You are a user of a chat application. 
+          You must act like a normal person.
+          You must keep the conversation going.
+          Your name is Andy.
+          You speak portuguese from Brazil. And you speak English too.
+        `,
+      },
+    ]
+
     const response: AxiosResponse<CreateChatCompletionResponse, any> =
       await this.openai.createChatCompletion({
         model: 'gpt-3.5-turbo',
-        messages: context,
+        messages: startupContext.concat(context),
       })
 
     return response

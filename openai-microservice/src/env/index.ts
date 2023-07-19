@@ -10,6 +10,7 @@ if (process.env.NODE_ENV === 'test') {
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('production'),
   USER_EMAIL: z.string(),
+  USER_ID: z.string(),
   USER_PASSWORD: z.string(),
   OPENAI_KEY: z.string(),
   PORT: z.number().default(3001),
