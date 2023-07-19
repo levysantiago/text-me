@@ -39,11 +39,15 @@ export async function startClientSocketHook() {
       const contextJson = await cacheProvider.retrieve('context')
       let context: ChatCompletionRequestMessage[] = []
 
+      // Is message from assistant
+      let isMessageFromFriend = false
+      if (fromUserId !== env.USER_ID) isMessageFromFriend = true
+
       if (contextJson) {
         context = JSON.parse(contextJson)
 
         // Pushing new message
-        if (fromUserId !== env.USER_ID) {
+        if (isMessageFromFriend) {
           context.push({ role: 'user', content })
         } else {
           context.push({ role: 'assistant', content })
@@ -72,7 +76,7 @@ export async function startClientSocketHook() {
       }
 
       // If who sent the message is not the microsservice
-      if (fromUserId !== env.USER_ID) {
+      if (isMessageFromFriend) {
         // Emiting typing event
         const typingInterval = setInterval(() => {
           socket.emit('typing', {
