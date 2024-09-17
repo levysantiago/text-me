@@ -8,6 +8,7 @@
     "dotenv": "^16.0.3",
     "eslint": "^8.40.0",
     "fastify": "^4.17.0",
+    "ioredis": "^5.4.1",
     "openai": "^4.60.0",
     "reflect-metadata": "^0.1.13",
     "socket.io-client": "^4.6.1",

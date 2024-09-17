@@ -1,5 +1,5 @@
 export interface ICacheProvider {
-  save(key: string, value: string): Promise<void>
-  retrieve(key: string): Promise<string>
+  save(key: string, value: string, ttl?: number): Promise<void>
+  retrieve(key: string): Promise<string | null>
   delete(key: string): Promise<void>
 }

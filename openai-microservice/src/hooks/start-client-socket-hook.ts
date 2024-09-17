@@ -7,6 +7,7 @@ import { IHandleCreatedMessageDTO } from './dtos/ihandle-created-message.dto'
 import { IAiProvider } from '@src/providers/ai-provider/types/iai-provider'
 import { IContext } from '@src/providers/ai-provider/types/icontext'
 import { IChatMessage } from '@src/providers/ai-provider/types/ichat-message'
+import { getConversationFromUsers } from '@src/lib/get-conversation-from-users-helper'
 
 export async function startClientSocketHook() {
   // Catching cache provider
@@ -21,7 +22,7 @@ export async function startClientSocketHook() {
   }
 
   // Starting socket
-  const socket = io('http://localhost:3333', {
+  const socket = io(env.WEBSOCKET_SERVER, {
     query: { access_token: accessToken },
   })
 
@@ -33,8 +34,13 @@ export async function startClientSocketHook() {
       content,
       role,
     }: IHandleCreatedMessageDTO) => {
+      // Get conversation id
+      const conversationId = getConversationFromUsers({ fromUserId, toUserId })
+
       // Getting context from cache if exists
-      const contextJson = await cacheProvider.retrieve('context')
+      const contextJson = await cacheProvider.retrieve(
+        `context:${conversationId}`,
+      )
       let context: IContext = []
 
       // Is message from assistant
@@ -62,8 +68,15 @@ export async function startClientSocketHook() {
           return message
         })
 
+        // Defining ttl
+        const ttl = 1 * 24 * 60 * 60 // 1 day
+
         // Saving context to cache
-        await cacheProvider.save('context', JSON.stringify(context))
+        await cacheProvider.save(
+          `context:${conversationId}`,
+          JSON.stringify(context),
+          ttl,
+        )
       }
 
       // If who sent the message is not the microservice

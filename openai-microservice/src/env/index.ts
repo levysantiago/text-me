@@ -8,14 +8,27 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 const envSchema = z.object({
+  // Environment
   NODE_ENV: z.enum(['development', 'test', 'production']).default('production'),
-  USER_EMAIL: z.string(),
+  PORT: z.number().default(3001),
+
+  // TextMe Server
   USER_ID: z.string(),
+  USER_EMAIL: z.string(),
   USER_PASSWORD: z.string(),
+
+  // TextMe Websocket server
+  WEBSOCKET_SERVER: z.string(),
+
+  // Redis
+  REDIS_HOST: z.string(),
+  REDIS_PORT: z.coerce.number(),
+  REDIS_PASSWORD: z.string(),
+
+  // OpenAI
   OPENAI_KEY: z.string(),
   OPENAI_ORGANIZATION: z.string(),
   OPENAI_PROJECT: z.string(),
-  PORT: z.number().default(3001),
 })
 
 const _env = envSchema.safeParse(process.env)
