@@ -1,5 +1,6 @@
 import { Message } from 'src/app/entities/message';
 import { Message as RawMessage } from '@prisma/client';
+import { IRole } from 'src/app/entities/types/irole';
 
 export class PrismaMessageMapper {
   static toPrisma(message: Message) {
@@ -7,6 +8,7 @@ export class PrismaMessageMapper {
   }
 
   static fromPrisma(rawMessage: RawMessage) {
-    return new Message(rawMessage, rawMessage.id);
+    const role = rawMessage.role as IRole;
+    return new Message({ ...rawMessage, role }, rawMessage.id);
   }
 }

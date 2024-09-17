@@ -8,8 +8,8 @@ export class Friendship {
     this.friendId = props.friendId;
 
     this.id = id ?? randomUUID();
-    this.created_at = props.created_at ?? new Date();
-    this.updated_at = props.updated_at ?? new Date();
+    this.createdAt = props.createdAt ?? new Date();
+    this.updatedAt = props.updatedAt ?? new Date();
   }
 
   @Exclude()
@@ -20,9 +20,9 @@ export class Friendship {
   friendId: string;
 
   @Exclude()
-  created_at: Date;
+  createdAt: Date;
   @Exclude()
-  updated_at: Date;
+  updatedAt: Date;
 
   toHTTP(): Friendship {
     return instanceToPlain(this) as Friendship;

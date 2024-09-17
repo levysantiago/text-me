@@ -2,6 +2,7 @@ import { Exclude, instanceToPlain } from 'class-transformer';
 import { randomUUID } from 'node:crypto';
 import { getConversationFromUsers } from 'src/lib/get-conversation-from-users-helper';
 import { ICreateMessageDTO } from '../dtos/icreate-message-dto';
+import { IRole } from './types/irole';
 
 export class Message {
   constructor(props: ICreateMessageDTO, id?: string) {
@@ -9,14 +10,15 @@ export class Message {
     this.toUserId = props.toUserId;
     this.content = props.content;
     this.visualized = props.visualized ?? false;
+    this.role = props.role;
     this.conversation = getConversationFromUsers({
       fromUserId: this.fromUserId,
       toUserId: this.toUserId,
     });
 
     this.id = id ?? randomUUID();
-    this.created_at = props.created_at ?? new Date();
-    this.updated_at = props.updated_at ?? new Date();
+    this.createdAt = props.createdAt ?? new Date();
+    this.updatedAt = props.updatedAt ?? new Date();
   }
 
   @Exclude()
@@ -26,6 +28,8 @@ export class Message {
 
   toUserId: string;
 
+  role: IRole;
+
   conversation: string;
 
   visualized: boolean;
@@ -33,9 +37,9 @@ export class Message {
   content: string;
 
   @Exclude()
-  created_at: Date;
+  createdAt: Date;
   @Exclude()
-  updated_at: Date;
+  updatedAt: Date;
 
   toHTTP(): Message {
     return instanceToPlain(this) as Message;

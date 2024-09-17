@@ -7,40 +7,42 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id         String   @id
-  email      String   @unique
-  name       String
-  password   String
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  id          String   @id
+  email       String   @unique
+  name        String
+  password    String
+  isAssistant Boolean  @default(false) @map("is_assistant")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @map("updated_at")
 
   @@map("users")
 }
 
 model Message {
   id           String   @id
-  fromUserId   String
-  toUserId     String
+  fromUserId   String   @map("from_user_id")
+  toUserId     String   @map("to_user_id")
   conversation String
   visualized   Boolean
+  role         String   @default("user")
   content      String
-  created_at   DateTime @default(now())
-  updated_at   DateTime @default(now())
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @default(now()) @map("updated_at")
 
   @@map("messages")
 }
 
 model Friendship {
-  id         String   @id
-  userId     String
-  friendId   String
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  id        String   @id
+  userId    String   @map("user_id")
+  friendId  String   @map("friend_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @default(now()) @map("updated_at")
 
   @@map("friendships")
 }

@@ -59,7 +59,7 @@ export class MyGateway implements OnModuleInit {
   }
 
   /**
-   * Iniciating connection when module is initialized
+   * Initiating connection when module is initialized
    */
   onModuleInit() {
     this.server.on('connection', (socket: Socket) => {
@@ -86,7 +86,7 @@ export class MyGateway implements OnModuleInit {
    * Event subscription that handles a new message creation.
    * After creating the messages, emits the "handleCreatedMessage"
    * event to update the client messages and "friendStoppedTyping" event
-   * to warn the user that his/her friend stoped typing.
+   * to warn the user that his/her friend stopped typing.
    * @param body The data needed to create the message
    * @param fromClient Who sent the message
    */
@@ -101,18 +101,28 @@ export class MyGateway implements OnModuleInit {
         secret: env.JWT_SECRET,
       });
 
+      // Find user
+      const user = await this.getUserService.execute({
+        userId: fromUserId,
+      });
+
+      // Define role
+      const role = !user.isAssistant ? 'user' : 'assistant';
+
       // Creating message
       await this.createMessageService.execute({
         fromUserId,
         toUserId: body.toUserId,
         content: body.content,
+        role,
       });
 
-      // Emiting event for user that sent message
+      // Emit event for user that sent message
       fromClient.emit('handleCreatedMessage', {
         fromUserId,
         toUserId: body.toUserId,
         content: body.content,
+        role,
       });
 
       //Getting the friends of user receiver to verify if the message sender
@@ -140,7 +150,7 @@ export class MyGateway implements OnModuleInit {
       // Getting the user receiver socket id
       const receiverSocketId = this.clientsStateData[body.toUserId].socketId;
       if (receiverSocketId) {
-        // Emiting event for user that received message
+        // Emit event for user that received message
         this.server.to(receiverSocketId).emit('handleCreatedMessage', {
           fromUserId,
           toUserId: body.toUserId,
@@ -162,7 +172,7 @@ export class MyGateway implements OnModuleInit {
   }
 
   /**
-   * Event submiscription used to define all users messages received as
+   * Event subscription used to define all users messages received as
    * visualized. This must be emitted when the user opens the chat page.
    * @param body The data needed to execute the function.
    */
@@ -218,14 +228,20 @@ export class MyGateway implements OnModuleInit {
       if (!this.clientsStateData[userId].lastTypingTime) {
         this.clientsStateData[userId].lastTypingTime = new Date();
         const interval = setInterval(() => {
+          // Transform typing time to Moment instance
+          const typingTimeMoment = moment(
+            this.clientsStateData[userId].lastTypingTime,
+          );
+
+          // Get current date as moment instance
+          const currentDateMoment = moment(new Date());
+
+          // Definition if user is still typing
+          const isStillTyping = currentDateMoment.diff(typingTimeMoment) > 2;
+
           // When the user stops typing, the interval will stop after the
           // difference of lastDateTime and currentDate is above 2.
-          if (
-            moment(new Date()).diff(
-              moment(this.clientsStateData[userId].lastTypingTime),
-              'seconds',
-            ) > 2
-          ) {
+          if (isStillTyping) {
             // After the user stopped typing, the interval emits the event
             // "friendStoppedTyping" to warn his/her friend that he/she
             // stopped typing.
@@ -238,7 +254,7 @@ export class MyGateway implements OnModuleInit {
             }
             // Clearing the interval
             clearInterval(interval);
-            // Reseting the userIntervals control info
+            // Resetting the userIntervals control info
             this.clientsStateData[userId].lastTypingTime = undefined;
             this.clientsStateData[userId].interval = undefined;
           }
