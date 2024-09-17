@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { textmeServer } from '../api/textme-server'
 import { env } from '../env'
 import { container } from 'tsyringe'
-import { ICacheProvider } from '../providers/CacheProvider/types/icache-provider'
+import { ICacheProvider } from '../providers/cache-provider/types/icache-provider'
 import { startClientSocketHook } from './start-client-socket-hook'
 
 export async function loginHook() {

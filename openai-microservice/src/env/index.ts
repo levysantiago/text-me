@@ -13,6 +13,8 @@ const envSchema = z.object({
   USER_ID: z.string(),
   USER_PASSWORD: z.string(),
   OPENAI_KEY: z.string(),
+  OPENAI_ORGANIZATION: z.string(),
+  OPENAI_PROJECT: z.string(),
   PORT: z.number().default(3001),
 })
 

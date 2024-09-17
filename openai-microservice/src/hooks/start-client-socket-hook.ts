@@ -1,14 +1,18 @@
 import { container } from 'tsyringe'
-import { ICacheProvider } from '../providers/CacheProvider/types/icache-provider'
+import { ICacheProvider } from '../providers/cache-provider/types/icache-provider'
 import { io } from 'socket.io-client'
-import OpenAiService from '../services/openai-service'
 import { textmeServer } from '../api/textme-server'
-import { ChatCompletionRequestMessage } from 'openai'
 import { env } from '../env'
+import { IHandleCreatedMessageDTO } from './dtos/ihandle-created-message.dto'
+import { IAiProvider } from '@src/providers/ai-provider/types/iai-provider'
+import { IContext } from '@src/providers/ai-provider/types/icontext'
+import { IChatMessage } from '@src/providers/ai-provider/types/ichat-message'
 
 export async function startClientSocketHook() {
   // Catching cache provider
   const cacheProvider = container.resolve<ICacheProvider>('CacheProvider')
+  // getting AI provider
+  const aiProvider = container.resolve<IAiProvider>('AiProvider')
 
   // Retrieving access token
   const accessToken = await cacheProvider.retrieve('access_token')
@@ -21,23 +25,17 @@ export async function startClientSocketHook() {
     query: { access_token: accessToken },
   })
 
-  // getting openai service
-  const openaiService = container.resolve(OpenAiService)
-
   socket.on(
     'handleCreatedMessage',
     async ({
       fromUserId,
       toUserId,
       content,
-    }: {
-      fromUserId: string
-      toUserId: string
-      content: string
-    }) => {
+      role,
+    }: IHandleCreatedMessageDTO) => {
       // Getting context from cache if exists
       const contextJson = await cacheProvider.retrieve('context')
-      let context: ChatCompletionRequestMessage[] = []
+      let context: IContext = []
 
       // Is message from assistant
       let isMessageFromFriend = false
@@ -47,27 +45,20 @@ export async function startClientSocketHook() {
         context = JSON.parse(contextJson)
 
         // Pushing new message
-        if (isMessageFromFriend) {
-          context.push({ role: 'user', content })
-        } else {
-          context.push({ role: 'assistant', content })
-        }
+        context.push({ role, content })
       } else {
         // Getting messages context
         const response = await textmeServer.get('chat', {
           params: { fromUserId },
-          headers: { Authorization: `Bearer ${accessToken}` },
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         })
 
         // Recreating context
         context = []
-        response.data.data.map((message: any) => {
-          if (message.fromUserId !== env.USER_ID) {
-            context.push({ role: 'user', content: message.content })
-          } else {
-            context.push({ role: 'assistant', content: message.content })
-          }
-
+        response.data.data.map((message: IChatMessage) => {
+          context.push({ role: message.role, content: message.content })
           return message
         })
 
@@ -75,9 +66,9 @@ export async function startClientSocketHook() {
         await cacheProvider.save('context', JSON.stringify(context))
       }
 
-      // If who sent the message is not the microsservice
+      // If who sent the message is not the microservice
       if (isMessageFromFriend) {
-        // Emiting typing event
+        // Emitting typing event
         const typingInterval = setInterval(() => {
           socket.emit('typing', {
             toUserId: fromUserId,
@@ -86,15 +77,15 @@ export async function startClientSocketHook() {
         }, 1000)
 
         // Recovering response from AI
-        const response = await openaiService.sendMessage(context)
+        const response = await aiProvider.sendMessage({ context })
 
         clearInterval(typingInterval)
 
-        if (response.data.choices[0].message) {
-          // Emiting new Message
+        if (response.message) {
+          // Emitting new Message
           socket.emit('newMessage', {
             toUserId: fromUserId,
-            content: response.data.choices[0].message.content,
+            content: response.message,
             access_token: accessToken,
           })
         }
