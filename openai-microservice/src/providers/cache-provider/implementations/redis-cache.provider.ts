@@ -1,7 +1,9 @@
 import { env } from '@src/env'
 import { ICacheProvider } from '../types/icache-provider'
 import Redis from 'ioredis'
+import { injectable } from 'tsyringe'
 
+@injectable()
 class RedisCacheProvider implements ICacheProvider {
   private redisClient: Redis
 
@@ -28,6 +30,10 @@ class RedisCacheProvider implements ICacheProvider {
 
   async delete(key: string): Promise<void> {
     await this.redisClient.del(key)
+  }
+
+  async disconnect(): Promise<void> {
+    this.redisClient.disconnect()
   }
 }
 

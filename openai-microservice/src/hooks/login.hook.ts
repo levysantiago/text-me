@@ -3,7 +3,6 @@ import { textmeServer } from '../api/textme-server'
 import { env } from '../env'
 import { container } from 'tsyringe'
 import { ICacheProvider } from '../providers/cache-provider/types/icache-provider'
-import { startClientSocketHook } from './start-client-socket-hook'
 
 export async function loginHook() {
   const cacheProvider = container.resolve<ICacheProvider>('CacheProvider')
@@ -29,6 +28,4 @@ export async function loginHook() {
   }
 
   await cacheProvider.save('access_token', responseData.data.data.access_token)
-
-  await startClientSocketHook()
 }

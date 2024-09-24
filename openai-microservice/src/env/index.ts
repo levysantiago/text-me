@@ -25,6 +25,12 @@ const envSchema = z.object({
   REDIS_PORT: z.coerce.number(),
   REDIS_PASSWORD: z.string(),
 
+  // RabbitMQ
+  RABBITMQ_HOST: z.string(),
+  RABBITMQ_PORT: z.coerce.number(),
+  RABBITMQ_USER: z.string(),
+  RABBITMQ_PASSWORD: z.string(),
+
   // OpenAI
   OPENAI_KEY: z.string(),
   OPENAI_ORGANIZATION: z.string(),

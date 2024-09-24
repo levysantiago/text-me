@@ -22,6 +22,8 @@ class LocalCacheProvider implements ICacheProvider {
       resolve()
     })
   }
+
+  async disconnect(): Promise<void> {}
 }
 
 export default LocalCacheProvider

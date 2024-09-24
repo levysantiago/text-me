@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "amqplib": "^0.10.4",
     "axios": "0.26.0",
     "dotenv": "^16.0.3",
     "eslint": "^8.40.0",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@rocketseat/eslint-config": "^1.2.0",
+    "@types/amqplib": "^0.10.5",
     "@types/node": "^20.1.0",
     "typescript": "^5.0.4"
   }
