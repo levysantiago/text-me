@@ -6,7 +6,9 @@ class FakeAiProvider implements IAiProvider {
   async sendMessage({
     context,
   }: ISendMessageDTO): Promise<ISendMessageResponse> {
-    return { message: 'Assistant default message' }
+    return {
+      message: `Assistant default message for "${context.at(-1)?.content}"`,
+    }
   }
 }
 
