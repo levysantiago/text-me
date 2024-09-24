@@ -1,39 +1,22 @@
-version: "3"
+version: "3.8"
 
 services:
-  redis:
-    container_name: "redis"
-    image: redis
-    command: redis-server --requirepass 12345
-    ports: 
-      - "6379:6379"
-
-  text-me-pg:
-    image: bitnami/postgresql
+  text-me-server:
+    container_name: "server"
+    image: node:18.16
+    entrypoint: ["sh", "./entrypoint.sh"]
     ports:
-      - 5432:5432
+      - 3333:3333
+    volumes:
+      - ./:/usr/text-me/server
+      - ./entrypoint.sh:/entrypoint.sh
     environment:
-      - POSTGRESQL_USERNAME=docker
-      - POSTGRESQL_PASSWORD=docker
-      - POSTGRESQL_DATABASE=textmedb
+      JWT_SECRET: secret
+      DATABASE_URL: postgresql://docker:docker@postgresql:5432/textmedb?schema=public
+    networks: 
+      - default
 
-  rabbitmq:
-    container_name: "rabbitmq"
-    image: rabbitmq:3-management
-    environment:
-      - RABBITMQ_DEFAULT_USER=admin
-      - RABBITMQ_DEFAULT_PASS=admin
-    ports:
-    # AMQP protocol port
-    - '5672:5672'
-    # HTTP management UI
-    - '15672:15672'
-  
-  # text-me-server:
-  #   container_name: "text-me-server"
-  #   build: .
-  #   command: yarn start:prod
-  #   ports:
-  #     - 3333:3333
-  #   volumes:
-  #     - .:/usr/text-me/server
+networks:
+  default: 
+    name: text-me
+    external: true

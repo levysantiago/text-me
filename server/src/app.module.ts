@@ -8,11 +8,13 @@ import { UserModule } from '@modules/user/user.module';
 import { ChatModule } from '@modules/chat/chat.module';
 import { FriendshipModule } from '@modules/friendship/friendship.module';
 import { AuthModule } from '@modules/auth/auth.module';
+import { HeartbeatModule } from '@modules/heartbeat/heartbeat.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: '../.env' }),
     HttpModule,
+    HeartbeatModule,
     AuthModule,
     UserModule,
     ChatModule,

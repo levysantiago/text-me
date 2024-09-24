@@ -3,6 +3,8 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
+  await prisma.user.deleteMany();
+
   // Create first user
   await prisma.user.create({
     data: {
