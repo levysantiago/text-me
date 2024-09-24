@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  client:
+    container_name: "client"
+    image: node:18.16
+    entrypoint: ["sh", "./entrypoint.sh"]
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/usr/text-me/client
+      - ./entrypoint.sh:/entrypoint.sh
+    environment:
+      REACT_APP_SERVER_API: http://localhost:3333/api/
+      REACT_APP_SERVER_WEBSOCKET: http://localhost:3333
+    networks: 
+      - default
+
+networks:
+  default: 
+    name: text-me
+    external: true

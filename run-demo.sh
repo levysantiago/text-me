@@ -21,3 +21,6 @@ echo "API is ready! Proceeding to the next command..."
 
 echo "Start OpenAI Microservice"
 docker compose -f ./openai-microservice/docker-compose.yml -p text-me up -d
+
+echo "Start Client"
+docker compose -f ./client/docker-compose.yml -p text-me up -d

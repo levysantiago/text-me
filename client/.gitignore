@@ -38,3 +38,6 @@ next-env.d.ts
 # Locks
 yarn.lock
 package-json.lock
+
+# environment variables
+.env

@@ -19,7 +19,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
       setIsLogged(true)
 
       const accessToken = localStorage.getItem('access_token')
-      const _socket = io('http://localhost:3333', {
+      const _socket = io(process.env.REACT_APP_SERVER_WEBSOCKET as string, {
         query: { access_token: accessToken as string },
       })
 
