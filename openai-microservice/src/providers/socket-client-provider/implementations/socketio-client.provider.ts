@@ -25,7 +25,7 @@ export class SocketIoClientProvider implements ISocketProvider {
     private cacheProvider: ICacheProvider,
   ) {}
 
-  async init(): Promise<void> {
+  async connect(): Promise<void> {
     // Retrieving access token
     const accessToken = await this.cacheProvider.retrieve('access_token')
     if (!accessToken) {
@@ -60,5 +60,9 @@ export class SocketIoClientProvider implements ISocketProvider {
 
   emit(eventName: IEmitEventName, data: any): void {
     this.socket.emit(eventName, data)
+  }
+
+  disconnect(): void {
+    this.socket.disconnect()
   }
 }
