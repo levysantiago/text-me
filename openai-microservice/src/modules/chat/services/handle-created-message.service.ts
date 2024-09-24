@@ -4,9 +4,10 @@ import { getConversationFromUsers } from '@src/lib/get-conversation-from-users-h
 import { ICacheProvider } from '@src/providers/cache-provider/types/icache-provider'
 import { IQueueProvider } from '@src/providers/queue-provider/types/iqueue.provider'
 import { IHandleCreatedMessageDTO } from '@src/providers/socket-client-provider/dtos/ihandle-created-message.dto'
-import { inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { GetUpdatedContextService } from './get-updated-context.service'
 
+@injectable()
 export class HandleCreatedMessageService {
   constructor(
     @inject('CacheProvider')
@@ -17,12 +18,12 @@ export class HandleCreatedMessageService {
     private getUpdatedContextService: GetUpdatedContextService,
   ) {}
 
-  async execute({
+  execute = async ({
     fromUserId,
     toUserId,
     content,
     role,
-  }: IHandleCreatedMessageDTO) {
+  }: IHandleCreatedMessageDTO) => {
     // Is message from assistant
     let isMessageFromFriend = false
     if (fromUserId !== env.USER_ID) isMessageFromFriend = true

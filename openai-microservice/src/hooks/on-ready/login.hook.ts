@@ -1,8 +1,8 @@
 import { z } from 'zod'
-import { textmeServer } from '../api/textme-server'
-import { env } from '../env'
 import { container } from 'tsyringe'
-import { ICacheProvider } from '../providers/cache-provider/types/icache-provider'
+import { ICacheProvider } from '@src/providers/cache-provider/types/icache-provider'
+import { textmeServer } from '@src/api/textme-server'
+import { env } from '@src/env'
 
 export async function loginHook() {
   const cacheProvider = container.resolve<ICacheProvider>('CacheProvider')

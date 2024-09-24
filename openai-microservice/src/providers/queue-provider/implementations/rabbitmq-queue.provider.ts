@@ -37,14 +37,18 @@ export class RabbitMqQueueService implements IQueueProvider {
   ): Promise<void> {
     await this.channel.consume(queue, async (dataJson) => {
       if (dataJson !== null) {
-        const data: ISendMessageToQueueDTO = JSON.parse(
-          dataJson.content.toString('utf-8'),
-        )
-        console.log('Received:', data)
-        this.channel.ack(dataJson)
+        try {
+          const data: ISendMessageToQueueDTO = JSON.parse(
+            dataJson.content.toString('utf-8'),
+          )
+          // console.log('Received:', data)
 
-        // Callback
-        await cb(data)
+          // Callback
+          await cb(data)
+          this.channel.ack(dataJson)
+        } catch (err) {
+          this.channel.nack(dataJson, false, true)
+        }
       }
     })
   }

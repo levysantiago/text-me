@@ -1,12 +1,13 @@
+/* eslint-disable no-useless-constructor */
 import { IAiProvider } from '@src/providers/ai-provider/types/iai-provider'
 import { ICacheProvider } from '@src/providers/cache-provider/types/icache-provider'
 import { ISocketProvider } from '@src/providers/socket-client-provider/types/isocket-provider'
-import { inject } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
 import { ISendAiResponseDTO } from './dtos/isend-ai-response.dto'
 import { GetUpdatedContextService } from './get-updated-context.service'
 import { getConversationFromUsers } from '@src/lib/get-conversation-from-users-helper'
 
-/* eslint-disable no-useless-constructor */
+@injectable()
 export class SendAiResponseService {
   constructor(
     @inject('CacheProvider')
@@ -19,7 +20,7 @@ export class SendAiResponseService {
     private getUpdatedContextService: GetUpdatedContextService,
   ) {}
 
-  async execute({ fromUserId, toUserId, content }: ISendAiResponseDTO) {
+  execute = async ({ fromUserId, toUserId, content }: ISendAiResponseDTO) => {
     // Retrieving access token
     const accessToken = await this.cacheProvider.retrieve('access_token')
     if (!accessToken) {
@@ -38,7 +39,7 @@ export class SendAiResponseService {
     // Emitting typing event
     const typingInterval = setInterval(() => {
       this.socketProvider.emit('typing', {
-        toUserId,
+        toUserId: fromUserId,
         access_token: accessToken,
       })
     }, 1000)
@@ -50,7 +51,7 @@ export class SendAiResponseService {
       if (response.message) {
         // Emitting new Message
         this.socketProvider.emit('newMessage', {
-          toUserId,
+          toUserId: fromUserId,
           content: response.message,
           access_token: accessToken,
         })
@@ -72,6 +73,7 @@ export class SendAiResponseService {
         ttl,
       )
     } catch (err: any) {
+      console.log('SendAiResponseService: ', err)
       throw new Error(err.message)
     } finally {
       clearInterval(typingInterval)
