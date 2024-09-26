@@ -15,6 +15,7 @@ export class GetMessagesController {
   @Get('chat')
   async handle(@Req() req: IRequest, @Response() res: IResponse) {
     const { fromUserId } = req.query;
+    console.log('fromUserId', fromUserId);
 
     const { data } = await this.getMessagesService.execute({
       fromUserId: fromUserId as string,

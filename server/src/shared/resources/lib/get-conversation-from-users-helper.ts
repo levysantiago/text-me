@@ -7,6 +7,11 @@ export function getConversationFromUsers({
   fromUserId: string;
   toUserId: string;
 }) {
+  if (!fromUserId || !toUserId) {
+    throw new Error(
+      `Invalid IDs fromUserId: ${fromUserId} | toUserId: ${toUserId}`,
+    );
+  }
   let leftSide = fromUserId;
   let rightSide = toUserId;
 
