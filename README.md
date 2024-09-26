@@ -92,7 +92,13 @@ Email: bob@gmail.com
 Password: 12345678
 ```
 
-## Run the projects in your machine
+## Run the project in your machine
+
+Before running the project in your machine, certify you have started the PostgreSQL, Redis and RabbitMQ containers, because the TextMe services will need them. If you just passed through the Demo, then you're good to go, if not, you can execute (you might need to run `chmod +x run-services.sh` first):
+
+```bash
+./run-services.sh
+```
 
 To get the whole project running in your machine instead of Docker, you must go to the respective folders of each service below. It's recommended to execute in this order:
 
