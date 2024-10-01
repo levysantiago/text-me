@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { IRole } from '@shared/resources/types/irole';
-import { MessageRepository } from '../repositories/message.repository';
+import { MessagesRepository } from '../repositories/messages.repository';
 import { Message } from '../infra/db/entities/message';
 
 interface IRequest {
@@ -12,7 +12,7 @@ interface IRequest {
 
 @Injectable()
 export class CreateMessageService {
-  constructor(private messageRepository: MessageRepository) {}
+  constructor(private messagesRepository: MessagesRepository) {}
 
   async execute({
     fromUserId,
@@ -29,6 +29,6 @@ export class CreateMessageService {
     });
 
     // Persist message
-    await this.messageRepository.create(message);
+    await this.messagesRepository.create(message);
   }
 }

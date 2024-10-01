@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { getConversationFromUsers } from '@shared/resources/lib/get-conversation-from-users-helper';
-import { MessageRepository } from '../repositories/message.repository';
+import { MessagesRepository } from '../repositories/messages.repository';
 
 interface IMessage {
   fromUserId: string;
@@ -19,13 +19,13 @@ interface IResponse {
 
 @Injectable()
 export class GetMessagesService {
-  constructor(private messageRepository: MessageRepository) {}
+  constructor(private messagesRepository: MessagesRepository) {}
 
   async execute({ fromUserId, toUserId }: IRequest): Promise<IResponse> {
     // Get users conversation key
     const conversation = getConversationFromUsers({ fromUserId, toUserId });
     // find messages by conversation
-    const messages = await this.messageRepository.findByConversation(
+    const messages = await this.messagesRepository.findByConversation(
       conversation,
     );
     return { data: messages };

@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { MessageRepository } from './repositories/message.repository';
-import { PrismaMessageRepository } from './infra/db/repositories/prisma-message.repository';
+import { MessagesRepository } from './repositories/messages.repository';
+import { PrismaMessagesRepository } from './infra/db/repositories/prisma-messages.repository';
 import { CreateMessageService } from './services/create-message.service';
 import { GetMessagesService } from './services/get-messages.service';
 import { VisualizeMessagesService } from './services/visualize-messages.service';
@@ -17,8 +17,8 @@ import { FriendshipModule } from '@modules/friendship/friendship.module';
     GetMessagesService,
     VisualizeMessagesService,
     GetFriendsMessagesResumeService,
-    { provide: MessageRepository, useClass: PrismaMessageRepository },
+    { provide: MessagesRepository, useClass: PrismaMessagesRepository },
   ],
-  exports: [CreateMessageService, VisualizeMessagesService, MessageRepository],
+  exports: [CreateMessageService, VisualizeMessagesService, MessagesRepository],
 })
 export class ChatModule {}

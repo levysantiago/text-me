@@ -1,11 +1,11 @@
-import { MessageRepository } from '@modules/chat/repositories/message.repository';
+import { MessagesRepository } from '@modules/chat/repositories/messages.repository';
 import { Message } from '../entities/message';
 import { Injectable } from '@nestjs/common';
 import { PrismaDatabaseProvider } from '@shared/container/providers/database-provider/implementations/prisma-database.provider';
 import { PrismaMessageMapper } from '../mappers/prisma-message.mapper';
 
 @Injectable()
-export class PrismaMessageRepository implements MessageRepository {
+export class PrismaMessagesRepository implements MessagesRepository {
   constructor(private prismaService: PrismaDatabaseProvider) {}
 
   async create(message: Message): Promise<void> {

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { MessageRepository } from '../repositories/message.repository';
+import { MessagesRepository } from '../repositories/messages.repository';
 
 interface IRequest {
   fromUserId: string;
@@ -8,10 +8,10 @@ interface IRequest {
 
 @Injectable()
 export class VisualizeMessagesService {
-  constructor(private messageRepository: MessageRepository) {}
+  constructor(private messagesRepository: MessagesRepository) {}
 
   async execute({ fromUserId, userId }: IRequest): Promise<void> {
     // Update messages as visualized
-    await this.messageRepository.visualizeMessages(fromUserId, userId);
+    await this.messagesRepository.visualizeMessages(fromUserId, userId);
   }
 }

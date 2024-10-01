@@ -1,6 +1,6 @@
 import { Message } from '../infra/db/entities/message';
 
-export abstract class MessageRepository {
+export abstract class MessagesRepository {
   abstract findBy(id: string): Promise<Message>;
   abstract findByConversation(conversation: string): Promise<Message[]>;
   abstract visualizeMessages(
