@@ -29,6 +29,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
       });
     }
 
+    console.log(exception);
+
     return response.status(status).json({
       statusCode: 500,
       message: errorMessages.INTERNAL_SERVER_ERROR,

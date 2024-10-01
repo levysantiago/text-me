@@ -1,6 +1,7 @@
 import { MessageRepository } from '@modules/chat/repositories/message.repository';
 import { FriendshipRepository } from '@modules/friendship/repositories/friendship.repository';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
+import { MessagesNotFoundError } from '../errors/messages-not-found.error';
 
 interface IRequest {
   toUserId: string;
@@ -28,36 +29,44 @@ export class GetFriendsMessagesResumeService {
 
   async execute({ toUserId }: IRequest): Promise<IResponse> {
     try {
+      // Find all user messages
       const messages = await this.messageRepository.findAllOfUser(toUserId);
 
+      // Find all user friendships
       const friendships = await this.friendshipRepository.findAllOfUser(
         toUserId,
       );
 
+      // Initialize data to be returned
       const data = {};
       friendships.map((friendship) => {
+        // Filter only messages of each specific friend
         const friendMessages = messages.filter((m) => {
           return m.fromUserId === friendship.friendId;
         });
 
+        // Check for unseen messages
         const unseenMessages = friendMessages.filter((m) => {
           return !m.visualized;
         });
 
+        // Prepare resume of friend messages
         const resume: IResume = {
+          // Amount of unseen messages
           unseenMessages: unseenMessages.length,
+          // Last message sent by the friend
           lastMessage: friendMessages[friendMessages.length - 1]
             ? friendMessages[friendMessages.length - 1].content
             : '',
         };
+        // Assign resumes to each friend key in data object
         data[friendship.friendId] = resume;
       });
 
       return { data };
-    } catch (e) {
-      console.log(e);
-
-      throw new HttpException('MESSAGES_NOT_FOUND', HttpStatus.NOT_FOUND);
+    } catch (err) {
+      console.log(err);
+      throw new MessagesNotFoundError();
     }
   }
 }

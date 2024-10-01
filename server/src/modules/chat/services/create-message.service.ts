@@ -20,6 +20,7 @@ export class CreateMessageService {
     content,
     role,
   }: IRequest): Promise<void> {
+    // Create message entity
     const message = new Message({
       fromUserId,
       toUserId,
@@ -27,6 +28,7 @@ export class CreateMessageService {
       role,
     });
 
+    // Persist message
     await this.messageRepository.create(message);
   }
 }
