@@ -1,13 +1,13 @@
 import { User } from '@modules/user/infra/db/entities/user';
-import { CreateUserController } from '@modules/user/infra/http/controllers/create-user.controller';
-import { CreateUserService } from '@modules/user/services/create-user.service';
+import { UpdateUserController } from '@modules/user/infra/http/controllers/update-user.controller';
+import { UpdateUserService } from '@modules/user/services/update-user.service';
 import { Test } from '@nestjs/testing';
 import { fakeUserObject } from '@test/unit/mock/fake-user-object.mock';
 import { Response } from 'express';
 
-describe('CreateUserController', () => {
-  let createUserService: CreateUserService;
-  let sut: CreateUserController;
+describe('UpdateUserController', () => {
+  let updateUserService: UpdateUserService;
+  let sut: UpdateUserController;
 
   const expectedUser = new User(fakeUserObject, fakeUserObject.id);
   const fakeResponseSendFunc = jest.fn();
@@ -20,7 +20,7 @@ describe('CreateUserController', () => {
     const moduleFixture = await Test.createTestingModule({
       providers: [
         {
-          provide: CreateUserService,
+          provide: UpdateUserService,
           useValue: {
             execute: jest
               .fn()
@@ -28,39 +28,42 @@ describe('CreateUserController', () => {
           },
         },
       ],
-      controllers: [CreateUserController],
+      controllers: [UpdateUserController],
     }).compile();
-    // Get repository
-    createUserService = moduleFixture.get(CreateUserService);
     // Get service
-    sut = moduleFixture.get(CreateUserController);
+    updateUserService = moduleFixture.get(UpdateUserService);
+    // Get controller
+    sut = moduleFixture.get(UpdateUserController);
   });
 
   describe('execute', () => {
     const body = {
-      email: 'bob@gmail.com',
       name: 'bob',
       password: '12345678',
     };
 
+    const fakeRequest = {
+      user: { userId: 'fake-id' },
+    };
+
     it('should be able to create user', async () => {
       const spy = fakeResponseSendFunc;
-      await sut.handle(body, fakeResponse);
+      await sut.handle(body, fakeRequest, fakeResponse);
       expect(spy).toBeCalledWith({ user: expectedUser.toHTTP() });
     });
 
-    it('should call CreateUserService::execute with right parameters', async () => {
-      const spy = jest.spyOn(createUserService, 'execute');
-      await sut.handle(body, fakeResponse);
-      expect(spy).toBeCalledWith(body);
+    it('should call UpdateUserService::execute with right parameters', async () => {
+      const spy = jest.spyOn(updateUserService, 'execute');
+      await sut.handle(body, fakeRequest, fakeResponse);
+      expect(spy).toBeCalledWith({ ...body, id: fakeRequest.user.userId });
       expect(spy).toBeCalledTimes(1);
     });
 
-    it('should rethrow if CreateUserService::execute throws unknown error', async () => {
+    it('should rethrow if UpdateUserService::execute throws unknown error', async () => {
       jest
-        .spyOn(createUserService, 'execute')
+        .spyOn(updateUserService, 'execute')
         .mockRejectedValueOnce(new Error('unknown'));
-      const promise = sut.handle(body, fakeResponse);
+      const promise = sut.handle(body, fakeRequest, fakeResponse);
       expect(promise).rejects.toThrow(new Error('unknown'));
     });
   });
