@@ -2,7 +2,7 @@ import { User as RawUser } from '@prisma/client';
 import { User } from '../entities/user';
 
 export class PrismaUserMapper {
-  static toPrisma(user: User) {
+  static toPrisma(user: User): RawUser {
     return user;
   }
 
