@@ -9,12 +9,17 @@ export class PrismaFriendshipRepository implements FriendshipRepository {
   constructor(private prismaService: PrismaDatabaseProvider) {}
 
   async create(friendship: Friendship): Promise<void> {
-    await this.prismaService.friendship.create({ data: friendship });
+    await this.prismaService.friendship.create({
+      data: PrismaFriendshipMapper.toPrisma(friendship),
+    });
   }
 
   async findAllOfUser(userId: string): Promise<Friendship[]> {
     const rawFriendships = await this.prismaService.friendship.findMany({
       where: { userId },
+      include: {
+        friend: true,
+      },
     });
     return rawFriendships.map(PrismaFriendshipMapper.fromPrisma);
   }

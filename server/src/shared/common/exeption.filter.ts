@@ -30,7 +30,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     }
 
     return response.status(status).json({
-      statusCode: status,
+      statusCode: 500,
       message: errorMessages.INTERNAL_SERVER_ERROR,
       reason: '',
       timestamp: new Date().toISOString(),
