@@ -1,0 +1,5 @@
+{
+  "INTERNAL_SERVER_ERROR": "A unexpected error ocurred, please, await some minutes or contact support.",
+  "RESOURCE_NOT_FOUND": "The resource you are trying to find was not found.",
+  "EMAIL_ALREADY_EXISTS": "This email is already registered, maybe try to login."
+}

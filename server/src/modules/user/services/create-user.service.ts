@@ -1,7 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { User } from '../infra/db/entities/user';
 import { UserRepository } from '../repositories/user-repository';
 import { ICreateUserDTO } from '../dtos/icreate-user-dto';
+import { EmailAlreadyExistsError } from '../errors/email-already-exists.error';
 
 type IRequest = ICreateUserDTO;
 
@@ -10,26 +11,18 @@ export class CreateUserService {
   constructor(private userRepository: UserRepository) {}
 
   async execute({ email, name, password }: IRequest): Promise<void> {
-    try {
-      const user = new User({
-        email,
-        name,
-        password,
-      });
+    // Create user entity
+    const user = new User({
+      email,
+      name,
+      password,
+    });
 
-      const userWithSameEmail = await this.userRepository.findByEmail(email);
-      if (userWithSameEmail) {
-        throw new HttpException(
-          'EMAIL_ALREADY_EXISTS',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      }
+    // Verify if user with same email exists
+    const userWithSameEmail = await this.userRepository.findByEmail(email);
+    if (userWithSameEmail) throw new EmailAlreadyExistsError();
 
-      await this.userRepository.create(user);
-    } catch (e) {
-      if (e instanceof HttpException) throw e;
-      console.log(e);
-      throw new HttpException('SERVER_ERROR', HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    // Persisting user
+    await this.userRepository.create(user);
   }
 }
