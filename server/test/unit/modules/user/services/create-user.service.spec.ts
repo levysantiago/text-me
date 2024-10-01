@@ -3,7 +3,7 @@ import { User } from '@modules/user/infra/db/entities/user';
 import { UsersRepository } from '@modules/user/repositories/users-repository';
 import { CreateUserService } from '@modules/user/services/create-user.service';
 import { Test } from '@nestjs/testing';
-import { fakeUserObject } from '@test/unit/mock/fake-user-object';
+import { fakeUserObject } from '@test/unit/mock/fake-user-object.mock';
 
 describe('CreateUserService', () => {
   let usersRepository: UsersRepository;

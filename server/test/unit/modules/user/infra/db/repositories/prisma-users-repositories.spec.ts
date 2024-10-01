@@ -3,7 +3,7 @@ import { PrismaUserMapper } from '@modules/user/infra/db/mappers/prisma-user-map
 import { PrismaUsersRepository } from '@modules/user/infra/db/repositories/prisma-users-repository';
 import { Test, TestingModule } from '@nestjs/testing';
 import { PrismaDatabaseProvider } from '@shared/container/providers/database-provider/implementations/prisma-database.provider';
-import { fakeUserObject } from '@test/unit/mock/fake-user-object';
+import { fakeUserObject } from '@test/unit/mock/fake-user-object.mock';
 
 describe('PrismaUsersRepository', () => {
   let prismaService: PrismaDatabaseProvider;
