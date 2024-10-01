@@ -2,7 +2,7 @@ import { AppError } from '@shared/resources/errors/app.error';
 
 export class FriendNotFoundError extends AppError {
   constructor(options: { reason?: string } = {}) {
-    super('RESOURCE_NOT_FOUND', {
+    super('RESOURCE_NOT_FOUND_ERROR', {
       status: 404,
       reason:
         options.reason ||

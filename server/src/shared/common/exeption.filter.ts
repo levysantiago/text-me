@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { AppError } from '@shared/resources/errors/app.error';
 import { ErrorMessageManager } from '@shared/resources/errors/error-message-manager';
+import { IErrorMessages } from '@shared/resources/errors/types/ierror-message-id';
 import { ILocale } from '@shared/resources/types/ilocale';
 import { Request, Response } from 'express';
 
@@ -22,6 +23,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     if (exception instanceof AppError) {
       return response.status(status).json({
         statusCode: status,
+        error: exception.messageId,
         message: errorMessages[exception.messageId],
         reason: exception.reason,
         timestamp: new Date().toISOString(),
@@ -31,8 +33,11 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
     console.log(exception);
 
+    const defaultErrorMessageId: keyof IErrorMessages = 'INTERNAL_SERVER_ERROR';
+
     return response.status(status).json({
       statusCode: 500,
+      error: defaultErrorMessageId,
       message: errorMessages.INTERNAL_SERVER_ERROR,
       reason: '',
       timestamp: new Date().toISOString(),
