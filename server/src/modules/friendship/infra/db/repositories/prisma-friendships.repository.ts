@@ -1,11 +1,11 @@
-import { FriendshipRepository } from '@modules/friendship/repositories/friendship.repository';
+import { FriendshipsRepository } from '@modules/friendship/repositories/friendships.repository';
 import { Injectable } from '@nestjs/common';
 import { PrismaDatabaseProvider } from '@shared/container/providers/database-provider/implementations/prisma-database.provider';
 import { Friendship } from '../entities/friendship';
 import { PrismaFriendshipMapper } from '../mappers/prisma-friendship.mapper';
 
 @Injectable()
-export class PrismaFriendshipRepository implements FriendshipRepository {
+export class PrismaFriendshipsRepository implements FriendshipsRepository {
   constructor(private prismaService: PrismaDatabaseProvider) {}
 
   async create(friendship: Friendship): Promise<void> {

@@ -1,5 +1,5 @@
 import { MessageRepository } from '@modules/chat/repositories/message.repository';
-import { FriendshipRepository } from '@modules/friendship/repositories/friendship.repository';
+import { FriendshipsRepository } from '@modules/friendship/repositories/friendships.repository';
 import { Injectable } from '@nestjs/common';
 import { MessagesNotFoundError } from '../errors/messages-not-found.error';
 
@@ -24,7 +24,7 @@ interface IResponse {
 export class GetFriendsMessagesResumeService {
   constructor(
     private messageRepository: MessageRepository,
-    private friendshipRepository: FriendshipRepository,
+    private friendshipsRepository: FriendshipsRepository,
   ) {}
 
   async execute({ toUserId }: IRequest): Promise<IResponse> {
@@ -33,7 +33,7 @@ export class GetFriendsMessagesResumeService {
       const messages = await this.messageRepository.findAllOfUser(toUserId);
 
       // Find all user friendships
-      const friendships = await this.friendshipRepository.findAllOfUser(
+      const friendships = await this.friendshipsRepository.findAllOfUser(
         toUserId,
       );
 

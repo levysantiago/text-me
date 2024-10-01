@@ -4,7 +4,7 @@ import { GetUserService } from './services/get-user.service';
 import { UpdateUserService } from './services/update-user.service';
 import { CreateUserController } from './infra/http/controllers/create-user.controller';
 import { UpdateUserController } from './infra/http/controllers/update-user.controller';
-import { PrismaUsersRepository } from './infra/db/repositories/prisma-user-repository';
+import { PrismaUsersRepository } from './infra/db/repositories/prisma-users-repository';
 import { UsersRepository } from './repositories/users-repository';
 
 @Module({

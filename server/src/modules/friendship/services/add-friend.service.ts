@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Friendship } from '../infra/db/entities/friendship';
-import { FriendshipRepository } from '../repositories/friendship.repository';
+import { FriendshipsRepository } from '../repositories/friendships.repository';
 import { FriendNotFoundError } from '../errors/friend-not-found.error';
 import { UsersRepository } from '@modules/user/repositories/users-repository';
 
@@ -12,7 +12,7 @@ interface IRequest {
 @Injectable()
 export class AddFriendService {
   constructor(
-    private friendshipRepository: FriendshipRepository,
+    private friendshipsRepository: FriendshipsRepository,
     private usersRepository: UsersRepository,
   ) {}
 
@@ -25,6 +25,6 @@ export class AddFriendService {
     const friendship = new Friendship({ userId, friendId: friend.id });
 
     // Persist friendship
-    await this.friendshipRepository.create(friendship);
+    await this.friendshipsRepository.create(friendship);
   }
 }
