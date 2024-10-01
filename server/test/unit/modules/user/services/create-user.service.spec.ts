@@ -5,7 +5,7 @@ import { CreateUserService } from '@modules/user/services/create-user.service';
 import { Test } from '@nestjs/testing';
 import { fakeUserObject } from '@test/unit/mock/fake-user-object';
 
-describe('PrismaUsersRepository', () => {
+describe('CreateUserService', () => {
   let usersRepository: UsersRepository;
   let sut: CreateUserService;
 

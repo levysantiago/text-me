@@ -102,7 +102,7 @@ export class EventsGateway implements OnModuleInit {
       });
 
       // Find user
-      const user = await this.getUserService.execute({
+      const { user } = await this.getUserService.execute({
         userId: fromUserId,
       });
 
@@ -137,9 +137,10 @@ export class EventsGateway implements OnModuleInit {
       if (!areTheyFriends) {
         // If they are not friends, we create a friendship between them
         // Obtaining the friend user
-        const friend = await this.getUserService.execute({
+        const { user: friend } = await this.getUserService.execute({
           userId: fromUserId,
         });
+
         // Creating friendship
         await this.addFriendService.execute({
           userId: body.toUserId,
