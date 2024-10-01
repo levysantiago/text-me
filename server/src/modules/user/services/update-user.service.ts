@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { UserRepository } from '../repositories/user-repository';
+import { UsersRepository } from '../repositories/users-repository';
 import { IUpdateUserDTO } from '../dtos/iupdate-user-dto';
 import { UserNotFoundError } from '../errors/user-not-found.error';
 
@@ -9,11 +9,11 @@ interface IRequest extends IUpdateUserDTO {
 
 @Injectable()
 export class UpdateUserService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private usersRepository: UsersRepository) {}
 
   async execute({ id, name, password }: IRequest): Promise<void> {
     // Find user
-    const user = await this.userRepository.find(id);
+    const user = await this.usersRepository.find(id);
     if (!user) throw new UserNotFoundError();
 
     // Update user data
@@ -21,6 +21,6 @@ export class UpdateUserService {
     password ? (user.password = password) : null;
 
     // Save user updates
-    await this.userRepository.save(user);
+    await this.usersRepository.save(user);
   }
 }

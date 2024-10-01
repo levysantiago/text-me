@@ -1,12 +1,12 @@
-import { UserRepository } from '@modules/user/repositories/user-repository';
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InvalidEmailOrPasswordError } from '../error/invalid-email-or-password.error';
+import { UsersRepository } from '@modules/user/repositories/users-repository';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userRepository: UserRepository,
+    private usersRepository: UsersRepository,
     private jwtService: JwtService,
   ) {}
 
@@ -15,7 +15,7 @@ export class AuthService {
     password: string,
   ): Promise<{ access_token: string }> {
     // Find user by email
-    const user = await this.userRepository.findByEmail(email);
+    const user = await this.usersRepository.findByEmail(email);
 
     // Verify user and password
     if (user && user.password === password) {
