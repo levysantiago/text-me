@@ -9,14 +9,6 @@ describe('PrismaUsersRepository', () => {
   let prismaService: PrismaDatabaseProvider;
   let sut: PrismaUsersRepository;
 
-  const FakePrismaDatabaseProvider = {
-    user: {
-      create: jest.fn().mockResolvedValue(fakeUserObject),
-      findUnique: jest.fn().mockResolvedValue(fakeUserObject),
-      update: jest.fn().mockResolvedValue(fakeUserObject),
-    },
-  };
-
   beforeAll(() => {
     // Mock PrismaUserMapper
     jest
@@ -26,6 +18,14 @@ describe('PrismaUsersRepository', () => {
   });
 
   beforeEach(async () => {
+    const FakePrismaDatabaseProvider = {
+      user: {
+        create: jest.fn().mockResolvedValue(fakeUserObject),
+        findUnique: jest.fn().mockResolvedValue(fakeUserObject),
+        update: jest.fn().mockResolvedValue(fakeUserObject),
+      },
+    };
+
     // Create testing module
     const moduleFixture: TestingModule = await Test.createTestingModule({
       providers: [
@@ -52,9 +52,9 @@ describe('PrismaUsersRepository', () => {
       });
 
       // Create user
-      const promise = sut.create(user);
+      const userCreated = await sut.create(user);
 
-      expect(promise).resolves.toEqual(undefined);
+      expect(userCreated).toEqual(new User(fakeUserObject, fakeUserObject.id));
     });
 
     it('should be able to call PrismaDatabaseProvider::create with right parameters', async () => {
@@ -71,6 +71,7 @@ describe('PrismaUsersRepository', () => {
       await sut.create(user);
 
       expect(spy).toBeCalledWith({ data: user });
+      expect(spy).toBeCalledTimes(1);
     });
 
     it('should rethrow error to caller if PrismaDatabaseProvider::create throws', async () => {
@@ -102,6 +103,7 @@ describe('PrismaUsersRepository', () => {
       const spy = jest.spyOn(prismaService.user, 'findUnique');
       await sut.find('fake-id');
       expect(spy).toBeCalledWith({ where: { id: 'fake-id' } });
+      expect(spy).toBeCalledTimes(1);
     });
 
     it('should rethrow error to caller if PrismaDatabaseProvider::findUnique throws', async () => {
@@ -124,8 +126,9 @@ describe('PrismaUsersRepository', () => {
 
     it('should be able to call PrismaDatabaseProvider::findUnique with right parameters', async () => {
       const spy = jest.spyOn(prismaService.user, 'findUnique');
-      await sut.find('bob@gmail.com');
+      await sut.findByEmail('bob@gmail.com');
       expect(spy).toBeCalledWith({ where: { email: 'bob@gmail.com' } });
+      expect(spy).toBeCalledTimes(1);
     });
 
     it('should rethrow error to caller if PrismaDatabaseProvider::findUnique throws', async () => {
@@ -134,7 +137,7 @@ describe('PrismaUsersRepository', () => {
         .spyOn(prismaService.user, 'findUnique')
         .mockRejectedValueOnce(new Error('unknown'));
       // execute findByEmail
-      const promise = sut.find('bob@gmail.com');
+      const promise = sut.findByEmail('bob@gmail.com');
       // expect
       expect(promise).rejects.toThrow(new Error('unknown'));
     });
@@ -160,6 +163,7 @@ describe('PrismaUsersRepository', () => {
         data: fakeUserObject,
         where: { id: fakeUserObject.id },
       });
+      expect(spy).toBeCalledTimes(1);
     });
 
     it('should rethrow error to caller if PrismaDatabaseProvider::update throws', async () => {

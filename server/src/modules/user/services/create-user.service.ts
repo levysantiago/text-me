@@ -6,11 +6,15 @@ import { EmailAlreadyExistsError } from '../errors/email-already-exists.error';
 
 type IRequest = ICreateUserDTO;
 
+interface IResponse {
+  user: User;
+}
+
 @Injectable()
 export class CreateUserService {
   constructor(private usersRepository: UsersRepository) {}
 
-  async execute({ email, name, password }: IRequest): Promise<void> {
+  async execute({ email, name, password }: IRequest): Promise<IResponse> {
     // Create user entity
     const user = new User({
       email,
@@ -23,6 +27,8 @@ export class CreateUserService {
     if (userWithSameEmail) throw new EmailAlreadyExistsError();
 
     // Persisting user
-    await this.usersRepository.create(user);
+    const userCreated = await this.usersRepository.create(user);
+
+    return { user: userCreated.toHTTP() };
   }
 }

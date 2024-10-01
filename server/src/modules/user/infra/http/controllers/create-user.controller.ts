@@ -10,11 +10,11 @@ export class CreateUserController {
   async handle(@Body() body: any, @Response() res: IResponse) {
     const { name, email, password } = body;
 
-    await this.createUserService.execute({
+    const data = await this.createUserService.execute({
       name,
       email,
       password,
     });
-    return res.status(200).send();
+    return res.status(200).send(data);
   }
 }
