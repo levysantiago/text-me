@@ -152,8 +152,8 @@ describe('PrismaUsersRepository', () => {
     });
 
     it('should be able to save user successfully', async () => {
-      const promise = sut.save(user);
-      expect(promise).resolves.toEqual(undefined);
+      const updatedUser = await sut.save(user);
+      expect(updatedUser).toEqual(fakeUserObject);
     });
 
     it('should be able to call PrismaDatabaseProvider::update with right parameters', async () => {
