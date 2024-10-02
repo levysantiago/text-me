@@ -15,7 +15,7 @@ interface IRequest extends ExpressRequest {
 }
 
 @Controller('api')
-export class AddFriendshipController {
+export class AddFriendController {
   constructor(private addFriendService: AddFriendService) {}
 
   @UseGuards(JwtAuthGuard)
