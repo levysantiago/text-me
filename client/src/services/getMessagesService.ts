@@ -22,8 +22,7 @@ export const getMessagesService = async ({
   }
 
   // Executing sign in route
-  const response = await server.get('/chat', {
-    params: { fromUserId },
+  const response = await server.get(`/chat/${fromUserId}/`, {
     headers: { Authorization: `Bearer ${accessToken}` },
   })
   if (response.status !== 200) {
