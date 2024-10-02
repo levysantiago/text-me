@@ -63,6 +63,9 @@ describe('CreateUserService', () => {
       expect(spy).toBeCalledWith(
         expect.objectContaining({
           ...params,
+          id: expect.any(String),
+          createdAt: expect.any(Date),
+          updatedAt: expect.any(Date),
         }),
       );
       expect(spy).toBeCalledTimes(1);
