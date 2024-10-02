@@ -10,9 +10,9 @@ describe('CreateUserController', () => {
   let sut: CreateUserController;
 
   const expectedUser = new User(fakeUserObject, fakeUserObject.id);
-  const fakeResponseSendFunc = jest.fn();
+  const fakeResponseJsonFunc = jest.fn();
   const fakeResponse = {
-    status: jest.fn().mockReturnValue({ send: fakeResponseSendFunc }),
+    status: jest.fn().mockReturnValue({ json: fakeResponseJsonFunc }),
   } as any as Response;
 
   beforeEach(async () => {
@@ -44,7 +44,7 @@ describe('CreateUserController', () => {
     };
 
     it('should be able to create user', async () => {
-      const spy = fakeResponseSendFunc;
+      const spy = fakeResponseJsonFunc;
       await sut.handle(body, fakeResponse);
       expect(spy).toBeCalledWith({ user: expectedUser.toHTTP() });
     });

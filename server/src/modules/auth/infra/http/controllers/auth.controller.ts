@@ -15,7 +15,7 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('auth')
-  async login(@Body() body, @Res() response: Response) {
+  async handle(@Body() body, @Res() response: Response) {
     const createAuthUserBodySchema = z.object({
       email: z.string().email(),
       password: z.string(),
