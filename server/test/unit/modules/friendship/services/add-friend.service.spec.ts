@@ -1,5 +1,4 @@
 import { FriendNotFoundError } from '@modules/friendship/errors/friend-not-found.error';
-import { Friendship } from '@modules/friendship/infra/db/entities/friendship';
 import { FriendshipsRepository } from '@modules/friendship/repositories/friendships.repository';
 import { AddFriendService } from '@modules/friendship/services/add-friend.service';
 import { User } from '@modules/user/infra/db/entities/user';
@@ -53,7 +52,7 @@ describe('AddFriendService', () => {
       friendEmail: 'fake-friend-email',
     };
 
-    it('should be able to create user', async () => {
+    it('should be able to create friendship', async () => {
       const promise = sut.execute(params);
       expect(promise).resolves.toEqual(undefined);
     });

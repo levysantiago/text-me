@@ -14,7 +14,9 @@ export class GetFriendsController {
   @UseGuards(JwtAuthGuard)
   @Get('friend')
   async handle(@Request() req: IRequest) {
-    const { data } = await this.getFriendsService.execute(req.user.userId);
+    const { data } = await this.getFriendsService.execute({
+      userId: req.user.userId,
+    });
 
     return { data };
   }
