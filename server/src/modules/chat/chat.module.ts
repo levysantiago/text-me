@@ -8,9 +8,10 @@ import { GetAmountOfUnseenMessagesController } from './infra/http/controllers/ge
 import { GetMessagesController } from './infra/http/controllers/get-messages.controller';
 import { GetFriendsMessagesResumeService } from './services/get-friends-messages-resume.service';
 import { FriendshipModule } from '@modules/friendship/friendship.module';
+import { UserModule } from '@modules/user/user.module';
 
 @Module({
-  imports: [FriendshipModule],
+  imports: [FriendshipModule, UserModule],
   controllers: [GetAmountOfUnseenMessagesController, GetMessagesController],
   providers: [
     CreateMessageService,
