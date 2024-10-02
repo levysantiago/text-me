@@ -7,7 +7,9 @@ export class Friendship {
   constructor(props: ICreateFriendshipDTO, id?: string) {
     this.userId = props.userId;
     this.friendId = props.friendId;
-    this.friend = props.friend ? new User(props.friend) : undefined;
+    this.friend = props.friend
+      ? new User(props.friend, props.friend.id)
+      : undefined;
 
     this.id = id ?? randomUUID();
     this.createdAt = props.createdAt ?? new Date();

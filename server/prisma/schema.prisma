@@ -47,5 +47,7 @@ model Friendship {
 
   friend User @relation(fields: [friendId], references: [id])
 
+  @@unique([userId, friendId])
+  @@index([userId, friendId])
   @@map("friendships")
 }

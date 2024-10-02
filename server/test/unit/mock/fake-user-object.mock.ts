@@ -1,4 +1,6 @@
-export const fakeUserObject = {
+import { User as RawUser } from '@prisma/client';
+
+export const fakeUserObject: RawUser = {
   id: 'fake-id',
   name: 'fake-name',
   email: 'fake-email',
