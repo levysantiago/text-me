@@ -2,7 +2,6 @@ import { MessagesNotFoundError } from '@modules/chat/errors/messages-not-found.e
 import { Message } from '@modules/chat/infra/db/entities/message';
 import { MessagesRepository } from '@modules/chat/repositories/messages.repository';
 import { GetFriendsMessagesResumeService } from '@modules/chat/services/get-friends-messages-resume.service';
-import { FriendNotFoundError } from '@modules/friendship/errors/friend-not-found.error';
 import { Friendship } from '@modules/friendship/infra/db/entities/friendship';
 import { FriendshipsRepository } from '@modules/friendship/repositories/friendships.repository';
 import { Test } from '@nestjs/testing';
