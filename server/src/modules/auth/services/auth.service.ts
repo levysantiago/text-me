@@ -3,6 +3,15 @@ import { JwtService } from '@nestjs/jwt';
 import { InvalidEmailOrPasswordError } from '../error/invalid-email-or-password.error';
 import { UsersRepository } from '@modules/user/repositories/users-repository';
 
+interface IRequest {
+  email: string;
+  password: string;
+}
+
+interface IResponse {
+  access_token: string;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -10,10 +19,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async execute(
-    email: string,
-    password: string,
-  ): Promise<{ access_token: string }> {
+  async execute({ email, password }: IRequest): Promise<IResponse> {
     // Find user by email
     const user = await this.usersRepository.findByEmail(email);
 
@@ -23,9 +29,10 @@ export class AuthService {
       const payload = { username: user.name, sub: user.id };
 
       // Sign and create access token
-      return new Promise((resolve) => {
-        resolve({ access_token: this.jwtService.sign(payload) });
-      });
+      const accessToken = this.jwtService.sign(payload);
+
+      // Return access token
+      return { access_token: accessToken };
     }
 
     throw new InvalidEmailOrPasswordError();

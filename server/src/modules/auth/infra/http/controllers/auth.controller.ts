@@ -24,7 +24,10 @@ export class AuthController {
     try {
       const { email, password } = createAuthUserBodySchema.parse(body);
 
-      const { access_token } = await this.authService.execute(email, password);
+      const { access_token } = await this.authService.execute({
+        email,
+        password,
+      });
 
       return response.status(200).json({ data: { access_token } });
     } catch (e) {
