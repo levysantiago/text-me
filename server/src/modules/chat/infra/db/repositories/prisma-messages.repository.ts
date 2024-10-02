@@ -9,10 +9,12 @@ export class PrismaMessagesRepository implements MessagesRepository {
   constructor(private prismaService: PrismaDatabaseProvider) {}
 
   async create(message: Message): Promise<void> {
-    await this.prismaService.message.create({ data: message });
+    await this.prismaService.message.create({
+      data: PrismaMessageMapper.toPrisma(message),
+    });
   }
 
-  async findBy(id: string): Promise<Message> {
+  async findById(id: string): Promise<Message> {
     const rawMessage = await this.prismaService.message.findUnique({
       where: { id },
     });
@@ -33,9 +35,9 @@ export class PrismaMessagesRepository implements MessagesRepository {
     return rawMessages.map(PrismaMessageMapper.fromPrisma);
   }
 
-  async visualizeMessages(fromUserId: string, toUserId: string): Promise<void> {
+  async visualizeMessages(conversation: string): Promise<void> {
     await this.prismaService.message.updateMany({
-      where: { fromUserId, toUserId },
+      where: { conversation },
       data: { visualized: true },
     });
   }

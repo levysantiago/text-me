@@ -127,9 +127,9 @@ export class EventsGateway implements OnModuleInit {
 
       //Getting the friends of user receiver to verify if the message sender
       // is his/her friend
-      const friendsOfReceiver = await this.getFriendsService.execute(
-        body.toUserId,
-      );
+      const friendsOfReceiver = await this.getFriendsService.execute({
+        userId: body.toUserId,
+      });
       // Verifying if users are friends
       const areTheyFriends = friendsOfReceiver.data.filter((friend) => {
         return friend.id === fromUserId;

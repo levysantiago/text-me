@@ -11,6 +11,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  user
+  assistant
+}
+
 model User {
   id          String       @id
   email       String       @unique
@@ -30,7 +35,7 @@ model Message {
   toUserId     String   @map("to_user_id")
   conversation String
   visualized   Boolean
-  role         String   @default("user")
+  role         Role     @default(user)
   content      String
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @default(now()) @map("updated_at")

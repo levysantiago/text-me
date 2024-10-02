@@ -52,7 +52,7 @@ describe('PrismaFriendshipsRepository', () => {
     const friendship = new Friendship(fakeFriendshipObject);
 
     it('should be able to create friendship successfully', async () => {
-      // Create user
+      // Create friendship
       const promise = sut.create(friendship);
       // Check
       expect(promise).resolves.toEqual(undefined);
