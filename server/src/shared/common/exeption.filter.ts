@@ -31,7 +31,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       });
     }
 
-    console.log(exception);
+    if (process.env.NODE_ENV !== 'test') console.log(exception);
 
     const defaultErrorMessageId: keyof IErrorMessages = 'INTERNAL_SERVER_ERROR';
 
@@ -39,7 +39,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       statusCode: 500,
       error: defaultErrorMessageId,
       message: errorMessages.INTERNAL_SERVER_ERROR,
-      reason: '',
+      reason: exception.message,
       timestamp: new Date().toISOString(),
       path: request.url,
     });
