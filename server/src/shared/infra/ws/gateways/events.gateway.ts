@@ -136,26 +136,23 @@ export class EventsGateway implements OnModuleInit {
       })[0];
       if (!areTheyFriends) {
         // If they are not friends, we create a friendship between them
-        // Obtaining the friend user
-        const { user: friend } = await this.getUserService.execute({
-          userId: fromUserId,
-        });
-
         // Creating friendship
         await this.addFriendService.execute({
           userId: body.toUserId,
-          friendEmail: friend.email,
+          friendEmail: user.email,
         });
       }
 
       // Getting the user receiver socket id
-      const receiverSocketId = this.clientsStateData[body.toUserId].socketId;
-      if (receiverSocketId) {
+      const receiverClientData = this.clientsStateData[body.toUserId];
+      if (receiverClientData) {
+        const receiverSocketId = receiverClientData.socketId;
         // Emit event for user that received message
         this.server.to(receiverSocketId).emit('handleCreatedMessage', {
           fromUserId,
           toUserId: body.toUserId,
           content: body.content,
+          role,
         });
         // Emitting event to user receiver that his friend stopped typing
         this.server.to(receiverSocketId).emit('friendStoppedTyping', {
