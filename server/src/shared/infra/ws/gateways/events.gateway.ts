@@ -213,8 +213,9 @@ export class EventsGateway implements OnModuleInit {
 
       // Emitting event for user that will receive the message to warn that
       // his/her friend is typing
-      const receiverSocketId = this.clientsStateData[body.toUserId].socketId;
-      if (receiverSocketId) {
+      const receiverClientData = this.clientsStateData[body.toUserId];
+      if (receiverClientData) {
+        const receiverSocketId = receiverClientData.socketId;
         this.server.to(receiverSocketId).emit('friendIsTyping', {
           fromUserId: userId,
         });
@@ -234,18 +235,22 @@ export class EventsGateway implements OnModuleInit {
           // Get current date as moment instance
           const currentDateMoment = moment(new Date());
 
+          // Two milliseconds
+          const twoMilliseconds = 2;
+
           // Definition if user is still typing
-          const isStillTyping = currentDateMoment.diff(typingTimeMoment) > 2;
+          const didUserStoppedTyping =
+            currentDateMoment.diff(typingTimeMoment) > twoMilliseconds;
 
           // When the user stops typing, the interval will stop after the
-          // difference of lastDateTime and currentDate is above 2.
-          if (isStillTyping) {
+          // difference of lastDateTime and currentDate is above 2 milliseconds.
+          if (didUserStoppedTyping) {
             // After the user stopped typing, the interval emits the event
             // "friendStoppedTyping" to warn his/her friend that he/she
             // stopped typing.
-            const receiverSocketId =
-              this.clientsStateData[body.toUserId].socketId;
-            if (receiverSocketId) {
+            const receiverClientData = this.clientsStateData[body.toUserId];
+            if (receiverClientData) {
+              const receiverSocketId = receiverClientData.socketId;
               this.server.to(receiverSocketId).emit('friendStoppedTyping', {
                 fromUserId: userId,
               });

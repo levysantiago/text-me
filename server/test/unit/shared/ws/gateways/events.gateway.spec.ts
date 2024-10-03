@@ -26,6 +26,14 @@ describe('EventsGateway', () => {
   let socketClient: Socket;
   const serverToEmitFunc = jest.fn();
 
+  beforeAll(() => {
+    jest.useFakeTimers();
+  });
+
+  afterAll(() => {
+    jest.useRealTimers();
+  });
+
   beforeEach(async () => {
     const fakeJwtService = {
       sign: jest.fn().mockReturnValue('fake-token'),
@@ -251,6 +259,91 @@ describe('EventsGateway', () => {
         undefined,
       );
       expect(spy).toBeCalledTimes(1);
+    });
+  });
+
+  describe('onVisualizeMessage', () => {
+    const body = {
+      access_token: 'fake-token',
+      fromUserId: validFriend.id,
+    };
+
+    it('should be able to call JwtService::verify with right parameters', async () => {
+      const spy = jest.spyOn(jwtService, 'verify');
+      await sut.onVisualizeMessage(body);
+      expect(spy).toBeCalledWith(body.access_token, { secret: env.JWT_SECRET });
+    });
+
+    it('should be able to call VisualizeMessagesService::execute with right parameters', async () => {
+      const spy = jest.spyOn(visualizeMessagesService, 'execute');
+      await sut.onVisualizeMessage(body);
+      expect(spy).toBeCalledWith({
+        fromUserId: body.fromUserId,
+        userId: validUser.id,
+      });
+    });
+  });
+
+  describe('onChatTyping', () => {
+    const body = {
+      access_token: 'fake-token',
+      toUserId: validFriend.id,
+    };
+
+    it('should be able to call JwtService::verify with right parameters', async () => {
+      const spy = jest.spyOn(jwtService, 'verify');
+      await sut.onChatTyping(body);
+      expect(spy).toBeCalledWith(body.access_token, { secret: env.JWT_SECRET });
+    });
+
+    it('should be able to emit friendIsTyping event', async () => {
+      // Add friend socket state data
+      sut['clientsStateData'][validFriend.id] = {
+        socketId: 'fake-friend-socket-id',
+        interval: undefined,
+        lastTypingTime: undefined,
+      };
+
+      const spy = jest.spyOn(sut['server'], 'to');
+      const spyEvent = serverToEmitFunc;
+      await sut.onChatTyping(body);
+      jest.runAllTimers();
+      expect(spy).toBeCalledWith('fake-friend-socket-id');
+      expect(spyEvent).toBeCalledWith('friendIsTyping', {
+        fromUserId: validUser.id,
+      });
+      expect(spy).toBeCalledTimes(2);
+
+      sut['clientsStateData'][validFriend.id] = undefined;
+    });
+
+    it('should be able to emit friendStoppedTyping event', async () => {
+      // Add friend socket state data
+      sut['clientsStateData'][validFriend.id] = {
+        socketId: 'fake-friend-socket-id',
+        interval: undefined,
+        lastTypingTime: undefined,
+      };
+
+      const spy = jest.spyOn(sut['server'], 'to');
+      const spyClearInterval = jest.spyOn(global, 'clearInterval');
+      const spyEvent = serverToEmitFunc;
+      await sut.onChatTyping(body);
+      jest.runAllTimers();
+      expect(spy).toBeCalledWith('fake-friend-socket-id');
+      expect(spyEvent).toBeCalledWith('friendStoppedTyping', {
+        fromUserId: validUser.id,
+      });
+      expect(spy).toBeCalledTimes(2);
+      expect(spyClearInterval).toBeCalledWith(expect.any(Object));
+
+      // Ensure lastTypingTime and interval is undefined at the end
+      expect(
+        sut['clientsStateData'][validUser.id].lastTypingTime,
+      ).toBeUndefined();
+      expect(sut['clientsStateData'][validUser.id].interval).toBeUndefined();
+
+      sut['clientsStateData'][validFriend.id] = undefined;
     });
   });
 });
