@@ -4,7 +4,7 @@ import { Response } from 'express';
 @Controller('/')
 export class HeartbeatController {
   @Get('/')
-  async login(@Res() response: Response) {
+  async handle(@Res() response: Response) {
     return response.status(200).json({ data: 'TextMe Server is UP!' });
   }
 }
