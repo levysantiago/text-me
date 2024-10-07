@@ -20,18 +20,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    
-    - name: Enter server folder
-      run: cd ./server
 
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}
-        cache: 'yarn'
     
     - name: Intalling dependencies
-      run: yarn ci
+      run: npm ci
+      working-directory: ./server
     
     - name: Running tests
-      run: yarn test
+      run: npm test
+      working-directory: ./server
