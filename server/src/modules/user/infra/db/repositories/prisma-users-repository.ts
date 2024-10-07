@@ -1,4 +1,4 @@
-import { PrismaUserMapper } from '../mappers/prisma-user-mapper';
+import { PrismaUserMapper } from '../mappers/prisma-user.mapper';
 import { Injectable } from '@nestjs/common';
 import { PrismaDatabaseProvider } from '@shared/container/providers/database-provider/implementations/prisma-database.provider';
 import { User } from '../entities/user';

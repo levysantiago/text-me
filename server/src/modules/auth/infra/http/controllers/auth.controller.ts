@@ -21,24 +21,13 @@ export class AuthController {
       password: z.string(),
     });
 
-    try {
-      const { email, password } = createAuthUserBodySchema.parse(body);
+    const { email, password } = createAuthUserBodySchema.parse(body);
 
-      const { access_token } = await this.authService.execute({
-        email,
-        password,
-      });
+    const { access_token } = await this.authService.execute({
+      email,
+      password,
+    });
 
-      return response.status(200).json({ data: { access_token } });
-    } catch (e) {
-      if (e instanceof z.ZodError) {
-        throw new HttpException(
-          { reason: 'Validation error', errors: e.errors },
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-
-      throw e;
-    }
+    return response.status(200).json({ data: { access_token } });
   }
 }
