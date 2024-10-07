@@ -30,7 +30,7 @@ jobs:
       run: npm install yarn -g
 
     - name: Intalling dependencies
-      run: yarn ci
+      run: yarn install --frozen-lockfile
       working-directory: ./server
     
     - name: Running tests
