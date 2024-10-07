@@ -45,7 +45,7 @@ describe('VisualizeMessagesService', () => {
     it('should call MessagesRepository::visualizeMessages with right parameters', async () => {
       const spy = jest.spyOn(messagesRepository, 'visualizeMessages');
       await sut.execute(params);
-      expect(spy).toBeCalledWith('fake-conversation');
+      expect(spy).toBeCalledWith(params.fromUserId, params.userId);
       expect(spy).toBeCalledTimes(1);
     });
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { MessagesRepository } from '../repositories/messages.repository';
 import { ConversationHelper } from '@shared/resources/lib/conversation-helper';
+import { MessagesNotFoundError } from '../errors/messages-not-found.error';
 
 interface IMessage {
   fromUserId: string;
@@ -22,15 +23,19 @@ export class GetMessagesService {
   constructor(private messagesRepository: MessagesRepository) {}
 
   async execute({ fromUserId, toUserId }: IRequest): Promise<IResponse> {
-    // Get users conversation key
-    const conversation = ConversationHelper.getConversationFromUsers({
-      fromUserId,
-      toUserId,
-    });
-    // find messages by conversation
-    const messages = await this.messagesRepository.findByConversation(
-      conversation,
-    );
-    return { data: messages };
+    try {
+      // Get users conversation key
+      const conversation = ConversationHelper.getConversationFromUsers({
+        fromUserId,
+        toUserId,
+      });
+      // find messages by conversation
+      const messages = await this.messagesRepository.findByConversation(
+        conversation,
+      );
+      return { data: messages };
+    } catch (err) {
+      throw new MessagesNotFoundError();
+    }
   }
 }

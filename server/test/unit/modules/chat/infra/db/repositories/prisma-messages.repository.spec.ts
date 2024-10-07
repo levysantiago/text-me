@@ -121,6 +121,9 @@ describe('PrismaMessagesRepository', () => {
         where: {
           toUserId: 'fake-user-id',
         },
+        orderBy: {
+          createdAt: 'asc',
+        },
       });
       expect(spy).toBeCalledTimes(1);
     });
@@ -152,6 +155,9 @@ describe('PrismaMessagesRepository', () => {
         where: {
           conversation: 'fake-conversation',
         },
+        orderBy: {
+          createdAt: 'asc',
+        },
       });
       expect(spy).toBeCalledTimes(1);
     });
@@ -170,15 +176,18 @@ describe('PrismaMessagesRepository', () => {
 
   describe('visualizeMessages', () => {
     it('should be able to find messages by conversation', async () => {
-      const promise = sut.visualizeMessages('fake-conversation');
+      const promise = sut.visualizeMessages(
+        'fake-from-user-id',
+        'fake-to-user-id',
+      );
       expect(promise).resolves.toEqual(undefined);
     });
 
     it('should be able to call PrismaDatabaseProvider::updateMany with right parameters', async () => {
       const spy = jest.spyOn(prismaService.message, 'updateMany');
-      await sut.visualizeMessages('fake-conversation');
+      await sut.visualizeMessages('fake-from-user-id', 'fake-to-user-id');
       expect(spy).toBeCalledWith({
-        where: { conversation: 'fake-conversation' },
+        where: { fromUserId: 'fake-from-user-id', toUserId: 'fake-to-user-id' },
         data: { visualized: true },
       });
       expect(spy).toBeCalledTimes(1);
@@ -190,7 +199,10 @@ describe('PrismaMessagesRepository', () => {
         .spyOn(prismaService.message, 'updateMany')
         .mockRejectedValueOnce(new Error('unknown'));
       // execute visualizeMessages
-      const promise = sut.visualizeMessages('fake-conversation');
+      const promise = sut.visualizeMessages(
+        'fake-from-user-id',
+        'fake-to-user-id',
+      );
       // expect
       expect(promise).rejects.toThrow(new Error('unknown'));
     });

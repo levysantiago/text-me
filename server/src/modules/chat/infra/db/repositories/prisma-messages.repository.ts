@@ -24,6 +24,7 @@ export class PrismaMessagesRepository implements MessagesRepository {
   async findAllOfUser(userReceiverId: string): Promise<Message[]> {
     const rawMessages = await this.prismaService.message.findMany({
       where: { toUserId: userReceiverId },
+      orderBy: { createdAt: 'asc' },
     });
     return rawMessages.map(PrismaMessageMapper.fromPrisma);
   }
@@ -31,13 +32,14 @@ export class PrismaMessagesRepository implements MessagesRepository {
   async findByConversation(conversation: string): Promise<Message[]> {
     const rawMessages = await this.prismaService.message.findMany({
       where: { conversation: conversation },
+      orderBy: { createdAt: 'asc' },
     });
     return rawMessages.map(PrismaMessageMapper.fromPrisma);
   }
 
-  async visualizeMessages(conversation: string): Promise<void> {
+  async visualizeMessages(fromUserId: string, toUserId: string): Promise<void> {
     await this.prismaService.message.updateMany({
-      where: { conversation },
+      where: { fromUserId, toUserId },
       data: { visualized: true },
     });
   }

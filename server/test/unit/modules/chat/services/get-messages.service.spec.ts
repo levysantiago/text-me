@@ -1,3 +1,4 @@
+import { MessagesNotFoundError } from '@modules/chat/errors/messages-not-found.error';
 import { Message } from '@modules/chat/infra/db/entities/message';
 import { MessagesRepository } from '@modules/chat/repositories/messages.repository';
 import { GetMessagesService } from '@modules/chat/services/get-messages.service';
@@ -58,7 +59,7 @@ describe('GetMessagesService', () => {
         .spyOn(messagesRepository, 'findByConversation')
         .mockRejectedValueOnce(new Error('unknown'));
       const promise = sut.execute(params);
-      expect(promise).rejects.toThrow(new Error('unknown'));
+      expect(promise).rejects.toThrow(new MessagesNotFoundError());
     });
   });
 });
