@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-constructor */
-import { env } from '@src/env'
-import { IHandleCreatedMessageDTO } from '@src/providers/socket-client-provider/dtos/ihandle-created-message.dto'
-import { ICacheProvider } from '@src/providers/cache-provider/types/icache-provider'
+import { env } from '@shared/resources/env'
+import { IHandleCreatedMessageDTO } from '@shared/container/providers/socket-client-provider/dtos/ihandle-created-message.dto'
+import { ICacheProvider } from '@shared/container/providers/cache-provider/types/icache-provider'
 import { io, Socket } from 'socket.io-client'
 import { inject, singleton } from 'tsyringe'
 import { ISocketProvider } from '../types/isocket-provider'

@@ -1,6 +1,6 @@
 import { container } from 'tsyringe'
-import { ISocketProvider } from '@src/providers/socket-client-provider/types/isocket-provider'
-import { HandleCreatedMessageService } from '@src/modules/chat/services/handle-created-message.service'
+import { ISocketProvider } from '@shared/container/providers/socket-client-provider/types/isocket-provider'
+import { HandleCreatedMessageService } from '@modules/chat/services/handle-created-message.service'
 
 export async function connectSocketServiceHook() {
   // getting Socket provider

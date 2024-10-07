@@ -1,7 +1,7 @@
 import { container } from 'tsyringe'
-import { IQueueProvider } from '@src/providers/queue-provider/types/iqueue.provider'
-import { ICacheProvider } from '@src/providers/cache-provider/types/icache-provider'
-import { ISocketProvider } from '@src/providers/socket-client-provider/types/isocket-provider'
+import { IQueueProvider } from '@shared/container/providers/queue-provider/types/iqueue.provider'
+import { ICacheProvider } from '@shared/container/providers/cache-provider/types/icache-provider'
+import { ISocketProvider } from '@shared/container/providers/socket-client-provider/types/isocket-provider'
 
 export async function disconnectServicesHook() {
   // getting Queue provider

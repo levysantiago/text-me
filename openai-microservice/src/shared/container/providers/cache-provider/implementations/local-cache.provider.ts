@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import { ICacheProvider } from '../types/icache-provider'
 
 class LocalCacheProvider implements ICacheProvider {

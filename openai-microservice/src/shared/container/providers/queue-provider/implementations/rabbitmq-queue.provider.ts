@@ -1,7 +1,7 @@
 import amqp from 'amqplib'
 import { injectable } from 'tsyringe'
 import { IQueueProvider } from '../types/iqueue.provider'
-import { env } from '@src/env'
+import { env } from '@shared/resources/env'
 import { ISendMessageToQueueDTO } from '../dtos/isend-message-to-queue.dto'
 import { IQueueName } from '../types/iqueue-name'
 

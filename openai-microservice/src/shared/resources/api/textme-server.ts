@@ -1,4 +1,4 @@
-import { env } from '@src/env'
+import { env } from '@shared/resources/env'
 import axios from 'axios'
 
 export const textmeServer = axios.create({

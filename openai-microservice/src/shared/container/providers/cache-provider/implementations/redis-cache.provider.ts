@@ -1,4 +1,4 @@
-import { env } from '@src/env'
+import { env } from '@shared/resources/env'
 import { ICacheProvider } from '../types/icache-provider'
 import Redis from 'ioredis'
 import { injectable } from 'tsyringe'

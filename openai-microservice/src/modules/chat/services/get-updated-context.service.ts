@@ -1,8 +1,8 @@
-import { textmeServer } from '@src/api/textme-server'
-import { getConversationFromUsers } from '@src/lib/get-conversation-from-users-helper'
-import { IChatMessage } from '@src/providers/ai-provider/types/ichat-message'
-import { IContext } from '@src/providers/ai-provider/types/icontext'
-import { ICacheProvider } from '@src/providers/cache-provider/types/icache-provider'
+import { textmeServer } from '@shared/resources/api/textme-server'
+import { getConversationFromUsers } from '@shared/resources/lib/get-conversation-from-users-helper'
+import { IChatMessage } from '@shared/container/providers/ai-provider/types/ichat-message'
+import { IContext } from '@shared/container/providers/ai-provider/types/icontext'
+import { ICacheProvider } from '@shared/container/providers/cache-provider/types/icache-provider'
 import { container, injectable } from 'tsyringe'
 
 interface IGetContextDTO {

@@ -1,4 +1,4 @@
-import { env } from '@src/env'
+import { env } from '@shared/resources/env'
 import { OpenAI } from 'openai'
 import { ISendMessageResponse } from '../dtos/isend-message.response'
 import { ISendMessageDTO } from '../dtos/isend-message.dto'
