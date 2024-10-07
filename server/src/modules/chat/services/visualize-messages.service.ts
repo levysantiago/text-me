@@ -1,5 +1,6 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { MessageRepository } from '../repositories/message.repository';
+import { Injectable } from '@nestjs/common';
+import { MessagesRepository } from '../repositories/messages.repository';
+import { ConversationHelper } from '@shared/resources/lib/conversation-helper';
 
 interface IRequest {
   fromUserId: string;
@@ -8,15 +9,10 @@ interface IRequest {
 
 @Injectable()
 export class VisualizeMessagesService {
-  constructor(private messageRepository: MessageRepository) {}
+  constructor(private messagesRepository: MessagesRepository) {}
 
   async execute({ fromUserId, userId }: IRequest): Promise<void> {
-    try {
-      await this.messageRepository.visualizeMessages(fromUserId, userId);
-    } catch (e) {
-      console.log(e);
-
-      throw new HttpException('MESSAGE_NOT_FOUND', HttpStatus.NOT_FOUND);
-    }
+    // Update messages as visualized
+    await this.messagesRepository.visualizeMessages(fromUserId, userId);
   }
 }

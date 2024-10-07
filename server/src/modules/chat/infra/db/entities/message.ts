@@ -1,8 +1,8 @@
 import { Exclude, instanceToPlain } from 'class-transformer';
 import { randomUUID } from 'node:crypto';
 import { IRole } from '@shared/resources/types/irole';
-import { getConversationFromUsers } from '@shared/resources/lib/get-conversation-from-users-helper';
 import { ICreateMessageDTO } from '@modules/chat/dtos/icreate-message-dto';
+import { ConversationHelper } from '@shared/resources/lib/conversation-helper';
 
 export class Message {
   constructor(props: ICreateMessageDTO, id?: string) {
@@ -11,7 +11,7 @@ export class Message {
     this.content = props.content;
     this.visualized = props.visualized ?? false;
     this.role = props.role;
-    this.conversation = getConversationFromUsers({
+    this.conversation = ConversationHelper.getConversationFromUsers({
       fromUserId: this.fromUserId,
       toUserId: this.toUserId,
     });

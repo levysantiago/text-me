@@ -1,7 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Friendship } from '../infra/db/entities/friendship';
-import { FriendshipRepository } from '../repositories/friendship.repository';
-import { UserRepository } from '@modules/user/repositories/user-repository';
+import { FriendshipsRepository } from '../repositories/friendships.repository';
+import { FriendNotFoundError } from '../errors/friend-not-found.error';
+import { UsersRepository } from '@modules/user/repositories/users-repository';
 
 interface IRequest {
   userId: string;
@@ -11,17 +12,19 @@ interface IRequest {
 @Injectable()
 export class AddFriendService {
   constructor(
-    private friendshipRepository: FriendshipRepository,
-    private userRepository: UserRepository,
+    private friendshipsRepository: FriendshipsRepository,
+    private usersRepository: UsersRepository,
   ) {}
 
   async execute({ userId, friendEmail }: IRequest): Promise<void> {
-    const friend = await this.userRepository.findByEmail(friendEmail);
-    if (!friend) {
-      throw new HttpException('FRIEND_NOT_FOUND', HttpStatus.NOT_FOUND);
-    }
+    // Find friend
+    const friend = await this.usersRepository.findByEmail(friendEmail);
+    if (!friend) throw new FriendNotFoundError();
 
+    // Create friendship entity
     const friendship = new Friendship({ userId, friendId: friend.id });
-    await this.friendshipRepository.create(friendship);
+
+    // Persist friendship
+    await this.friendshipsRepository.create(friendship);
   }
 }

@@ -1,6 +1,7 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { getConversationFromUsers } from '@shared/resources/lib/get-conversation-from-users-helper';
-import { MessageRepository } from '../repositories/message.repository';
+import { Injectable } from '@nestjs/common';
+import { MessagesRepository } from '../repositories/messages.repository';
+import { ConversationHelper } from '@shared/resources/lib/conversation-helper';
+import { MessagesNotFoundError } from '../errors/messages-not-found.error';
 
 interface IMessage {
   fromUserId: string;
@@ -19,18 +20,22 @@ interface IResponse {
 
 @Injectable()
 export class GetMessagesService {
-  constructor(private messageRepository: MessageRepository) {}
+  constructor(private messagesRepository: MessagesRepository) {}
 
   async execute({ fromUserId, toUserId }: IRequest): Promise<IResponse> {
     try {
-      const conversation = getConversationFromUsers({ fromUserId, toUserId });
-
-      const messages = await this.messageRepository.findByConversation(
+      // Get users conversation key
+      const conversation = ConversationHelper.getConversationFromUsers({
+        fromUserId,
+        toUserId,
+      });
+      // find messages by conversation
+      const messages = await this.messagesRepository.findByConversation(
         conversation,
       );
       return { data: messages };
-    } catch (e) {
-      throw new HttpException('MESSAGES_NOT_FOUND', HttpStatus.NOT_FOUND);
+    } catch (err) {
+      throw new MessagesNotFoundError();
     }
   }
 }

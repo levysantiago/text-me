@@ -12,10 +12,9 @@ export class GetMessagesController {
   constructor(private getMessagesService: GetMessagesService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Get('chat')
+  @Get('chat/:fromUserId/')
   async handle(@Req() req: IRequest, @Response() res: IResponse) {
-    const { fromUserId } = req.query;
-    console.log('fromUserId', fromUserId);
+    const { fromUserId } = req.params;
 
     const { data } = await this.getMessagesService.execute({
       fromUserId: fromUserId as string,

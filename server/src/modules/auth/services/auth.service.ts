@@ -1,28 +1,40 @@
-import { UserRepository } from '@modules/user/repositories/user-repository';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { InvalidEmailOrPasswordError } from '../error/invalid-email-or-password.error';
+import { UsersRepository } from '@modules/user/repositories/users-repository';
+
+interface IRequest {
+  email: string;
+  password: string;
+}
+
+interface IResponse {
+  access_token: string;
+}
 
 @Injectable()
 export class AuthService {
   constructor(
-    private userRepository: UserRepository,
+    private usersRepository: UsersRepository,
     private jwtService: JwtService,
   ) {}
 
-  async execute(
-    email: string,
-    password: string,
-  ): Promise<{ access_token: string }> {
-    const user = await this.userRepository.findByEmail(email);
+  async execute({ email, password }: IRequest): Promise<IResponse> {
+    // Find user by email
+    const user = await this.usersRepository.findByEmail(email);
 
+    // Verify user and password
     if (user && user.password === password) {
+      // Create payload
       const payload = { username: user.name, sub: user.id };
 
-      return new Promise((resolve) => {
-        resolve({ access_token: this.jwtService.sign(payload) });
-      });
+      // Sign and create access token
+      const accessToken = this.jwtService.sign(payload);
+
+      // Return access token
+      return { access_token: accessToken };
     }
 
-    throw new HttpException('Email or password wrong', HttpStatus.BAD_REQUEST);
+    throw new InvalidEmailOrPasswordError();
   }
 }

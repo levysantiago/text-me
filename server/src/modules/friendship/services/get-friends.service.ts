@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { FriendshipRepository } from '../repositories/friendship.repository';
-import { UserRepository } from '@modules/user/repositories/user-repository';
+import { FriendshipsRepository } from '../repositories/friendships.repository';
 import { User } from '@modules/user/infra/db/entities/user';
+
+interface IRequest {
+  userId: string;
+}
 
 interface IResponse {
   data: User[];
@@ -9,21 +12,18 @@ interface IResponse {
 
 @Injectable()
 export class GetFriendsService {
-  constructor(
-    private userRepository: UserRepository,
-    private friendshipRepository: FriendshipRepository,
-  ) {}
+  constructor(private friendshipsRepository: FriendshipsRepository) {}
 
-  async execute(userId: string): Promise<IResponse> {
-    const friendships = await this.friendshipRepository.findAllOfUser(userId);
+  async execute({ userId }: IRequest): Promise<IResponse> {
+    // Find all friendship of user
+    const friendships = await this.friendshipsRepository.findAllOfUser(userId);
 
-    const friends = await Promise.all(
-      friendships.map(async (friendship) => {
-        const friend = await this.userRepository.find(friendship.friendId);
-        return friend.toHTTP();
-      }),
-    );
+    // Format user friendship items
+    const friends = friendships.map((friendship) => {
+      return friendship.friendToHTTP();
+    });
 
+    // return friendship
     return {
       data: friends,
     };

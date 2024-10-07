@@ -1,20 +1,20 @@
 import { Module } from '@nestjs/common';
-import { FriendshipRepository } from './repositories/friendship.repository';
-import { PrismaFriendshipRepository } from './infra/db/repositories/prisma-friendship.repository';
+import { FriendshipsRepository } from './repositories/friendships.repository';
+import { PrismaFriendshipsRepository } from './infra/db/repositories/prisma-friendships.repository';
 import { AddFriendService } from './services/add-friend.service';
 import { GetFriendsService } from './services/get-friends.service';
-import { AddFriendshipController } from './infra/http/controllers/add-friendship.controller';
+import { AddFriendController } from './infra/http/controllers/add-friend.controller';
 import { GetFriendsController } from './infra/http/controllers/get-friends.controller';
 import { UserModule } from '@modules/user/user.module';
 
 @Module({
   imports: [UserModule],
-  controllers: [AddFriendshipController, GetFriendsController],
+  controllers: [AddFriendController, GetFriendsController],
   providers: [
     AddFriendService,
     GetFriendsService,
-    { provide: FriendshipRepository, useClass: PrismaFriendshipRepository },
+    { provide: FriendshipsRepository, useClass: PrismaFriendshipsRepository },
   ],
-  exports: [AddFriendService, GetFriendsService, FriendshipRepository],
+  exports: [AddFriendService, GetFriendsService, FriendshipsRepository],
 })
 export class FriendshipModule {}

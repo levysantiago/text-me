@@ -19,11 +19,11 @@ export class UpdateUserController {
   async handle(@Body() body: any, @Req() req, @Response() res: IResponse) {
     const { name, password } = body;
 
-    await this.updateUserService.execute({
+    const data = await this.updateUserService.execute({
       id: req.user.userId,
       name,
       password,
     });
-    return res.status(200).send();
+    return res.status(200).json(data);
   }
 }

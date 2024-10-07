@@ -102,7 +102,7 @@ export class EventsGateway implements OnModuleInit {
       });
 
       // Find user
-      const user = await this.getUserService.execute({
+      const { user } = await this.getUserService.execute({
         userId: fromUserId,
       });
 
@@ -127,34 +127,32 @@ export class EventsGateway implements OnModuleInit {
 
       //Getting the friends of user receiver to verify if the message sender
       // is his/her friend
-      const friendsOfReceiver = await this.getFriendsService.execute(
-        body.toUserId,
-      );
+      const friendsOfReceiver = await this.getFriendsService.execute({
+        userId: body.toUserId,
+      });
       // Verifying if users are friends
       const areTheyFriends = friendsOfReceiver.data.filter((friend) => {
         return friend.id === fromUserId;
       })[0];
       if (!areTheyFriends) {
         // If they are not friends, we create a friendship between them
-        // Obtaining the friend user
-        const friend = await this.getUserService.execute({
-          userId: fromUserId,
-        });
         // Creating friendship
         await this.addFriendService.execute({
           userId: body.toUserId,
-          friendEmail: friend.email,
+          friendEmail: user.email,
         });
       }
 
       // Getting the user receiver socket id
-      const receiverSocketId = this.clientsStateData[body.toUserId].socketId;
-      if (receiverSocketId) {
+      const receiverClientData = this.clientsStateData[body.toUserId];
+      if (receiverClientData) {
+        const receiverSocketId = receiverClientData.socketId;
         // Emit event for user that received message
         this.server.to(receiverSocketId).emit('handleCreatedMessage', {
           fromUserId,
           toUserId: body.toUserId,
           content: body.content,
+          role,
         });
         // Emitting event to user receiver that his friend stopped typing
         this.server.to(receiverSocketId).emit('friendStoppedTyping', {
@@ -215,8 +213,9 @@ export class EventsGateway implements OnModuleInit {
 
       // Emitting event for user that will receive the message to warn that
       // his/her friend is typing
-      const receiverSocketId = this.clientsStateData[body.toUserId].socketId;
-      if (receiverSocketId) {
+      const receiverClientData = this.clientsStateData[body.toUserId];
+      if (receiverClientData) {
+        const receiverSocketId = receiverClientData.socketId;
         this.server.to(receiverSocketId).emit('friendIsTyping', {
           fromUserId: userId,
         });
@@ -236,18 +235,22 @@ export class EventsGateway implements OnModuleInit {
           // Get current date as moment instance
           const currentDateMoment = moment(new Date());
 
+          // Two milliseconds
+          const twoMilliseconds = 2;
+
           // Definition if user is still typing
-          const isStillTyping = currentDateMoment.diff(typingTimeMoment) > 2;
+          const didUserStoppedTyping =
+            currentDateMoment.diff(typingTimeMoment) > twoMilliseconds;
 
           // When the user stops typing, the interval will stop after the
-          // difference of lastDateTime and currentDate is above 2.
-          if (isStillTyping) {
+          // difference of lastDateTime and currentDate is above 2 milliseconds.
+          if (didUserStoppedTyping) {
             // After the user stopped typing, the interval emits the event
             // "friendStoppedTyping" to warn his/her friend that he/she
             // stopped typing.
-            const receiverSocketId =
-              this.clientsStateData[body.toUserId].socketId;
-            if (receiverSocketId) {
+            const receiverClientData = this.clientsStateData[body.toUserId];
+            if (receiverClientData) {
+              const receiverSocketId = receiverClientData.socketId;
               this.server.to(receiverSocketId).emit('friendStoppedTyping', {
                 fromUserId: userId,
               });

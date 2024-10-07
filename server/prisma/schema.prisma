@@ -11,14 +11,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  user
+  assistant
+}
+
 model User {
-  id          String   @id
-  email       String   @unique
+  id          String       @id
+  email       String       @unique
   name        String
   password    String
-  isAssistant Boolean  @default(false) @map("is_assistant")
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @default(now()) @map("updated_at")
+  isAssistant Boolean      @default(false) @map("is_assistant")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @default(now()) @map("updated_at")
+  friendships Friendship[]
 
   @@map("users")
 }
@@ -29,7 +35,7 @@ model Message {
   toUserId     String   @map("to_user_id")
   conversation String
   visualized   Boolean
-  role         String   @default("user")
+  role         Role     @default(user)
   content      String
   createdAt    DateTime @default(now()) @map("created_at")
   updatedAt    DateTime @default(now()) @map("updated_at")
@@ -44,5 +50,9 @@ model Friendship {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @default(now()) @map("updated_at")
 
+  friend User @relation(fields: [friendId], references: [id])
+
+  @@unique([userId, friendId])
+  @@index([userId, friendId])
   @@map("friendships")
 }

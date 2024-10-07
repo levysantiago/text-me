@@ -39,8 +39,7 @@ export class GetUpdatedContextService {
       // context.push({ role, content })
     } else {
       // Getting messages context
-      const response = await textmeServer.get('chat', {
-        params: { fromUserId },
+      const response = await textmeServer.get(`chat/${fromUserId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },

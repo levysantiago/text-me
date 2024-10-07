@@ -17,9 +17,11 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
+    "resolveJsonModule": true,
     "paths": {
       "@modules/*": ["./src/modules/*"],
       "@shared/*": ["./src/shared/*"],
+      "@test/*": ["./test/*"]
     }
-  },
+  }
 }

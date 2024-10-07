@@ -3,7 +3,9 @@ import { Friendship } from '../entities/friendship';
 
 export class PrismaFriendshipMapper {
   static toPrisma(friendship: Friendship) {
-    return friendship;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { friend, ...friendshipToPersist } = friendship;
+    return friendshipToPersist;
   }
 
   static fromPrisma(rawFriendship: RawFriendship) {
