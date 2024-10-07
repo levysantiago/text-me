@@ -10,15 +10,47 @@ export class RabbitMqQueueService implements IQueueProvider {
   private connection!: amqp.Connection
   private channel!: amqp.Channel
 
+  private async tryConnect(): Promise<boolean> {
+    try {
+      this.connection = await amqp.connect({
+        hostname: env.RABBITMQ_HOST,
+        port: env.RABBITMQ_PORT,
+        username: env.RABBITMQ_USER,
+        password: env.RABBITMQ_PASSWORD,
+      })
+      this.channel = await this.connection.createChannel()
+      await this.channel.assertQueue('main_queue', { durable: true })
+      return true
+    } catch (err) {
+      return false
+    }
+  }
+
   async connect(): Promise<void> {
-    this.connection = await amqp.connect({
-      hostname: env.RABBITMQ_HOST,
-      port: env.RABBITMQ_PORT,
-      username: env.RABBITMQ_USER,
-      password: env.RABBITMQ_PASSWORD,
+    const connected = await this.tryConnect()
+
+    if (!connected) {
+      throw new Error('RabbitMQ not connected')
+    }
+
+    this.connection.on('close', () => {
+      console.log('RabbitMQ disconnected, starting reconnection process...')
+
+      const milliseconds = 10 * 1000
+      const reconnectInterval = setInterval(async () => {
+        console.log('Reconnecting to RabbitMQ...')
+        // Try reconnect
+        const connected = await this.tryConnect()
+        // If connected, clear interval
+        if (connected) {
+          clearInterval(reconnectInterval)
+          console.log('RabbitMQ reconnected!')
+          return
+        }
+        // if not, keep trying
+        console.log('Could not reconnect to RabbitMQ.')
+      }, milliseconds)
     })
-    this.channel = await this.connection.createChannel()
-    await this.channel.assertQueue('main_queue', { durable: true })
   }
 
   async sendMessage(data: ISendMessageToQueueDTO): Promise<void> {
