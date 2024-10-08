@@ -10,5 +10,5 @@ export async function connectQueueServiceHook() {
   // Connecting
   await queueProvider.connect()
   // Start consumer
-  queueProvider.consumeMessages('main_queue', sendAiResponseService.execute)
+  queueProvider.consume(sendAiResponseService.execute)
 }

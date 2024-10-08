@@ -68,7 +68,7 @@ export class HandleCreatedMessageService {
     } else {
       try {
         // Add message to queue
-        await this.queueProvider.sendMessage({
+        await this.queueProvider.publish({
           fromUserId,
           content,
           toUserId,

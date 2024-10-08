@@ -92,6 +92,9 @@ export class SendAiResponseService {
           access_token: accessToken,
         })
       }
+
+      // Throw error so the consumption of the queue keep the data in queue
+      throw new Error()
     } finally {
       clearInterval(typingInterval)
     }

@@ -1,12 +1,8 @@
 import amqp from 'amqplib'
-import { injectable } from 'tsyringe'
 import { IQueueProvider } from '../types/iqueue.provider'
 import { env } from '@shared/resources/env'
-import { ISendMessageToQueueDTO } from '../dtos/isend-message-to-queue.dto'
-import { IQueueName } from '../types/iqueue-name'
 
-@injectable()
-export class RabbitMqQueueService implements IQueueProvider {
+export class RabbitMqQueueProvider implements IQueueProvider {
   private connection!: amqp.Connection
   private channel!: amqp.Channel
 
@@ -53,7 +49,7 @@ export class RabbitMqQueueService implements IQueueProvider {
     })
   }
 
-  async sendMessage(data: ISendMessageToQueueDTO): Promise<void> {
+  async publish(data: any): Promise<void> {
     this.channel.sendToQueue(
       'main_queue',
       Buffer.from(JSON.stringify(data), 'utf-8'),
@@ -63,16 +59,11 @@ export class RabbitMqQueueService implements IQueueProvider {
     )
   }
 
-  async consumeMessages(
-    queue: IQueueName,
-    cb: (data: any) => Promise<void>,
-  ): Promise<void> {
-    await this.channel.consume(queue, async (dataJson) => {
+  async consume(cb: (data: any) => Promise<void>): Promise<void> {
+    await this.channel.consume('main_queue', async (dataJson) => {
       if (dataJson !== null) {
         try {
-          const data: ISendMessageToQueueDTO = JSON.parse(
-            dataJson.content.toString('utf-8'),
-          )
+          const data: any = JSON.parse(dataJson.content.toString('utf-8'))
           // console.log('Received:', data)
 
           // Callback

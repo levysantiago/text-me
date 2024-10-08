@@ -1,9 +1,9 @@
 import { container } from 'tsyringe'
-import { RabbitMqQueueService } from './implementations/rabbitmq-queue.provider'
+import { RabbitMqQueueProvider } from './implementations/rabbitmq-queue.provider'
 import { IQueueProvider } from './types/iqueue.provider'
 
 const implementations = {
-  rabbitmq: RabbitMqQueueService,
+  rabbitmq: RabbitMqQueueProvider,
 }
 
 container.registerSingleton<IQueueProvider>(
