@@ -1,9 +1,7 @@
 import { env } from '@shared/resources/env'
 import { ICacheProvider } from '../types/icache-provider'
 import Redis from 'ioredis'
-import { injectable } from 'tsyringe'
 
-@injectable()
 class RedisCacheProvider implements ICacheProvider {
   private redisClient: Redis
 

@@ -35,6 +35,13 @@ describe('OpenAiProvider', () => {
     sut = new OpenAiProvider()
   })
 
+  describe('constructor', () => {
+    it('should be able to call OpenAI constructor with right parameters', async () => {
+      expect(sut['openai'].apiKey).toEqual(env.OPENAI_KEY)
+      expect(sut['openai'].organization).toEqual(env.OPENAI_ORGANIZATION)
+    })
+  })
+
   describe('sendMessage', () => {
     const params = {
       context: [{ role: 'user', content: 'message' }] as IContext,
@@ -45,11 +52,6 @@ describe('OpenAiProvider', () => {
       expect(result).toEqual({ message: 'openai-message' })
     })
 
-    it('should be able to call OpenAI constructor with right parameters', async () => {
-      expect(sut['openai'].apiKey).toEqual(env.OPENAI_KEY)
-      expect(sut['openai'].organization).toEqual(env.OPENAI_ORGANIZATION)
-    })
-
     it('should be able to call OpenAI::create with right parameters', async () => {
       const spy = jest.spyOn(sut['openai'].chat.completions, 'create')
       await sut.sendMessage(params)
@@ -57,6 +59,7 @@ describe('OpenAiProvider', () => {
         model: 'gpt-3.5-turbo',
         messages: sut['startupContext'].concat(params.context),
       })
+      expect(spy).toHaveBeenCalledTimes(1)
     })
   })
 })
