@@ -6,6 +6,19 @@ import { IAiProvider } from '../types/iai-provider'
 
 class OpenAiProvider implements IAiProvider {
   private openai: OpenAI
+  private startupContext: OpenAI.Chat.Completions.ChatCompletionMessageParam[] =
+    [
+      {
+        role: 'system',
+        content: `
+          You are a user of a chat application. 
+          You must act like a normal person.
+          You must keep the conversation going.
+          Your name is Andy.
+          You speak portuguese from Brazil. And you speak English too.
+        `,
+      },
+    ]
 
   constructor() {
     this.openai = new OpenAI({
@@ -18,24 +31,10 @@ class OpenAiProvider implements IAiProvider {
   async sendMessage({
     context,
   }: ISendMessageDTO): Promise<ISendMessageResponse> {
-    const startupContext: OpenAI.Chat.Completions.ChatCompletionMessageParam[] =
-      [
-        {
-          role: 'system',
-          content: `
-          You are a user of a chat application. 
-          You must act like a normal person.
-          You must keep the conversation going.
-          Your name is Andy.
-          You speak portuguese from Brazil. And you speak English too.
-        `,
-        },
-      ]
-
     const openAiResponse: OpenAI.Chat.Completions.ChatCompletion =
       await this.openai.chat.completions.create({
         model: 'gpt-3.5-turbo',
-        messages: startupContext.concat(context),
+        messages: this.startupContext.concat(context),
       })
 
     return { message: openAiResponse.choices[0].message.content }

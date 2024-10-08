@@ -1,7 +1,7 @@
 import { EmailAlreadyExistsError } from '@modules/user/errors/email-already-exists.error';
 import { ArgumentsHost, HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { HttpExceptionFilter } from '@shared/common/exeption.filter';
+import { HttpExceptionFilter } from '@shared/infra/filters/exeption.filter';
 import { ErrorMessageManager } from '@shared/resources/errors/error-message-manager';
 
 describe('Exception Filter', () => {
