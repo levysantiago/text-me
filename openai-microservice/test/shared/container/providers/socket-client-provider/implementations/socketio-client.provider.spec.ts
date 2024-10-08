@@ -1,11 +1,11 @@
 /* eslint-disable dot-notation */
 /* eslint-disable @typescript-eslint/no-empty-function */
 import 'reflect-metadata'
-import RedisCacheProvider from '@shared/container/providers/cache-provider/implementations/redis-cache.provider'
 import { ICacheProvider } from '@shared/container/providers/cache-provider/types/icache-provider'
 import { SocketIoClientProvider } from '@shared/container/providers/socket-client-provider/implementations/socketio-client.provider'
 import * as socketLib from 'socket.io-client'
 import { env } from '@shared/resources/env'
+import { mock } from 'jest-mock-extended'
 
 jest.mock('ioredis', () => class {})
 
@@ -28,8 +28,10 @@ describe('SocketIoClientProvider', () => {
   let sut: SocketIoClientProvider
   let cacheProvider: ICacheProvider
 
+  beforeAll(() => {})
+
   beforeEach(() => {
-    cacheProvider = new RedisCacheProvider()
+    cacheProvider = mock()
     sut = new SocketIoClientProvider(cacheProvider)
 
     jest.spyOn(cacheProvider, 'retrieve').mockResolvedValue('fake_access_token')

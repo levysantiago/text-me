@@ -5,9 +5,9 @@ import { ISocketProvider } from '@shared/container/providers/socket-client-provi
 import { inject, injectable } from 'tsyringe'
 import { ISendAiResponseDTO } from './dtos/isend-ai-response.dto'
 import { GetUpdatedContextService } from './get-updated-context.service'
-import { getConversationFromUsers } from '@shared/resources/lib/get-conversation-from-users-helper'
 import { MicroserviceNotLoggedError } from '../errors/microservice-not-logged.error'
 import { ErrorMessageManager } from '@shared/resources/errors/error-message-manager'
+import { ConversationHelper } from '@shared/resources/lib/conversation-helper'
 
 @injectable()
 export class SendAiResponseService {
@@ -67,7 +67,7 @@ export class SendAiResponseService {
       }
 
       // Get conversation id
-      const conversationId = getConversationFromUsers({
+      const conversationId = ConversationHelper.getConversationFromUsers({
         fromUserId,
         toUserId,
       })

@@ -1,9 +1,9 @@
 import { textmeServer } from '@shared/resources/api/textme-server'
-import { getConversationFromUsers } from '@shared/resources/lib/get-conversation-from-users-helper'
 import { IChatMessage } from '@shared/container/providers/ai-provider/types/ichat-message'
 import { IContext } from '@shared/container/providers/ai-provider/types/icontext'
 import { ICacheProvider } from '@shared/container/providers/cache-provider/types/icache-provider'
 import { container, injectable } from 'tsyringe'
+import { ConversationHelper } from '@shared/resources/lib/conversation-helper'
 
 interface IGetContextDTO {
   fromUserId: string
@@ -24,7 +24,10 @@ export class GetUpdatedContextService {
     const accessToken = await this.cacheProvider.retrieve('access_token')
 
     // Get conversation id
-    const conversationId = getConversationFromUsers({ fromUserId, toUserId })
+    const conversationId = ConversationHelper.getConversationFromUsers({
+      fromUserId,
+      toUserId,
+    })
 
     // Getting context from cache if exists
     const contextJson = await this.cacheProvider.retrieve(

@@ -1,6 +1,5 @@
 /* eslint-disable no-useless-constructor */
 import { env } from '@shared/resources/env'
-import { getConversationFromUsers } from '@shared/resources/lib/get-conversation-from-users-helper'
 import { ICacheProvider } from '@shared/container/providers/cache-provider/types/icache-provider'
 import { IQueueProvider } from '@shared/container/providers/queue-provider/types/iqueue.provider'
 import { IHandleCreatedMessageDTO } from '@shared/container/providers/socket-client-provider/dtos/ihandle-created-message.dto'
@@ -9,6 +8,7 @@ import { GetUpdatedContextService } from './get-updated-context.service'
 import { ISocketProvider } from '@shared/container/providers/socket-client-provider/types/isocket-provider'
 import { MicroserviceNotLoggedError } from '../errors/microservice-not-logged.error'
 import { ErrorMessageManager } from '@shared/resources/errors/error-message-manager'
+import { ConversationHelper } from '@shared/resources/lib/conversation-helper'
 
 @injectable()
 export class HandleCreatedMessageService {
@@ -45,7 +45,7 @@ export class HandleCreatedMessageService {
         context.push({ role: 'assistant', content })
 
         // Get conversation id
-        const conversationId = getConversationFromUsers({
+        const conversationId = ConversationHelper.getConversationFromUsers({
           fromUserId,
           toUserId,
         })
