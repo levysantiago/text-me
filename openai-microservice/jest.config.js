@@ -21,6 +21,9 @@ module.exports = {
     '.module.ts',
     '<rootDir>/src/main.ts',
     '.mock.ts',
+    'index.ts',
+    'fake-ai.provider.ts',
+    'local-cache.provider.ts',
   ],
   testEnvironment: 'node',
   coverageThreshold: {

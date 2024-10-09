@@ -24,7 +24,7 @@ export class ErrorMessageManager {
     // Transform error file to object
     const messagesObj: IErrorMessages = JSON.parse(messagesContent)
 
-    //
+    // Return messages
     return messagesObj
   }
 
