@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReactNode, useEffect, useState } from 'react'
 import { AppContext } from './AppContext'
 import { checkLoginService } from 'services/checkLoginService'
