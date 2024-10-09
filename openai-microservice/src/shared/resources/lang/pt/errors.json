@@ -1,0 +1,4 @@
+{
+  "INTERNAL_SERVER_ERROR": "Ocorreu um erro inesperado. Aguarde alguns minutos ou entre em contato com o suporte.",
+  "MICROSERVICE_NOT_LOGGED_ERROR": "O microsserviço não está conectado ao servidor. Verifique as credenciais do usuário."
+}

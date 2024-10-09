@@ -1,6 +1,7 @@
 #!/bin/sh
 cd usr/text-me/server
-yarn
+yarn --frozen-lockfile
 npx prisma migrate reset
 npx prisma db seed
-yarn start:dev
+yarn build
+yarn start:prod

@@ -18,9 +18,12 @@
     "zod": "^3.21.4"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.json",
+    "build": "rm -rf dist && tsc -p tsconfig.build.json && tscpaths -p tsconfig.json -s ./src",
     "start:dev": "tsx watch src/server.ts",
-    "lint": "eslint src --ext .ts --fix"
+    "start:prod": "node ./dist/server.js",
+    "test": "jest --runInBand --silent",
+    "test:debug": "jest --runInBand",
+    "test:cov": "jest --coverage --runInBand --silent"
   },
   "eslintConfig": {
     "extends": [
@@ -31,7 +34,12 @@
   "devDependencies": {
     "@rocketseat/eslint-config": "^1.2.0",
     "@types/amqplib": "^0.10.5",
+    "@types/jest": "^29.5.13",
     "@types/node": "^20.1.0",
+    "jest": "^29.7.0",
+    "jest-mock-extended": "^4.0.0-beta1",
+    "ts-jest": "^29.2.5",
+    "tscpaths": "^0.0.9",
     "typescript": "^5.0.4"
   }
 }

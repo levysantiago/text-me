@@ -5,14 +5,25 @@ services:
     container_name: "client"
     image: node:18.16
     entrypoint: ["sh", "./entrypoint.sh"]
-    ports:
-      - 3000:3000
     volumes:
       - ./:/usr/text-me/client
       - ./entrypoint.sh:/entrypoint.sh
     environment:
+      NODE_ENV: production
       REACT_APP_SERVER_API: http://localhost:3333/api/
       REACT_APP_SERVER_WEBSOCKET: http://localhost:3333
+    networks: 
+      - default
+
+  nginx:
+    image: nginx:alpine
+    depends_on:
+      - client
+    volumes:
+      - ./build:/usr/share/nginx/html
+    ports:
+      - "3000:80"
+    command: ["nginx", "-g", "daemon off;"]
     networks: 
       - default
 

@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useContext, useEffect, useState } from 'react'
 import { createSearchParams, useNavigate } from 'react-router-dom'
 import {

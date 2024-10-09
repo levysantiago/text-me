@@ -1,4 +1,5 @@
 #!/bin/sh
 cd usr/text-me/openai-microservice
-yarn
-yarn start:dev
+yarn --frozen-lockfile
+yarn build
+yarn start:prod

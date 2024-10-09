@@ -1,10 +1,10 @@
 import 'reflect-metadata'
-import './providers'
+import '@shared/container/providers'
 import fastify from 'fastify'
-import { loginHook } from './hooks/on-ready/login.hook'
-import { disconnectServicesHook } from './hooks/on-close/disconnect-services.hook'
-import { connectSocketServiceHook } from './hooks/on-ready/connect-socket-service.hook'
-import { connectQueueServiceHook } from './hooks/on-ready/connect-queue-service.hook'
+import { loginHook } from './shared/infra/hooks/on-ready/login.hook'
+import { disconnectServicesHook } from './shared/infra/hooks/on-close/disconnect-services.hook'
+import { connectSocketServiceHook } from './shared/infra/hooks/on-ready/connect-socket-service.hook'
+import { connectQueueServiceHook } from './shared/infra/hooks/on-ready/connect-queue-service.hook'
 
 const server = fastify()
 
