@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/shared/resources/errors/app.error.ts</title>
+    <title>Code coverage report for src/shared/resources/lib/conversation-helper.ts</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../../prettify.css" />
     <link rel="stylesheet" href="../../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/shared/resources/errors</a> app.error.ts</h1>
+        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/shared/resources/lib</a> conversation-helper.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>2/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/6</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">20% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>2/10</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -83,8 +83,13 @@
 <a name='L18'></a><a href='#L18'>18</a>
 <a name='L19'></a><a href='#L19'>19</a>
 <a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L21'></a><a href='#L21'>21</a>
+<a name='L22'></a><a href='#L22'>22</a>
+<a name='L23'></a><a href='#L23'>23</a>
+<a name='L24'></a><a href='#L24'>24</a>
+<a name='L25'></a><a href='#L25'>25</a>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -94,33 +99,46 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { IErrorMessages } from './types/ierror-message-id'
-import { FastifyError } from 'fastify'
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { createHash } from 'node:crypto'
 &nbsp;
-export class AppError extends Error implements FastifyError {
-  public messageId: keyof IErrorMessages
-  public reason: string
-  public status: number
-  public code: string
+export class ConversationHelper {
+  public <span class="fstat-no" title="function not covered" >static </span>getConversationFromUsers({
+    fromUserId,
+    toUserId,
+  }: {
+    fromUserId: string
+    toUserId: string
+  }) {
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (!fromUserId || !toUserId) {</span>
+<span class="cstat-no" title="statement not covered" >      throw new Error(</span>
+        `Invalid IDs fromUserId: ${fromUserId} | toUserId: ${toUserId}`,
+      )
+    }
+    let leftSide = <span class="cstat-no" title="statement not covered" >fromUserId</span>
+    let rightSide = <span class="cstat-no" title="statement not covered" >toUserId</span>
 &nbsp;
-  constructor(
-    messageId: keyof IErrorMessages,
-    options: { status?: number; reason?: string },
-  ) {
-    super('')
-    this.status = options.status || <span class="branch-1 cbranch-no" title="branch not covered" >500</span>
-    this.messageId = messageId || <span class="branch-1 cbranch-no" title="branch not covered" >'INTERNAL_SERVER_ERROR'</span>
-    this.code = this.messageId as string
-    this.reason = options.reason || ''
+<span class="cstat-no" title="statement not covered" >    <span class="missing-if-branch" title="if path not taken" >I</span>if (fromUserId.charCodeAt(0) &lt;= toUserId.charCodeAt(0)) {</span>
+<span class="cstat-no" title="statement not covered" >      leftSide = toUserId</span>
+<span class="cstat-no" title="statement not covered" >      rightSide = fromUserId</span>
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return createHash('sha1').update(`${leftSide}-${rightSide}`).digest('hex')</span>
   }
 }
 &nbsp;</pre></td></tr></table></pre>

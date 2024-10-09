@@ -22,7 +22,7 @@
     "start:dev": "tsx watch src/server.ts",
     "test": "jest --runInBand --silent",
     "test:debug": "jest --runInBand",
-    "test:cov": "jest --coverage --runInBand"
+    "test:cov": "jest --coverage --runInBand --silent"
   },
   "eslintConfig": {
     "extends": [

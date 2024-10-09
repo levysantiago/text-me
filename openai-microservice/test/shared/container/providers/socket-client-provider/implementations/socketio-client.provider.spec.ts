@@ -57,22 +57,19 @@ describe('SocketIoClientProvider', () => {
         query: { access_token: 'fake_access_token' },
       })
     })
-
-    it('should be able to call socket::on with right parameters', async () => {
-      const spy = fakeSocketOn
-      await sut.connect()
-      expect(spy).toHaveBeenCalledWith(
-        'handleCreatedMessage',
-        expect.any(Function),
-      )
-    })
   })
 
   describe('subscribe', () => {
+    async function _beforeEach() {
+      await sut.connect()
+    }
+
     it('should be able to subscribe a callback to event', async () => {
+      await _beforeEach()
+      const spy = fakeSocketOn
       const callback = async (data: any) => undefined
       sut.subscribe('handleCreatedMessage', callback)
-      expect(sut['handlersByEvent'].handleCreatedMessage).toEqual([callback])
+      expect(spy).toHaveBeenCalledWith('handleCreatedMessage', callback)
     })
   })
 
