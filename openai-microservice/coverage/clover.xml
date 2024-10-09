@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1728486917567" clover="3.2.0">
-  <project timestamp="1728486917567" name="All files">
-    <metrics statements="272" coveredstatements="188" conditionals="38" coveredconditionals="22" methods="47" coveredmethods="31" elements="357" coveredelements="241" complexity="0" loc="272" ncloc="272" packages="18" files="25" classes="25"/>
+<coverage generated="1728493809898" clover="3.2.0">
+  <project timestamp="1728493809898" name="All files">
+    <metrics statements="272" coveredstatements="195" conditionals="38" coveredconditionals="25" methods="47" coveredmethods="32" elements="357" coveredelements="252" complexity="0" loc="272" ncloc="272" packages="18" files="25" classes="25"/>
     <package name="src">
       <metrics statements="17" coveredstatements="0" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="server.ts" path="/Users/levysantiago/Documents/workspace/text-me/openai-microservice/src/server.ts">
@@ -388,19 +388,19 @@
       </file>
     </package>
     <package name="src.shared.resources.lib">
-      <metrics statements="10" coveredstatements="2" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <metrics statements="10" coveredstatements="9" conditionals="4" coveredconditionals="3" methods="1" coveredmethods="1"/>
       <file name="conversation-helper.ts" path="/Users/levysantiago/Documents/workspace/text-me/openai-microservice/src/shared/resources/lib/conversation-helper.ts">
-        <metrics statements="10" coveredstatements="2" conditionals="4" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="1" count="5" type="stmt"/>
-        <line num="3" count="5" type="stmt"/>
-        <line num="11" count="0" type="cond" truecount="0" falsecount="3"/>
+        <metrics statements="10" coveredstatements="9" conditionals="4" coveredconditionals="3" methods="1" coveredmethods="1"/>
+        <line num="1" count="6" type="stmt"/>
+        <line num="3" count="6" type="stmt"/>
+        <line num="11" count="1003" type="cond" truecount="2" falsecount="1"/>
         <line num="12" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
-        <line num="17" count="0" type="stmt"/>
-        <line num="19" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="21" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
+        <line num="16" count="1003" type="stmt"/>
+        <line num="17" count="1003" type="stmt"/>
+        <line num="19" count="1003" type="cond" truecount="1" falsecount="0"/>
+        <line num="20" count="1003" type="stmt"/>
+        <line num="21" count="1003" type="stmt"/>
+        <line num="24" count="1003" type="stmt"/>
       </file>
     </package>
   </project>
