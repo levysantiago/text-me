@@ -31,7 +31,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       });
     }
 
-    if (process.env.NODE_ENV !== 'test') console.log(exception);
+    console.log(exception);
 
     const defaultErrorMessageId: keyof IErrorMessages = 'INTERNAL_SERVER_ERROR';
 

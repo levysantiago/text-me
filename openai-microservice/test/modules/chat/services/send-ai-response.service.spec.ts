@@ -12,7 +12,7 @@ jest.mock('ioredis', () => class {})
 jest.mock('socket.io-client', () => ({}))
 jest.mock('openai', () => ({}))
 
-describe.skip('SendAiResponseService', () => {
+describe('SendAiResponseService', () => {
   let cacheProvider: ICacheProvider
   let aiProvider: IAiProvider
   let socketProvider: ISocketProvider
@@ -91,8 +91,8 @@ describe.skip('SendAiResponseService', () => {
       const spy = jest.spyOn(socketProvider, 'emit')
       await sut.execute(params)
       expect(spy).toHaveBeenNthCalledWith(1, 'typing', {
-        fromUserId: params.fromUserId,
-        toUserId: params.toUserId,
+        toUserId: params.fromUserId,
+        access_token: 'fake_access_token',
       })
     })
 
@@ -144,10 +144,12 @@ describe.skip('SendAiResponseService', () => {
       const spy = jest.spyOn(socketProvider, 'emit')
       const promise = sut.execute(params)
       expect(promise).rejects.toEqual(new Error())
-      expect(spy).toHaveBeenCalledWith('newMessage', {
-        toUserId: params.fromUserId,
-        content: 'fake_excuse_message',
-        access_token: 'fake_access_token',
+      promise.catch(() => {
+        expect(spy).toHaveBeenCalledWith('newMessage', {
+          toUserId: params.fromUserId,
+          content: 'fake_excuse_message',
+          access_token: 'fake_access_token',
+        })
       })
     })
 

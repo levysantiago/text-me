@@ -20,7 +20,8 @@
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "start:dev": "tsx watch src/server.ts",
-    "test": "jest --runInBand",
+    "test": "jest --runInBand --silent",
+    "test:debug": "jest --runInBand",
     "test:cov": "jest --coverage --runInBand"
   },
   "eslintConfig": {
