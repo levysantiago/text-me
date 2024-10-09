@@ -13,5 +13,5 @@ export async function disconnectServicesHook() {
   // Disconnecting
   await queueProvider.disconnect()
   await cacheProvider.disconnect()
-  await socketProvider.disconnect()
+  socketProvider.disconnect()
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1728486625373" clover="3.2.0">
-  <project timestamp="1728486625373" name="All files">
-    <metrics statements="272" coveredstatements="180" conditionals="38" coveredconditionals="22" methods="47" coveredmethods="30" elements="357" coveredelements="232" complexity="0" loc="272" ncloc="272" packages="18" files="25" classes="25"/>
+<coverage generated="1728486917567" clover="3.2.0">
+  <project timestamp="1728486917567" name="All files">
+    <metrics statements="272" coveredstatements="188" conditionals="38" coveredconditionals="22" methods="47" coveredmethods="31" elements="357" coveredelements="241" complexity="0" loc="272" ncloc="272" packages="18" files="25" classes="25"/>
     <package name="src">
       <metrics statements="17" coveredstatements="0" conditionals="1" coveredconditionals="0" methods="1" coveredmethods="0"/>
       <file name="server.ts" path="/Users/levysantiago/Documents/workspace/text-me/openai-microservice/src/server.ts">
@@ -283,17 +283,17 @@
       </file>
     </package>
     <package name="src.shared.infra.hooks.on-close">
-      <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
+      <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
       <file name="disconnect-services.hook.ts" path="/Users/levysantiago/Documents/workspace/text-me/openai-microservice/src/shared/infra/hooks/on-close/disconnect-services.hook.ts">
-        <metrics statements="8" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="1" count="0" type="stmt"/>
-        <line num="6" count="0" type="stmt"/>
-        <line num="8" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="15" count="0" type="stmt"/>
-        <line num="16" count="0" type="stmt"/>
+        <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="8" count="4" type="stmt"/>
+        <line num="10" count="4" type="stmt"/>
+        <line num="12" count="4" type="stmt"/>
+        <line num="14" count="4" type="stmt"/>
+        <line num="15" count="4" type="stmt"/>
+        <line num="16" count="4" type="stmt"/>
       </file>
     </package>
     <package name="src.shared.infra.hooks.on-ready">
