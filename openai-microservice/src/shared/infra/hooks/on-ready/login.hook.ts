@@ -5,6 +5,16 @@ import { textmeServer } from '@shared/resources/api/textme-server'
 import { env } from '@shared/resources/env'
 
 export async function loginHook(): Promise<void> {
+  // Keep updating every 40 minutes
+  const milisecs = 40 * 60 * 1000
+
+  await login()
+  setInterval(async () => {
+    await login()
+  }, milisecs)
+}
+
+const login = async () => {
   const cacheProvider = container.resolve<ICacheProvider>('CacheProvider')
 
   const response = await textmeServer.post('/auth', {

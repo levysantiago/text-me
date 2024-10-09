@@ -10,6 +10,14 @@ describe('LoginHook', () => {
   let cacheProvider: ICacheProvider
   const sut = loginHook
 
+  beforeAll(() => {
+    jest.useFakeTimers()
+  })
+
+  afterAll(() => {
+    jest.useRealTimers()
+  })
+
   beforeEach(() => {
     cacheProvider = mock()
 
