@@ -1,0 +1,14 @@
+# locks
+yarn.lock
+
+# dependencies
+node_modules/
+
+# environmental variables
+.env
+
+# coverage
+coverage/
+
+# build
+dist

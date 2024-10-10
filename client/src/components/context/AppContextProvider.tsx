@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReactNode, useEffect, useState } from 'react'
 import { AppContext } from './AppContext'
 import { checkLoginService } from 'services/checkLoginService'
@@ -19,7 +20,7 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
       setIsLogged(true)
 
       const accessToken = localStorage.getItem('access_token')
-      const _socket = io('http://localhost:3333', {
+      const _socket = io(process.env.REACT_APP_SERVER_WEBSOCKET as string, {
         query: { access_token: accessToken as string },
       })
 

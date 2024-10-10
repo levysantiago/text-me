@@ -1,0 +1,42 @@
+version: "3"
+
+services:
+  redis:
+    container_name: "redis"
+    image: redis
+    command: redis-server --requirepass 12345
+    ports: 
+      - "6379:6379"
+    networks: 
+      - default
+
+  postgresql:
+    container_name: "postgresql"
+    image: bitnami/postgresql
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRESQL_USERNAME=docker
+      - POSTGRESQL_PASSWORD=docker
+      - POSTGRESQL_DATABASE=textmedb
+    networks:
+      - default
+
+  rabbitmq:
+    container_name: "rabbitmq"
+    image: rabbitmq:3-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    ports:
+    # AMQP protocol port
+    - '5672:5672'
+    # HTTP management UI
+    - '15672:15672'
+    networks:
+      - default
+
+networks:
+  default: 
+    name: text-me
+    external: true

@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  text-me-server:
+    container_name: "server"
+    image: node:18.16
+    entrypoint: ["sh", "./entrypoint.sh"]
+    ports:
+      - 3333:3333
+    volumes:
+      - ./:/usr/text-me/server
+      - ./entrypoint.sh:/entrypoint.sh
+    environment:
+      JWT_SECRET: secret
+      DATABASE_URL: postgresql://docker:docker@postgresql:5432/textmedb?schema=public
+    networks: 
+      - default
+
+networks:
+  default: 
+    name: text-me
+    external: true

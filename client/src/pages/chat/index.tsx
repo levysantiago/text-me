@@ -68,11 +68,13 @@ export default function Chat() {
     setFriendName(_friendName)
     setFriendId(_friendId)
     setAvatar(createAvatar(_friendName))
-    fetchMessages()
+    if(friendId){
+      fetchMessages()
+    }
   }, [friendId, isLogged])
 
   useEffect(() => {
-    if (socket) {
+    if (socket && friendId) {
       const accessToken = localStorage.getItem('access_token')
       socket.emit('visualizeChat', {
         access_token: accessToken,

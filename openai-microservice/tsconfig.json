@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es2020", 
+    "experimentalDecorators": true, 
+    "outDir": "dist",
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "module": "commonjs", 
+    "paths": {
+      "@modules/*":["./src/modules/*"],
+      "@shared/*":["./src/shared/*"]
+    },                                      
+    "esModuleInterop": true, 
+    "forceConsistentCasingInFileNames": true, 
+    "strict": true, 
+    "skipLibCheck": true, 
+    "resolveJsonModule": true
+  },
+  "include": ["src/**/*", "test/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

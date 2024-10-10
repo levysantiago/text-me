@@ -1,0 +1,24 @@
+version: "3.8"
+
+services:
+  openai-microservice:
+    container_name: "openai-microservice"
+    image: node:18.16
+    entrypoint: ["sh", "./entrypoint.sh"]
+    ports:
+      - 3001:3001
+    volumes:
+      - ./:/usr/text-me/openai-microservice
+      - ./entrypoint.sh:/entrypoint.sh
+    environment:
+      # TextMe websocket server
+      WEBSOCKET_SERVER: 'http://server:3333'
+      REDIS_HOST: "redis"
+      RABBITMQ_HOST: "rabbitmq"
+    networks: 
+      - default
+
+networks:
+  default: 
+    name: text-me
+    external: true

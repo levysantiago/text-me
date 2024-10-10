@@ -1,0 +1,4 @@
+{
+  "INTERNAL_SERVER_ERROR": "A unexpected error ocurred, please, await some minutes or contact support.",
+  "MICROSERVICE_NOT_LOGGED_ERROR": "Microservice is not logged to server, please, verify the user credentials."
+}
