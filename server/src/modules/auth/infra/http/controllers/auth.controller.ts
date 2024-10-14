@@ -1,27 +1,19 @@
 import { AuthService } from '@modules/auth/services/auth.service';
-import {
-  Body,
-  Controller,
-  HttpException,
-  HttpStatus,
-  Post,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, Post, Res, UsePipes } from '@nestjs/common';
 import { Response } from 'express';
-import { z } from 'zod';
+import {
+  AuthValidationPipe,
+  IAuthBody,
+} from './validations/auth-validation.pipe';
 
 @Controller('api')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('auth')
-  async handle(@Body() body, @Res() response: Response) {
-    const createAuthUserBodySchema = z.object({
-      email: z.string().email(),
-      password: z.string(),
-    });
-
-    const { email, password } = createAuthUserBodySchema.parse(body);
+  @UsePipes(AuthValidationPipe)
+  async handle(@Body() body: IAuthBody, @Res() response: Response) {
+    const { email, password } = body;
 
     const { access_token } = await this.authService.execute({
       email,

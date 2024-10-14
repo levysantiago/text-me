@@ -1,5 +1,5 @@
 import { HttpException } from '@nestjs/common';
-import { IErrorMessages } from './types/ierror-message-id';
+import { IErrorMessages } from './types/ierror-messages';
 
 export class AppError extends HttpException {
   public messageId: keyof IErrorMessages;
