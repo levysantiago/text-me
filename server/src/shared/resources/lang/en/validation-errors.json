@@ -1,6 +1,10 @@
 {
   "email.required": "Email is required",
   "email.email": "Email is invalid",
+  "email.string": "Email should be a string",
   "password.required": "Password is required",
-  "password.min": "Password must contain at least 8 characters"
+  "password.min": "Password must contain at least 8 characters",
+  "password.string": "Password should be a string",
+  "name.required": "Name is required",
+  "name.string": "Name should be a string"
 }

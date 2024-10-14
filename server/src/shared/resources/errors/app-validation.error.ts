@@ -29,8 +29,6 @@ export class AppValidationError extends HttpException {
   private formatZodErrors(errors: ZodIssue[]): IValidation[] {
     return errors.map((zodError) => {
       let validation = '';
-
-      console.log(zodError);
       
       switch (zodError.code) {
         case 'invalid_type': {

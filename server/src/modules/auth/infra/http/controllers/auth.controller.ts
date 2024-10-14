@@ -4,7 +4,7 @@ import { Response } from 'express';
 import {
   AuthValidationPipe,
   IAuthBody,
-} from './validations/auth.validation.pipe';
+} from './validations/auth-validation.pipe';
 
 @Controller('api')
 export class AuthController {
