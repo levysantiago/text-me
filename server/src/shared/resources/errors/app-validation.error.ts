@@ -5,6 +5,8 @@ import { IValidation } from './types/ivalidation';
 import { ILocale } from '../types/ilocale';
 import { ErrorMessageManager } from './error-message-manager';
 import { IValidationErrorMessages } from './types/ivalidation-error-messages';
+import { AppErrorDTO } from './dtos/app-error-dto';
+import { AppValidationErrorDTO } from './dtos/app-validation-error-dto';
 
 export class AppValidationError extends HttpException {
   public messageId: keyof IErrorMessages;
@@ -95,7 +97,7 @@ export class AppValidationError extends HttpException {
     });
   }
 
-  public toJson(requestPath: string): any {
+  public toJson(requestPath: string): AppValidationErrorDTO {
     const errorMessages = ErrorMessageManager.getMessages<IErrorMessages>(
       'errors',
       this.locale,

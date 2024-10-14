@@ -25,14 +25,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     );
 
     if (exception instanceof AppError) {
-      return response.status(status).json({
-        statusCode: status,
-        error: exception.messageId,
-        message: errorMessages[exception.messageId],
-        reason: exception.reason,
-        timestamp: new Date().toISOString(),
-        path: request.url,
-      });
+      return response.status(status).json(exception.toJson(request.path, locale));
     }
 
     if (exception instanceof AppValidationError) {

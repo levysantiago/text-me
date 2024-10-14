@@ -1,5 +1,6 @@
 import { GetFriendsMessagesResumeService } from '@modules/chat/services/get-friends-messages-resume.service';
 import { Controller, Get, Req, Response, UseGuards } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@shared/infra/http/guards/jwt-auth.guard';
 import { Request as ExpressRequest, Response as IResponse } from 'express';
 
@@ -8,6 +9,7 @@ interface IRequest extends ExpressRequest {
 }
 
 @Controller('api')
+@ApiTags("Chat")
 export class GetAmountOfUnseenMessagesController {
   constructor(
     private getFriendsMessagesResumeService: GetFriendsMessagesResumeService,

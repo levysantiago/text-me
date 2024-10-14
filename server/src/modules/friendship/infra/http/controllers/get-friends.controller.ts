@@ -1,5 +1,6 @@
 import { GetFriendsService } from '@modules/friendship/services/get-friends.service';
 import { Controller, Get, Request, Response, UseGuards } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@shared/infra/http/guards/jwt-auth.guard';
 import {
   Request as ExpressRequest,
@@ -11,6 +12,7 @@ interface IRequest extends ExpressRequest {
 }
 
 @Controller('api')
+@ApiTags("Friendship")
 export class GetFriendsController {
   constructor(private getFriendsService: GetFriendsService) {}
 

@@ -8,11 +8,13 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from '@shared/infra/http/guards/jwt-auth.guard';
 import { Response as IResponse } from 'express';
 import { IUpdateUserBody, UpdateUserValidationPipe } from './validations/update-user-validation.pipe';
 
 @Controller('api')
+@ApiTags("User")
 export class UpdateUserController {
   constructor(private updateUserService: UpdateUserService) {}
 

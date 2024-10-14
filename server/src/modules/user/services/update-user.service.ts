@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from '../repositories/users-repository';
-import { IUpdateUserDTO } from '../dtos/iupdate-user-dto';
+import { IUpdateUserDTO } from './dtos/iupdate-user-dto';
 import { UserNotFoundError } from '../errors/user-not-found.error';
 import { User } from '../infra/db/entities/user';
 

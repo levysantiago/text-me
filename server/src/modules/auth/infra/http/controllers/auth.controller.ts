@@ -1,5 +1,6 @@
 import { AuthService } from '@modules/auth/services/auth.service';
 import { Body, Controller, Post, Res, UsePipes } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import {
   AuthValidationPipe,
@@ -7,6 +8,7 @@ import {
 } from './validations/auth-validation.pipe';
 
 @Controller('api')
+@ApiTags("Auth")
 export class AuthController {
   constructor(private authService: AuthService) {}
 
