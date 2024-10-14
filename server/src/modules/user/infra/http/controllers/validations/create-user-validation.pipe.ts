@@ -3,7 +3,6 @@ import { extendZodWithOpenApi } from '@anatine/zod-openapi';
 import { ArgumentMetadata, PipeTransform } from '@nestjs/common';
 import { AppValidationError } from '@shared/resources/errors/app-validation.error';
 import { z } from 'zod';
-
 extendZodWithOpenApi(z)
 
 export const createUserBodySchema = z.object({

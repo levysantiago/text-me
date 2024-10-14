@@ -15,16 +15,16 @@ export class User {
     this.updatedAt = props.updatedAt ?? new Date();
   }
 
-  @ApiProperty()
+  @ApiProperty({example: "01928cb8-953c-7114-9b48-e2478a5d7c53"})
   id: string;
 
-  @ApiProperty()
+  @ApiProperty({example: "john@gmail.com"})
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({example: "John"})
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({example: false})
   isAssistant: boolean;
 
   @Exclude()
