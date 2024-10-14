@@ -4,5 +4,6 @@
   "EMAIL_ALREADY_EXISTS_ERROR": "This email is already registered, maybe try to login.",
   "MESSAGES_NOT_FOUND_ERROR": "It was not possible to find user messages.",
   "INVALID_EMAIL_OR_PASSWORD_ERROR": "Invalid email or password.",
-  "VALIDATION_ERROR": "Validation error."
+  "VALIDATION_ERROR": "Validation error.",
+  "USERS_ALREADY_FRIENDS_ERROR": "Users are already friends."
 }
