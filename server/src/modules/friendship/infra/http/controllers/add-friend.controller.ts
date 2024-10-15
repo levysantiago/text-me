@@ -12,6 +12,7 @@ import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from
 import { ApiGlobalHeaders } from '@shared/infra/http/decorators/api-global-headers.decorator';
 import { JwtAuthGuard } from '@shared/infra/http/guards/jwt-auth.guard';
 import { AppErrorDTO } from '@shared/resources/errors/dtos/app-error-dto';
+import { AppValidationErrorDTO } from '@shared/resources/errors/dtos/app-validation-error-dto';
 import { Response as IResponse, Request as ExpressRequest } from 'express';
 import { AddFriendBodyDTO, AddFriendValidationPipe } from './validations/add-friend-validation.pipe';
 
@@ -36,6 +37,10 @@ export class AddFriendController {
   @ApiResponse({
     type: AppErrorDTO,
     status: 500
+  })
+  @ApiResponse({
+    type: AppValidationErrorDTO,
+    status:400
   })
   async handle(
     @Body() body: AddFriendBodyDTO,
