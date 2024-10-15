@@ -21,7 +21,7 @@ describe('AuthController', () => {
           useValue: {
             execute: jest
               .fn()
-              .mockResolvedValue({ access_token: 'fake-token' }),
+              .mockResolvedValue({ data: {access_token: 'fake-token'} }),
           },
         },
       ],

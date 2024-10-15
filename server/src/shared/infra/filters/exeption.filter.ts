@@ -25,13 +25,15 @@ export class HttpExceptionFilter implements ExceptionFilter {
     );
 
     if (exception instanceof AppError) {
-      return response.status(status).json(exception.toJson(request.path, locale));
+      return response
+        .status(status)
+        .json(exception.toJson(request.url, locale));
     }
 
     if (exception instanceof AppValidationError) {
       return response
         .status(exception.getStatus())
-        .json(exception.toJson(request.path));
+        .json(exception.toJson(request.url));
     }
 
     console.log(exception);
