@@ -27,10 +27,12 @@ export class GetFriendsController {
     summary: "Get the list of user's friends.",
   })
   @ApiOkResponse({
-    type: GetFriensResponseDTO
+    type: GetFriensResponseDTO,
+    description: "Valid response.",
   })
   @ApiResponse({
     type: AppErrorDTO,
+    description: "App Error",
     status: 500
   })
   async handle(@Request() req: IRequest, @Response() res: ExpressResponse) {

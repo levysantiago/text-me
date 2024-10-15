@@ -33,13 +33,17 @@ export class AddFriendController {
   @ApiOperation({
     summary: "Add a user as a friend.",
   })
-  @ApiOkResponse()
+  @ApiOkResponse({
+    description: "Valid response.",
+  })
   @ApiResponse({
     type: AppErrorDTO,
+    description: "App Error",
     status: 500
   })
   @ApiResponse({
     type: AppValidationErrorDTO,
+    description: "Arguments validation error.",
     status:400
   })
   async handle(

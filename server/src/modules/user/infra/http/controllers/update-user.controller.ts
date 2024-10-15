@@ -31,14 +31,17 @@ export class UpdateUserController {
     summary: "Update user attributes.",
   })
   @ApiOkResponse({
-    type: UpdateUserResponseDTO
+    type: UpdateUserResponseDTO,
+    description: "Valid response.",
   })
   @ApiResponse({
     type: AppErrorDTO,
+    description: "App Error.",
     status: 500
   })
   @ApiResponse({
     type: AppValidationErrorDTO,
+    description: "Arguments validation error.",
     status:400
   })
   async handle(@Body() body: UpdateUserBodyDTO, @Req() req, @Response() res: IResponse) {

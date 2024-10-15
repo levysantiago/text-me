@@ -21,14 +21,17 @@ export class CreateUserController {
     summary: "Create a new user / Sign up to TextMe.",
   })
   @ApiCreatedResponse({
-    type: CreateUserResponseDTO
+    type: CreateUserResponseDTO,
+    description: "Valid response.",
   })
   @ApiResponse({
     type: AppErrorDTO,
+    description: "App Error.",
     status: 500
   })
   @ApiResponse({
     type: AppValidationErrorDTO,
+    description: "Arguments validation error.",
     status:400
   })
   async handle(@Body() body: CreateUserBodyDTO, @Response() res: IResponse): Promise<IResponse<CreateUserResponseDTO>> {
