@@ -1,6 +1,7 @@
 import { GetFriendsMessagesResumeService } from '@modules/chat/services/get-friends-messages-resume.service';
 import { Controller, Get, Req, Response, UseGuards } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiGlobalHeaders } from '@shared/infra/http/decorators/api-global-headers.decorator';
 import { JwtAuthGuard } from '@shared/infra/http/guards/jwt-auth.guard';
 import { Request as ExpressRequest, Response as IResponse } from 'express';
 
@@ -10,6 +11,8 @@ interface IRequest extends ExpressRequest {
 
 @Controller('api')
 @ApiTags("Chat")
+@ApiGlobalHeaders()
+@ApiBearerAuth()
 export class GetAmountOfUnseenMessagesController {
   constructor(
     private getFriendsMessagesResumeService: GetFriendsMessagesResumeService,

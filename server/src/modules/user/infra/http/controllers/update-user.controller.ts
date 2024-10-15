@@ -9,7 +9,8 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiGlobalHeaders } from '@shared/infra/http/decorators/api-global-headers.decorator';
 import { JwtAuthGuard } from '@shared/infra/http/guards/jwt-auth.guard';
 import { AppErrorDTO } from '@shared/resources/errors/dtos/app-error-dto';
 import { AppValidationErrorDTO } from '@shared/resources/errors/dtos/app-validation-error-dto';
@@ -18,6 +19,8 @@ import { UpdateUserBodyDTO, UpdateUserValidationPipe } from './validations/updat
 
 @Controller('api')
 @ApiTags("User")
+@ApiGlobalHeaders()
+@ApiBearerAuth()
 export class UpdateUserController {
   constructor(private updateUserService: UpdateUserService) {}
 

@@ -8,7 +8,8 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiGlobalHeaders } from '@shared/infra/http/decorators/api-global-headers.decorator';
 import { JwtAuthGuard } from '@shared/infra/http/guards/jwt-auth.guard';
 import { Response as IResponse, Request as ExpressRequest } from 'express';
 import { AddFriendValidationPipe, IAddFriendBody } from './validations/add-friend-validation.pipe';
@@ -19,6 +20,8 @@ interface IRequest extends ExpressRequest {
 
 @Controller('api')
 @ApiTags("Friendship")
+@ApiGlobalHeaders()
+@ApiBearerAuth()
 export class AddFriendController {
   constructor(private addFriendService: AddFriendService) {}
   

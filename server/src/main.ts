@@ -12,6 +12,7 @@ async function bootstrap() {
     .setTitle("TextMe Server Docs")
     .setDescription("This is the TextMe application Server which is responsible for handling all users, friendships and chat operations.")
     .setVersion("1.0")
+    .addBearerAuth()
     .build()
     
   app.enableCors({
