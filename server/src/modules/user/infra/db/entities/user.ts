@@ -1,4 +1,4 @@
-import { ICreateUserDTO } from '@modules/user/services/dtos/icreate-user-dto';
+import { ICreateUserDTO } from '@modules/user/dtos/icreate-user-dto';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, instanceToPlain } from 'class-transformer';
 import { randomUUID } from 'crypto';

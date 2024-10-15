@@ -1,5 +1,5 @@
 import { Controller, Get, Res } from '@nestjs/common';
-import { ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AppErrorDTO } from '@shared/resources/errors/dtos/app-error-dto';
 import { Response } from 'express';
 
@@ -7,6 +7,9 @@ import { Response } from 'express';
 @ApiTags("Heartbeat")
 export class HeartbeatController {
   @Get('/')
+  @ApiOperation({
+    summary: "Heartbeat route to verify if server is up.",
+  })
   @ApiOkResponse({
     example: {data: "TextMe Server is UP!"}
   })

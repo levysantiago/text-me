@@ -9,7 +9,7 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiGlobalHeaders } from '@shared/infra/http/decorators/api-global-headers.decorator';
 import { JwtAuthGuard } from '@shared/infra/http/guards/jwt-auth.guard';
 import { AppErrorDTO } from '@shared/resources/errors/dtos/app-error-dto';
@@ -27,6 +27,9 @@ export class UpdateUserController {
   @Put('user')
   @UseGuards(JwtAuthGuard)
   @UsePipes(UpdateUserValidationPipe)
+  @ApiOperation({
+    summary: "Update user attributes.",
+  })
   @ApiOkResponse({
     type: UpdateUserResponseDTO
   })

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User } from '../infra/db/entities/user';
 import { UsersRepository } from '../repositories/users-repository';
-import { ICreateUserDTO } from './dtos/icreate-user-dto';
+import { ICreateUserDTO } from '../dtos/icreate-user-dto';
 import { EmailAlreadyExistsError } from '../errors/email-already-exists.error';
 import { CreateUserResponseDTO } from './dtos/create-user-response-dto';
 

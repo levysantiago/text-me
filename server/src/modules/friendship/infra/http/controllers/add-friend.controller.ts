@@ -8,7 +8,7 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiGlobalHeaders } from '@shared/infra/http/decorators/api-global-headers.decorator';
 import { JwtAuthGuard } from '@shared/infra/http/guards/jwt-auth.guard';
 import { AppErrorDTO } from '@shared/resources/errors/dtos/app-error-dto';
@@ -29,6 +29,9 @@ export class AddFriendController {
   @Post('friend')
   @UseGuards(JwtAuthGuard)
   @UsePipes(AddFriendValidationPipe)
+  @ApiOperation({
+    summary: "Add a user as a friend.",
+  })
   @ApiOkResponse()
   @ApiResponse({
     type: AppErrorDTO,

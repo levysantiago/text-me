@@ -1,7 +1,7 @@
 import { CreateUserService } from '@modules/user/services/create-user.service';
 import { CreateUserResponseDTO } from '@modules/user/services/dtos/create-user-response-dto';
 import { Body, Controller, Post, Response, UsePipes } from '@nestjs/common';
-import {  ApiCreatedResponse, ApiHeaders, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {  ApiCreatedResponse, ApiHeaders, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiGlobalHeaders } from '@shared/infra/http/decorators/api-global-headers.decorator';
 import { AppErrorDTO } from '@shared/resources/errors/dtos/app-error-dto';
 import { AppValidationErrorDTO } from '@shared/resources/errors/dtos/app-validation-error-dto';
@@ -17,6 +17,9 @@ export class CreateUserController {
 
   @Post('user')
   @UsePipes(CreateUserValidationPipe)
+  @ApiOperation({
+    summary: "Create a new user / Sign up to TextMe.",
+  })
   @ApiCreatedResponse({
     type: CreateUserResponseDTO
   })

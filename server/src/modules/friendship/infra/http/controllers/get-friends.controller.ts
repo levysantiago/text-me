@@ -1,8 +1,10 @@
+import { GetFriensResponseDTO } from '@modules/friendship/services/dtos/get-friends-response-dto';
 import { GetFriendsService } from '@modules/friendship/services/get-friends.service';
 import { Controller, Get, Request, Response, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiGlobalHeaders } from '@shared/infra/http/decorators/api-global-headers.decorator';
 import { JwtAuthGuard } from '@shared/infra/http/guards/jwt-auth.guard';
+import { AppErrorDTO } from '@shared/resources/errors/dtos/app-error-dto';
 import {
   Request as ExpressRequest,
   Response as ExpressResponse,
@@ -21,6 +23,16 @@ export class GetFriendsController {
 
   @UseGuards(JwtAuthGuard)
   @Get('friend')
+  @ApiOperation({
+    summary: "Get the list of user's friends.",
+  })
+  @ApiOkResponse({
+    type: GetFriensResponseDTO
+  })
+  @ApiResponse({
+    type: AppErrorDTO,
+    status: 500
+  })
   async handle(@Request() req: IRequest, @Response() res: ExpressResponse) {
     const { data } = await this.getFriendsService.execute({
       userId: req.user.userId,
