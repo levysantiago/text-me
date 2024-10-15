@@ -1,7 +1,12 @@
 import { AuthService } from '@modules/auth/services/auth.service';
 import { AuthResponseDTO } from '@modules/auth/services/dtos/auth-response-dto';
 import { Body, Controller, Post, Res, UsePipes } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiOkResponse,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { ApiGlobalHeaders } from '@shared/infra/http/decorators/api-global-headers.decorator';
 import { AppErrorDTO } from '@shared/resources/errors/dtos/app-error-dto';
 import { AppValidationErrorDTO } from '@shared/resources/errors/dtos/app-validation-error-dto';
@@ -12,7 +17,7 @@ import {
 } from './validations/auth-validation.pipe';
 
 @Controller('api')
-@ApiTags("Auth")
+@ApiTags('Auth')
 @ApiGlobalHeaders()
 export class AuthController {
   constructor(private authService: AuthService) {}
@@ -20,21 +25,21 @@ export class AuthController {
   @Post('auth')
   @UsePipes(AuthValidationPipe)
   @ApiOperation({
-    summary: "Authenticates a registered user / Login route.",
+    summary: 'Authenticates a registered user / Login route.',
   })
   @ApiOkResponse({
     type: AuthResponseDTO,
-    description: "Valid response.",
+    description: 'Valid response.',
   })
   @ApiResponse({
     type: AppErrorDTO,
-    description: "App Error",
-    status: 500
+    description: 'App Error',
+    status: 500,
   })
   @ApiResponse({
     type: AppValidationErrorDTO,
-    description: "Arguments validation error.",
-    status:400
+    description: 'Arguments validation error.',
+    status: 400,
   })
   async handle(@Body() body: IAuthBody, @Res() response: Response) {
     const { email, password } = body;
