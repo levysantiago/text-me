@@ -44,8 +44,8 @@ describe('EventsGateway', () => {
       id: 'fake-socket-id',
       emit: jest.fn(),
       handshake: {
-        query: {
-          access_token: 'fake-token',
+        headers: {
+          authorization: 'fake-token',
         },
       },
     } as any as Socket;
@@ -110,14 +110,13 @@ describe('EventsGateway', () => {
         listener(socketClient);
       });
 
-    sut.onModuleInit();
+    sut.handleConnection(socketClient);
   });
 
   describe('onNewMessage', () => {
     const body = {
       toUserId: validFriend.id,
       content: 'fake-content',
-      access_token: 'fake-access-token',
     };
 
     it('should be able to handle new message', async () => {
@@ -128,7 +127,9 @@ describe('EventsGateway', () => {
     it('should be able to call JwtService::verify with right parameters', async () => {
       const spy = jest.spyOn(jwtService, 'verify');
       await sut.onNewMessage(body, socketClient);
-      expect(spy).toBeCalledWith(body.access_token, { secret: env.JWT_SECRET });
+      expect(spy).toBeCalledWith(socketClient.handshake.headers.authorization, {
+        secret: env.JWT_SECRET,
+      });
     });
 
     it('should be able to call GetUserService::execute with right parameters', async () => {
@@ -205,8 +206,10 @@ describe('EventsGateway', () => {
 
     it('should be able to emit handleCreateMessage to receiver client', async () => {
       // Add friend socket state data
-      sut['clientsStateData'][validFriend.id] = {
-        socketId: 'fake-friend-socket-id',
+      sut['clientsStateData']['fake-friend-socket-id'] = {
+        clientId: 'fake-friend-socket-id',
+        token: 'fake-token',
+        userId: validFriend.id,
         interval: undefined,
         lastTypingTime: undefined,
       };
@@ -229,8 +232,10 @@ describe('EventsGateway', () => {
 
     it('should be able to emit friendStoppedTyping to receiver client', async () => {
       // Add friend socket state data
-      sut['clientsStateData'][validFriend.id] = {
-        socketId: 'fake-friend-socket-id',
+      sut['clientsStateData']['fake-friend-socket-id'] = {
+        clientId: 'fake-friend-socket-id',
+        userId: validFriend.id,
+        token: 'fake-token',
         interval: undefined,
         lastTypingTime: undefined,
       };
@@ -252,10 +257,12 @@ describe('EventsGateway', () => {
       const spy = jest.spyOn(global, 'clearInterval');
       await sut.onNewMessage(body, socketClient);
       expect(spy).toBeCalledWith(
-        sut['clientsStateData'][validUser.id].interval,
+        sut['clientsStateData'][socketClient.id].interval,
       );
-      expect(sut['clientsStateData'][validUser.id].interval).toEqual(undefined);
-      expect(sut['clientsStateData'][validUser.id].lastTypingTime).toEqual(
+      expect(sut['clientsStateData'][socketClient.id].interval).toEqual(
+        undefined,
+      );
+      expect(sut['clientsStateData'][socketClient.id].lastTypingTime).toEqual(
         undefined,
       );
       expect(spy).toBeCalledTimes(1);
@@ -270,13 +277,13 @@ describe('EventsGateway', () => {
 
     it('should be able to call JwtService::verify with right parameters', async () => {
       const spy = jest.spyOn(jwtService, 'verify');
-      await sut.onVisualizeMessage(body);
+      await sut.onVisualizeMessage(body, socketClient);
       expect(spy).toBeCalledWith(body.access_token, { secret: env.JWT_SECRET });
     });
 
     it('should be able to call VisualizeMessagesService::execute with right parameters', async () => {
       const spy = jest.spyOn(visualizeMessagesService, 'execute');
-      await sut.onVisualizeMessage(body);
+      await sut.onVisualizeMessage(body, socketClient);
       expect(spy).toBeCalledWith({
         fromUserId: body.fromUserId,
         userId: validUser.id,
@@ -292,21 +299,23 @@ describe('EventsGateway', () => {
 
     it('should be able to call JwtService::verify with right parameters', async () => {
       const spy = jest.spyOn(jwtService, 'verify');
-      await sut.onChatTyping(body);
+      await sut.onChatTyping(body, socketClient);
       expect(spy).toBeCalledWith(body.access_token, { secret: env.JWT_SECRET });
     });
 
     it('should be able to emit friendIsTyping event', async () => {
       // Add friend socket state data
-      sut['clientsStateData'][validFriend.id] = {
-        socketId: 'fake-friend-socket-id',
+      sut['clientsStateData']['fake-friend-socket-id'] = {
+        clientId: 'fake-friend-socket-id',
+        token: 'fake-token',
+        userId: validFriend.id,
         interval: undefined,
         lastTypingTime: undefined,
       };
 
       const spy = jest.spyOn(sut['server'], 'to');
       const spyEvent = serverToEmitFunc;
-      await sut.onChatTyping(body);
+      await sut.onChatTyping(body, socketClient);
       jest.runAllTimers();
       expect(spy).toBeCalledWith('fake-friend-socket-id');
       expect(spyEvent).toBeCalledWith('friendIsTyping', {
@@ -319,8 +328,10 @@ describe('EventsGateway', () => {
 
     it('should be able to emit friendStoppedTyping event', async () => {
       // Add friend socket state data
-      sut['clientsStateData'][validFriend.id] = {
-        socketId: 'fake-friend-socket-id',
+      sut['clientsStateData']['fake-friend-socket-id'] = {
+        clientId: 'fake-friend-socket-id',
+        token: 'fake-token',
+        userId: validFriend.id,
         interval: undefined,
         lastTypingTime: undefined,
       };
@@ -328,7 +339,7 @@ describe('EventsGateway', () => {
       const spy = jest.spyOn(sut['server'], 'to');
       const spyClearInterval = jest.spyOn(global, 'clearInterval');
       const spyEvent = serverToEmitFunc;
-      await sut.onChatTyping(body);
+      await sut.onChatTyping(body, socketClient);
       jest.runAllTimers();
       expect(spy).toBeCalledWith('fake-friend-socket-id');
       expect(spyEvent).toBeCalledWith('friendStoppedTyping', {
@@ -339,11 +350,13 @@ describe('EventsGateway', () => {
 
       // Ensure lastTypingTime and interval is undefined at the end
       expect(
-        sut['clientsStateData'][validUser.id].lastTypingTime,
+        sut['clientsStateData']['fake-friend-socket-id'].lastTypingTime,
       ).toBeUndefined();
-      expect(sut['clientsStateData'][validUser.id].interval).toBeUndefined();
+      expect(
+        sut['clientsStateData']['fake-friend-socket-id'].interval,
+      ).toBeUndefined();
 
-      sut['clientsStateData'][validFriend.id] = undefined;
+      sut['clientsStateData']['fake-friend-socket-id'] = undefined;
     });
   });
 });
