@@ -36,6 +36,17 @@ export class HttpExceptionFilter implements ExceptionFilter {
         .json(exception.toJson(request.url));
     }
 
+    if (status === 404) {
+      return response.status(status).json({
+        statusCode: 404,
+        error: 'ROUTE_NOT_FOUND',
+        message: errorMessages.ROUTE_NOT_FOUND,
+        reason: exception.message,
+        timestamp: new Date().toISOString(),
+        path: request.url,
+      });
+    }
+
     console.log(exception);
 
     const defaultErrorMessageId: keyof IErrorMessages = 'INTERNAL_SERVER_ERROR';

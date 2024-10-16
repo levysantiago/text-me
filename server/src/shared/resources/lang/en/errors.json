@@ -6,5 +6,6 @@
   "INVALID_EMAIL_OR_PASSWORD_ERROR": "Invalid email or password.",
   "VALIDATION_ERROR": "Validation error.",
   "USERS_ALREADY_FRIENDS_ERROR": "Users are already friends.",
-  "UNAUTHORIZED": "Unauthorized operation, pelase, verify if you are logged in."
+  "UNAUTHORIZED": "Unauthorized operation, pelase, verify if you are logged in.",
+  "ROUTE_NOT_FOUND": "This route does not exists in this server."
 }
