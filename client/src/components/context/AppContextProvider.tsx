@@ -21,7 +21,9 @@ export function AppContextProvider({ children }: IAppContextProviderProps) {
 
       const accessToken = localStorage.getItem('access_token')
       const _socket = io(process.env.REACT_APP_SERVER_WEBSOCKET as string, {
-        query: { access_token: accessToken as string },
+        extraHeaders: {
+          Authorization: `Bearer ${accessToken}`,
+        },
       })
 
       _socket.on(
