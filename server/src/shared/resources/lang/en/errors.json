@@ -1,5 +1,5 @@
 {
-  "INTERNAL_SERVER_ERROR": "A unexpected error ocurred, please, await some minutes or contact support.",
+  "INTERNAL_SERVER_ERROR": "An unexpected error ocurred, please, await some minutes or contact support.",
   "RESOURCE_NOT_FOUND_ERROR": "The resource you are trying to find was not found.",
   "EMAIL_ALREADY_EXISTS_ERROR": "This email is already registered, maybe try to login.",
   "MESSAGES_NOT_FOUND_ERROR": "It was not possible to find user messages.",

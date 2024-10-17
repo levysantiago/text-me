@@ -1,0 +1,13 @@
+{
+  "email.required": "Email é obrigatório",
+  "email.email": "Email está inválido",
+  "email.string": "Email deve ser uma string",
+  "friendEmail.required": "friendEmail é obrigatório",
+  "friendEmail.email": "friendEmail está inválido",
+  "friendEmail.string": "friendEmail deve ser uma string",
+  "password.required": "Password é obrigatório",
+  "password.min": "Password deve conter pelo menos 8 caracteres",
+  "password.string": "Password deve ser uma string",
+  "name.required": "Name é obrigatório",
+  "name.string": "Name deve ser uma string"
+}

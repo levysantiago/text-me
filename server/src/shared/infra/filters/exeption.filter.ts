@@ -17,7 +17,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    const locale: ILocale = (request.headers['Accept-Language'] || 'en') as any;
+    const locale: ILocale = (request.headers['accept-language'] || 'en') as any;
     const status = exception.getStatus();
     const errorMessages = ErrorMessageManager.getMessages<IErrorMessages>(
       'errors',
@@ -33,7 +33,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     if (exception instanceof AppValidationError) {
       return response
         .status(exception.getStatus())
-        .json(exception.toJson(request.url));
+        .json(exception.toJson(request.url, locale));
     }
 
     if (status === 404) {

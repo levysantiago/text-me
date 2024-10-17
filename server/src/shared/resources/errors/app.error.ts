@@ -17,19 +17,19 @@ export class AppError extends HttpException {
     this.reason = options.reason || '';
   }
 
-  toJson(path: string, locale: ILocale): AppErrorDTO{
+  toJson(path: string, locale: ILocale): AppErrorDTO {
     const errorMessages = ErrorMessageManager.getMessages<IErrorMessages>(
       'errors',
       locale,
     );
 
-    return{
-      statusCode:this.getStatus(),
+    return {
+      statusCode: this.getStatus(),
       error: this.messageId,
       message: errorMessages[this.messageId],
       reason: this.reason,
       timestamp: new Date().toISOString(),
       path,
-    }
+    };
   }
 }
