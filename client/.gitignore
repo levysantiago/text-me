@@ -41,3 +41,4 @@ package-json.lock
 
 # environment variables
 .env
+.env.production

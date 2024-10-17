@@ -14,6 +14,7 @@ This is the server side of TextMe application. It was build in TypeScript and Ne
   - [Running the app](#running-the-app)
   - [Test](#test)
   - [Building](#building)
+    - [Docker](#docker)
   - [Routes Documentation (Swagger and Postman)](#routes-documentation-swagger-and-postman)
 - [Links](#links)
 
@@ -133,7 +134,7 @@ $ yarn run test:cov
 
 For production purposes, you must create a `.env.production` file on `server` folder, so that the docker compose file can use it as the application environment file. Create this file and update with production variable values.
 
-`OBS:` Remember that if you are going to use docker, the database name should be the name of the database container and not the default `localhost`. For example, if the database container name is `postgresql`, this means:
+`OBS:` Remember that if you are going to use docker, the database name should be the name of the database container and not the default `localhost`. This means:
 
 ```diff
 // Instead of define the database url like this:
@@ -154,6 +155,21 @@ or
 ```bash
 yarn build
 ```
+
+### Docker
+
+To run on docker you can just run:
+
+```bash
+docker compose up -d
+```
+
+if you want to run on an specific group of containers run
+
+```bash
+docker compose -p group_name up -d
+```
+
 
 ## Routes Documentation (Swagger and Postman)
 

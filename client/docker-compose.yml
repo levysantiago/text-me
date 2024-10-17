@@ -8,10 +8,8 @@ services:
     volumes:
       - ./:/usr/text-me/client
       - ./entrypoint.sh:/entrypoint.sh
-    environment:
-      NODE_ENV: production
-      REACT_APP_SERVER_API: http://localhost:3333/api/
-      REACT_APP_SERVER_WEBSOCKET: http://localhost:3333
+    env_file:
+      - ./.env.production
     networks: 
       - default
 
