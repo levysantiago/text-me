@@ -1,7 +1,10 @@
+import { ILocale } from '@shared/resources/types/ilocale';
+
 interface IClientData {
   clientId: string;
   userId: string;
   token: string;
+  locale: ILocale;
   interval: NodeJS.Timer;
   lastTypingTime: Date | undefined;
 }
@@ -14,6 +17,7 @@ interface ISaveDTO {
   clientId: string;
   userId: string;
   token: string;
+  locale?: ILocale;
 }
 
 interface IUpdateDTO {
@@ -24,11 +28,12 @@ interface IUpdateDTO {
 export class WsClientsHelper {
   private static clients: IClientDict = {};
 
-  public static save({ clientId, userId, token }: ISaveDTO): void {
+  public static save({ clientId, userId, token, locale }: ISaveDTO): void {
     this.clients[clientId] = {
       clientId,
       userId,
       token,
+      locale: locale || 'en',
       interval: null,
       lastTypingTime: null,
     };

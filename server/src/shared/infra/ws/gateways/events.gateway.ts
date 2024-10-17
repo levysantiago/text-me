@@ -17,6 +17,10 @@ import { VisualizeMessagesService } from '@modules/chat/services/visualize-messa
 import { GetUserService } from '@modules/user/services/get-user.service';
 import { AddFriendService } from '@modules/friendship/services/add-friend.service';
 import { WsClientsHelper } from './helpers/ws-clients.helper';
+import { UnauthorizedError } from '@shared/infra/errors/unauthorized.error';
+import { ILocale } from '@shared/resources/types/ilocale';
+import { AppError } from '@shared/resources/errors/app.error';
+import { InternalServerError } from '@shared/infra/errors/internal-server.error';
 
 interface INewMessageBody {
   toUserId: string;
@@ -45,22 +49,38 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     private jwtService: JwtService,
   ) {}
 
-  handleConnection(client: any, ...args: any[]) {
-    // console.log(socket);
-    // console.log('connected');
+  handleConnection(client: Socket, ...args: any[]) {
+    let defaultLocale: ILocale = 'en';
     try {
+      // Capture access token
       const accessToken = client.handshake.headers['authorization'] as string;
+      // Capture locale preference
+      const locale = client.handshake.headers['accept-language'] as string;
+
+      // Define locale
+      if (locale === 'en' || locale === 'pt') {
+        defaultLocale = locale;
+      }
+
+      // Validate access token
       const { sub: userId } = this.jwtService.verify(accessToken, {
         secret: env.JWT_SECRET,
       });
 
+      // Save client data to cache
       WsClientsHelper.save({
         clientId: client.id,
+        locale: defaultLocale,
         userId: userId,
         token: accessToken,
       });
     } catch (e) {
       console.log(e);
+
+      const appError = new UnauthorizedError();
+      client.emit('connectionError', appError.toJson('/', defaultLocale));
+
+      client.disconnect();
     }
   }
 
@@ -81,9 +101,8 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() body: INewMessageBody,
     @ConnectedSocket() client: Socket,
   ) {
+    const clientData = WsClientsHelper.findByClientId(client.id);
     try {
-      const clientData = WsClientsHelper.findByClientId(client.id);
-
       // Verifying access token
       const { sub: fromUserId } = this.jwtService.verify(clientData.token, {
         secret: env.JWT_SECRET,
@@ -140,7 +159,6 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
           fromUserId,
           toUserId: body.toUserId,
           content: body.content,
-          role,
         });
         // Emitting event to user receiver that his friend stopped typing
         this.server.to(receiverSocketId).emit('friendStoppedTyping', {
@@ -154,8 +172,21 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         interval: null,
         lastTypingTime: null,
       });
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      if (err instanceof AppError) {
+        client.emit(
+          'newMessageError',
+          err.toJson('/', clientData.locale || 'en'),
+        );
+      }
+
+      console.log(err);
+
+      const defaultError = new InternalServerError();
+      client.emit(
+        'newMessageError',
+        defaultError.toJson('/', clientData.locale || 'en'),
+      );
     }
   }
 
@@ -169,9 +200,8 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() body: IVisualizeChatBody,
     @ConnectedSocket() client,
   ) {
+    const clientData = WsClientsHelper.findByClientId(client.id);
     try {
-      const clientData = WsClientsHelper.findByClientId(client.id);
-
       // Verifying access token
       const { sub: userId } = this.jwtService.verify(clientData.token, {
         secret: env.JWT_SECRET,
@@ -182,8 +212,21 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
         fromUserId: body.fromUserId,
         userId,
       });
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      if (err instanceof AppError) {
+        client.emit(
+          'visualizeChatError',
+          err.toJson('/', clientData.locale || 'en'),
+        );
+      }
+
+      console.log(err);
+
+      const defaultError = new InternalServerError();
+      client.emit(
+        'visualizeChatError',
+        defaultError.toJson('/', clientData.locale || 'en'),
+      );
     }
   }
 
@@ -198,9 +241,8 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() body: ITypingBody,
     @ConnectedSocket() client,
   ) {
+    const clientData = WsClientsHelper.findByClientId(client.id);
     try {
-      const clientData = WsClientsHelper.findByClientId(client.id);
-
       // Verifying access token
       const { sub: userId } = this.jwtService.verify(clientData.token, {
         secret: env.JWT_SECRET,
@@ -275,8 +317,18 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
           interval,
         });
       }
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      if (err instanceof AppError) {
+        client.emit('typingError', err.toJson('/', clientData.locale || 'en'));
+      }
+
+      console.log(err);
+
+      const defaultError = new InternalServerError();
+      client.emit(
+        'typingError',
+        defaultError.toJson('/', clientData.locale || 'en'),
+      );
     }
   }
 }

@@ -2,11 +2,29 @@
 
 This is the server side of TextMe application. It was build in TypeScript and NestJS, and also using the following technologies:
 
+# Index
+- [TextMe Server](#textme-server)
+- [Index](#index)
+- [Technologies used](#technologies-used)
+- [Getting started](#getting-started)
+  - [Installation](#installation)
+  - [Running dependency services on Docker](#running-dependency-services-on-docker)
+  - [Environment variables](#environment-variables)
+  - [Executing migrations](#executing-migrations)
+  - [Running the app](#running-the-app)
+  - [Test](#test)
+  - [Routes Documentation (Swagger and Postman)](#routes-documentation-swagger-and-postman)
+- [Links](#links)
+
+# Technologies used
+
 - **NestJS:** Framework used to create the TextMe API.
 - **Socket.io:** For websocket communications in the TextMe Chat.
 - **Zod:** To validate requests data.
 - **Prisma:** ORM to manage communication with Database
 - **PostgreSQL:** Database to store users and messages data.
+- **Swagger:** For HTTP routes documentation (`/docs`).
+- **Postman:** For HTTP and WebSocket [routes documentation](https://levysdev.postman.co/workspace/TextMe~f2fdf013-d5e6-4438-92a2-de2d81d93202/overview).
 
 # Getting started
 
@@ -106,6 +124,13 @@ $ yarn run test:e2e
 # test coverage
 $ yarn run test:cov
 ```
+
+## Routes Documentation (Swagger and Postman)
+
+After running the server you will be able to see the HTTP API Swagger documentation on `http://localhost:3333/docs`.
+
+You can also read and interact with the HTTP and WebSocket routes on [Postman workspace](https://levysdev.postman.co/workspace/TextMe~f2fdf013-d5e6-4438-92a2-de2d81d93202/overview).
+
 
 # Links
 

@@ -9,6 +9,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { EventsGateway } from '@shared/infra/ws/gateways/events.gateway';
 import { WsClientsHelper } from '@shared/infra/ws/gateways/helpers/ws-clients.helper';
 import { env } from '@shared/resources/env';
+import { ILocale } from '@shared/resources/types/ilocale';
 import { fakeUserObject } from '@test/unit/mock/fake-user-object.mock';
 import { Socket } from 'socket.io';
 
@@ -28,6 +29,7 @@ describe('EventsGateway', () => {
     clientId: 'fake-socket-id',
     userId: validUser.id,
     token: 'fake-token',
+    locale: 'en' as ILocale,
     interval: null,
     lastTypingTime: null,
   };
@@ -36,6 +38,7 @@ describe('EventsGateway', () => {
     clientId: 'fake-friend-socket-id',
     token: 'fake-token',
     userId: validFriend.id,
+    locale: 'en' as ILocale,
     interval: null,
     lastTypingTime: null,
   };
@@ -62,6 +65,7 @@ describe('EventsGateway', () => {
     jest.spyOn(WsClientsHelper, 'save').mockImplementation((data) => {
       clients[data.clientId] = {
         ...data,
+        locale: 'en' as ILocale,
         interval: null,
         lastTypingTime: null,
       };
@@ -265,7 +269,6 @@ describe('EventsGateway', () => {
         fromUserId: validUser.id,
         toUserId: body.toUserId,
         content: body.content,
-        role: 'user',
       });
       expect(spy).toBeCalledTimes(2);
     });
