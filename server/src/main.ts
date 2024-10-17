@@ -2,6 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from '@shared/infra/filters/exeption.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { env } from '@shared/resources/env';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,6 +26,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, docsConfig);
   SwaggerModule.setup('docs', app, document);
 
-  await app.listen(3333);
+  await app.listen(env.SERVER_PORT);
 }
 bootstrap();

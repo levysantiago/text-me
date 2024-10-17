@@ -13,6 +13,7 @@ This is the server side of TextMe application. It was build in TypeScript and Ne
   - [Executing migrations](#executing-migrations)
   - [Running the app](#running-the-app)
   - [Test](#test)
+  - [Building](#building)
   - [Routes Documentation (Swagger and Postman)](#routes-documentation-swagger-and-postman)
 - [Links](#links)
 
@@ -65,6 +66,9 @@ JWT_SECRET=
 
 # Database
 DATABASE_URL=
+
+# Server
+SERVER_PORT=3333
 ```
 
 ## Executing migrations
@@ -123,6 +127,32 @@ $ yarn run test:e2e
 
 # test coverage
 $ yarn run test:cov
+```
+
+## Building
+
+For production purposes, you must create a `.env.production` file on `server` folder, so that the docker compose file can use it as the application environment file. Create this file and update with production variable values.
+
+`OBS:` Remember that if you are going to use docker, the database name should be the name of the database container and not the default `localhost`. For example, if the database container name is `postgresql`, this means:
+
+```diff
+// Instead of define the database url like this:
+- postgresql://docker:docker@localhost:5432/<database_name>?schema=public
+
+// You should define the database url like this:
++ postgresql://docker:docker@postgresql:5432/<database_name>?schema=public
+```
+
+Then you can run:
+
+```bash
+npm run build
+```
+
+or
+
+```bash
+yarn build
 ```
 
 ## Routes Documentation (Swagger and Postman)

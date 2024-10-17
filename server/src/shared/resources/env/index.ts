@@ -11,6 +11,7 @@ config({ path: resolve(__dirname, `../../../../${envFile}`) });
 const createEnvSchema = z.object({
   JWT_SECRET: z.string(),
   DATABASE_URL: z.string(),
+  SERVER_PORT: z.coerce.number(),
 });
 const _env = createEnvSchema.safeParse(process.env);
 
