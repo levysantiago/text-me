@@ -5,31 +5,25 @@ import { IValidation } from './types/ivalidation';
 import { ILocale } from '../types/ilocale';
 import { ErrorMessageManager } from './error-message-manager';
 import { IValidationErrorMessages } from './types/ivalidation-error-messages';
+import { AppValidationErrorDTO } from './dtos/app-validation-error-dto';
 
 export class AppValidationError extends HttpException {
   public messageId: keyof IErrorMessages;
   public reason: string;
   public details: IValidation[];
   public locale: ILocale;
+  public zodErrors: ZodIssue[];
 
-  constructor(
-    errors: ZodIssue[] = [],
-    options: { status?: number; locale?: ILocale } = {},
-  ) {
+  constructor(errors: ZodIssue[] = [], options: { status?: number } = {}) {
     super('', options.status || 400);
     this.messageId = 'VALIDATION_ERROR';
-    this.locale = options.locale || 'en';
-    const validationErrors = this.formatZodErrors(errors);
-    this.details = this.formatValidationErrorMessages(
-      validationErrors,
-      this.locale,
-    );
+    this.zodErrors = errors;
   }
 
   private formatZodErrors(errors: ZodIssue[]): IValidation[] {
     return errors.map((zodError) => {
       let validation = '';
-      
+
       switch (zodError.code) {
         case 'invalid_type': {
           if (zodError.received === 'undefined') {
@@ -41,12 +35,12 @@ export class AppValidationError extends HttpException {
         }
 
         case 'invalid_string': {
-          validation = zodError.validation.toString()
+          validation = zodError.validation.toString();
           break;
         }
 
         case 'too_small': {
-          validation = "min"
+          validation = 'min';
           break;
         }
 
@@ -75,7 +69,7 @@ export class AppValidationError extends HttpException {
           'validation-errors',
           locale,
         );
-        
+
       const message: string = messages[code];
       if (!message) {
         return {
@@ -95,16 +89,17 @@ export class AppValidationError extends HttpException {
     });
   }
 
-  public toJson(requestPath: string): any {
-    const errorMessages = ErrorMessageManager.getMessages<IErrorMessages>(
-      'errors',
-      this.locale,
+  public toJson(requestPath: string, locale: ILocale): AppValidationErrorDTO {
+    const validationErrors = this.formatZodErrors(this.zodErrors);
+    this.details = this.formatValidationErrorMessages(
+      validationErrors,
+      locale || 'en',
     );
 
     return {
       statusCode: this.getStatus(),
       error: this.messageId,
-      message: errorMessages[this.messageId],
+      message: locale === 'pt' ? 'Erro de validação' : 'Validation error',
       details: this.details,
       timestamp: new Date().toISOString(),
       path: requestPath,

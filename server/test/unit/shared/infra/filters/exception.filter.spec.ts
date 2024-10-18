@@ -61,7 +61,7 @@ describe('Exception Filter', () => {
     it('should be able to handle AppError', async () => {
       const spyStatus = fakeResponse.status;
       const spyJson = fakeResponseJsonFunc;
-      sut.catch(exception, fakeHost);
+      await sut.catch(exception, fakeHost);
 
       expect(spyStatus).toBeCalledWith(400);
       expect(spyJson).toBeCalledWith({

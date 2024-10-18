@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { MessagesRepository } from '../repositories/messages.repository';
-import { ConversationHelper } from '@shared/resources/lib/conversation-helper';
 
 interface IRequest {
   fromUserId: string;

@@ -1,12 +1,15 @@
+import { createZodDto } from '@anatine/zod-nestjs';
+import { extendZodWithOpenApi } from '@anatine/zod-openapi';
 import { ArgumentMetadata, PipeTransform } from '@nestjs/common';
 import { AppValidationError } from '@shared/resources/errors/app-validation.error';
 import { z } from 'zod';
+extendZodWithOpenApi(z)
 
 const addFriendBodySchema = z.object({
   friendEmail: z.string().email(),
 });
 
-export type IAddFriendBody = z.infer<typeof addFriendBodySchema>;
+export class AddFriendBodyDTO extends createZodDto(addFriendBodySchema){}
 
 export class AddFriendValidationPipe implements PipeTransform {
   transform(value: any, metadata: ArgumentMetadata) {

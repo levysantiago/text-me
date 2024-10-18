@@ -75,9 +75,7 @@ export default function Chat() {
 
   useEffect(() => {
     if (socket && friendId) {
-      const accessToken = localStorage.getItem('access_token')
       socket.emit('visualizeChat', {
-        access_token: accessToken,
         fromUserId: friendId,
       })
     }
@@ -89,7 +87,6 @@ export default function Chat() {
     if (socket) {
       socket.emit('typing', {
         toUserId: friendId,
-        access_token: localStorage.getItem('access_token'),
       })
     }
   }
@@ -105,12 +102,9 @@ export default function Chat() {
     }
 
     if (socket) {
-      const accessToken = localStorage.getItem('access_token')
-
       socket.emit('newMessage', {
         toUserId: friendId,
         content: messageContent,
-        access_token: accessToken,
       })
 
       setMessageContent('')
@@ -144,7 +138,6 @@ export default function Chat() {
 
     if (socket) {
       socket.emit('visualizeChat', {
-        access_token: localStorage.getItem('access_token'),
         fromUserId: friendId,
       })
     }

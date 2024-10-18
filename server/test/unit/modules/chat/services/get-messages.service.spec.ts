@@ -44,7 +44,7 @@ describe('GetMessagesService', () => {
 
     it('should be able to get messages of conversation', async () => {
       const result = await sut.execute(params);
-      expect(result).toEqual({ data: [expectedMessage] });
+      expect(result).toEqual({ data: [expectedMessage.toHTTP()] });
     });
 
     it('should call MessagesRepository::findByConversation with right parameters', async () => {

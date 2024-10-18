@@ -1,4 +1,5 @@
 import { ICreateUserDTO } from '@modules/user/dtos/icreate-user-dto';
+import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, instanceToPlain } from 'class-transformer';
 import { randomUUID } from 'crypto';
 
@@ -14,12 +15,16 @@ export class User {
     this.updatedAt = props.updatedAt ?? new Date();
   }
 
+  @ApiProperty({example: "01928cb8-953c-7114-9b48-e2478a5d7c53"})
   id: string;
 
+  @ApiProperty({example: "john@gmail.com"})
   email: string;
 
+  @ApiProperty({example: "John"})
   name: string;
 
+  @ApiProperty({example: false})
   isAssistant: boolean;
 
   @Exclude()

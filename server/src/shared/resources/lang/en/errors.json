@@ -1,9 +1,11 @@
 {
-  "INTERNAL_SERVER_ERROR": "A unexpected error ocurred, please, await some minutes or contact support.",
+  "INTERNAL_SERVER_ERROR": "An unexpected error ocurred, please, await some minutes or contact support.",
   "RESOURCE_NOT_FOUND_ERROR": "The resource you are trying to find was not found.",
   "EMAIL_ALREADY_EXISTS_ERROR": "This email is already registered, maybe try to login.",
   "MESSAGES_NOT_FOUND_ERROR": "It was not possible to find user messages.",
   "INVALID_EMAIL_OR_PASSWORD_ERROR": "Invalid email or password.",
   "VALIDATION_ERROR": "Validation error.",
-  "USERS_ALREADY_FRIENDS_ERROR": "Users are already friends."
+  "USERS_ALREADY_FRIENDS_ERROR": "Users are already friends.",
+  "UNAUTHORIZED": "Unauthorized operation, pelase, verify if you are logged in.",
+  "ROUTE_NOT_FOUND": "This route does not exists in this server."
 }

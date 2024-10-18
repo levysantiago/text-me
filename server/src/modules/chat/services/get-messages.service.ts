@@ -2,27 +2,21 @@ import { Injectable } from '@nestjs/common';
 import { MessagesRepository } from '../repositories/messages.repository';
 import { ConversationHelper } from '@shared/resources/lib/conversation-helper';
 import { MessagesNotFoundError } from '../errors/messages-not-found.error';
-
-interface IMessage {
-  fromUserId: string;
-  toUserId: string;
-  content: string;
-}
+import { GetMessagesResponseDTO } from './dtos/get-messages-response-dto';
 
 interface IRequest {
   fromUserId: string;
   toUserId: string;
 }
 
-interface IResponse {
-  data: IMessage[];
-}
-
 @Injectable()
 export class GetMessagesService {
   constructor(private messagesRepository: MessagesRepository) {}
 
-  async execute({ fromUserId, toUserId }: IRequest): Promise<IResponse> {
+  async execute({
+    fromUserId,
+    toUserId,
+  }: IRequest): Promise<GetMessagesResponseDTO> {
     try {
       // Get users conversation key
       const conversation = ConversationHelper.getConversationFromUsers({
@@ -33,7 +27,11 @@ export class GetMessagesService {
       const messages = await this.messagesRepository.findByConversation(
         conversation,
       );
-      return { data: messages };
+
+      // messages to return
+      const messagesToReturn = messages.map((msg) => msg.toHTTP());
+
+      return { data: messagesToReturn };
     } catch (err) {
       throw new MessagesNotFoundError();
     }

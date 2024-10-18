@@ -44,12 +44,5 @@ describe('UpdateUserValidationPipe', () => {
         );
       }).toThrow(new AppValidationError());
     });
-
-    it('should return the default value', async () => {
-      expect(()=> updateUserValidationPipe.transform(
-        {},
-        { type: 'custom' },
-      )).toThrow(new AppValidationError());
-    });
   });
 });

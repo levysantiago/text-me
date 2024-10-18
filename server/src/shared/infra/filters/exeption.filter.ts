@@ -17,7 +17,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    const locale: ILocale = (request.headers['Accept-Language'] || 'en') as any;
+    const locale: ILocale = (request.headers['accept-language'] || 'en') as any;
     const status = exception.getStatus();
     const errorMessages = ErrorMessageManager.getMessages<IErrorMessages>(
       'errors',
@@ -25,20 +25,26 @@ export class HttpExceptionFilter implements ExceptionFilter {
     );
 
     if (exception instanceof AppError) {
-      return response.status(status).json({
-        statusCode: status,
-        error: exception.messageId,
-        message: errorMessages[exception.messageId],
-        reason: exception.reason,
-        timestamp: new Date().toISOString(),
-        path: request.url,
-      });
+      return response
+        .status(status)
+        .json(exception.toJson(request.url, locale));
     }
 
     if (exception instanceof AppValidationError) {
       return response
         .status(exception.getStatus())
-        .json(exception.toJson(request.path));
+        .json(exception.toJson(request.url, locale));
+    }
+
+    if (status === 404) {
+      return response.status(status).json({
+        statusCode: 404,
+        error: 'ROUTE_NOT_FOUND',
+        message: errorMessages.ROUTE_NOT_FOUND,
+        reason: exception.message,
+        timestamp: new Date().toISOString(),
+        path: request.url,
+      });
     }
 
     console.log(exception);
