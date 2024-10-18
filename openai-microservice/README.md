@@ -73,7 +73,7 @@ npm i
 
 Create a `.env` file in root project. Fill all the keys of the content below with their respective values.
 
-```text
+```env
 # Environment
 NODE_ENV=development
 
