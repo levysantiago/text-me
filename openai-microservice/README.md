@@ -73,7 +73,7 @@ npm i
 
 Create a `.env` file in root project. Fill all the keys of the content below with their respective values.
 
-```text
+```env
 # Environment
 NODE_ENV=development
 
@@ -100,6 +100,12 @@ RABBITMQ_PASSWORD=
 OPENAI_KEY=
 OPENAI_ORGANIZATION=
 OPENAI_PROJECT=
+
+# Providers
+AI_PROVIDER=
+CACHE_PROVIDER=
+QUEUE_PROVIDER=
+SOCKET_PROVIDER=
 ```
 
 Define the user ID, email and password for login in TextMe. And define your OpenAI key. If you use the default created by the TextMe Server seed, you can use the credentials:
