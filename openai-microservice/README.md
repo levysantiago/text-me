@@ -131,19 +131,7 @@ The OpenAI Microservice will be running at `http://localhost:3001`
 
 ## Building
 
-For production purposes, you must create a `.env.production` file on `server` folder, so that the docker compose file can use it as the application environment file. Create this file and update with production variable values.
-
-`OBS:` Remember that if you are going to use docker, the services names should be the name of their respective containers and not the default `localhost`. This means:
-
-```diff
-// Instead of define the websocket server URL like this:
-- http://localhost:3333
-
-// You should define the websocket server URL like this:
-+ http://server:3333
-```
-
-Then you can run:
+To build locally you can run:
 
 ```bash
 npm run build
@@ -156,6 +144,18 @@ yarn build
 ```
 
 ### Docker
+
+For production purposes, you must create a `.env.production` file on `openai-microservice` folder, so that the docker compose file can use it as the application environment file. Create this file and update with production variable values.
+
+`OBS:` Remember that if you are going to use docker, the services names should be the name of their respective containers and not the default `localhost`. This means:
+
+```diff
+// Instead of define the websocket server URL like this:
+- http://localhost:3333
+
+// You should define the websocket server URL like this:
++ http://server:3333
+```
 
 Before running this microservice on docker, assert that the TextMe server is running well, so that the microservice will be able to connect to the WebSocket server. To run on docker you can just run:
 

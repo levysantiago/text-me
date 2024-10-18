@@ -53,7 +53,7 @@ npm start
 
 ## Build
 
-To build the project you'll need to create a `.env.production` first, define the production values and than run:
+To build locally you can run:
 
 ```bash
 yarn build
@@ -67,7 +67,7 @@ npm run build
 
 ### Docker
 
-To run on docker you can just run:
+To run the project on docker you'll need to create a `.env.production` first, define the production values and then run:
 
 ```bash
 docker compose up -d

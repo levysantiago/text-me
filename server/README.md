@@ -132,19 +132,7 @@ $ yarn run test:cov
 
 ## Building
 
-For production purposes, you must create a `.env.production` file on `server` folder, so that the docker compose file can use it as the application environment file. Create this file and update with production variable values.
-
-`OBS:` Remember that if you are going to use docker, the database name should be the name of the database container and not the default `localhost`. This means:
-
-```diff
-// Instead of define the database url like this:
-- postgresql://docker:docker@localhost:5432/<database_name>?schema=public
-
-// You should define the database url like this:
-+ postgresql://docker:docker@postgresql:5432/<database_name>?schema=public
-```
-
-Then you can run:
+To build locally you can run:
 
 ```bash
 npm run build
@@ -157,6 +145,18 @@ yarn build
 ```
 
 ### Docker
+
+For production purposes, you must create a `.env.production` file on `server` folder, so that the docker compose file can use it as the application environment file. Create this file and update with production variable values.
+
+`OBS:` Remember that if you are going to use docker, the database name should be the name of the database container and not the default `localhost`. This means:
+
+```diff
+// Instead of define the database url like this:
+- postgresql://docker:docker@localhost:5432/<database_name>?schema=public
+
+// You should define the database url like this:
++ postgresql://docker:docker@postgresql:5432/<database_name>?schema=public
+```
 
 To run on docker you can just run:
 
