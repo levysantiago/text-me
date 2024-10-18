@@ -53,13 +53,15 @@ export class WsClientsHelper {
   public static update(clientId: string, data: IUpdateDTO): void {
     const clientData = this.findByClientId(clientId);
 
-    data.interval !== undefined
-      ? (clientData.interval = data.interval)
-      : undefined;
+    if (clientData) {
+      data.interval !== undefined
+        ? (clientData.interval = data.interval)
+        : undefined;
 
-    data.lastTypingTime !== undefined
-      ? (clientData.lastTypingTime = data.lastTypingTime)
-      : undefined;
+      data.lastTypingTime !== undefined
+        ? (clientData.lastTypingTime = data.lastTypingTime)
+        : undefined;
+    }
   }
 
   public static delete(clientId: string): void {
