@@ -53,7 +53,13 @@ export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
     let defaultLocale: ILocale = 'en';
     try {
       // Capture access token
-      const accessToken = client.handshake.headers['authorization'] as string;
+      const accessTokenHeader = client.handshake.headers[
+        'authorization'
+      ] as string;
+      const accessToken = accessTokenHeader
+        ? accessTokenHeader.replace('Bearer ', '')
+        : '';
+
       // Capture locale preference
       const locale = client.handshake.headers['accept-language'] as string;
 

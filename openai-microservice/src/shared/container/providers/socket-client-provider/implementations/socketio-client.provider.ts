@@ -26,7 +26,9 @@ export class SocketIoClientProvider implements ISocketProvider {
 
     // Starting socket
     this.socket = io(env.WEBSOCKET_SERVER, {
-      query: { access_token: accessToken },
+      extraHeaders: {
+        authorization: `Bearer ${accessToken}`,
+      },
     })
   }
 

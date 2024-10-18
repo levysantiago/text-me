@@ -9,7 +9,7 @@ This is a OpenAI Microservice created to participate in the chat as another user
 - [Technologies used](#technologies-used)
   - [OpenAI Microservice Services overview](#openai-microservice-services-overview)
 - [Getting started](#getting-started)
-  - [Instalations](#instalations)
+  - [Installations](#installations)
   - [Environmental Variables](#environmental-variables)
   - [Running project](#running-project)
   - [Building](#building)
@@ -55,7 +55,7 @@ flowchart LR
 
 # Getting started
 
-## Instalations
+## Installations
 
 First you need to install the dependencies of the project.
 

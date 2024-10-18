@@ -5,7 +5,6 @@ import { ISocketProvider } from '@shared/container/providers/socket-client-provi
 import { inject, injectable } from 'tsyringe'
 import { ISendAiResponseDTO } from './dtos/isend-ai-response.dto'
 import { GetUpdatedContextService } from './get-updated-context.service'
-import { MicroserviceNotLoggedError } from '../errors/microservice-not-logged.error'
 import { ErrorMessageManager } from '@shared/resources/errors/error-message-manager'
 import { ConversationHelper } from '@shared/resources/lib/conversation-helper'
 
@@ -23,15 +22,8 @@ export class SendAiResponseService {
   ) {}
 
   execute = async ({ fromUserId, toUserId, content }: ISendAiResponseDTO) => {
-    let accessToken: string | null = null
     let typingInterval: NodeJS.Timeout | undefined
     try {
-      // Retrieving access token
-      accessToken = await this.cacheProvider.retrieve('access_token')
-      if (!accessToken) {
-        throw new MicroserviceNotLoggedError()
-      }
-
       // Getting updated context
       const context = await this.getUpdatedContextService.execute({
         fromUserId,
@@ -44,13 +36,11 @@ export class SendAiResponseService {
       // Emitting typing event
       this.socketProvider.emit('typing', {
         toUserId: fromUserId,
-        access_token: accessToken,
       })
       // Initiate interval to keep informing it is typing
       typingInterval = setInterval(() => {
         this.socketProvider.emit('typing', {
           toUserId: fromUserId,
-          access_token: accessToken,
         })
       }, 1000)
 
@@ -62,7 +52,6 @@ export class SendAiResponseService {
         this.socketProvider.emit('newMessage', {
           toUserId: fromUserId,
           content: response.message,
-          access_token: accessToken,
         })
       }
 
@@ -84,14 +73,11 @@ export class SendAiResponseService {
     } catch (err) {
       console.log(`SendAiResponseService: ${err}`)
 
-      if (accessToken) {
-        // Emitting error Message to user
-        this.socketProvider.emit('newMessage', {
-          toUserId: fromUserId,
-          content: ErrorMessageManager.getUserExcuseMessage(),
-          access_token: accessToken,
-        })
-      }
+      // Emitting error Message to user
+      this.socketProvider.emit('newMessage', {
+        toUserId: fromUserId,
+        content: ErrorMessageManager.getUserExcuseMessage(),
+      })
 
       // Throw error so the consumption of the queue keep the data in queue
       throw new Error()

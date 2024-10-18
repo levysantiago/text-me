@@ -7,7 +7,7 @@ This is the client side of TextMe application. It was built in TypeScript and Re
 - [Index](#index)
 - [Technologies used](#technologies-used)
 - [Getting started](#getting-started)
-  - [Instalation](#instalation)
+  - [Installation](#installation)
   - [Executing](#executing)
   - [Build](#build)
     - [Docker](#docker)
@@ -23,7 +23,7 @@ This is the client side of TextMe application. It was built in TypeScript and Re
 
 # Getting started
 
-## Instalation
+## Installation
 
 Install all the dependencies first:
 

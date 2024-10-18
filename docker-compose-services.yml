@@ -42,4 +42,4 @@ services:
 networks:
   default: 
     name: text-me
-    external: true
+    external: false
