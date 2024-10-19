@@ -2,7 +2,21 @@
 
 This is a OpenAI Microservice created to participate in the chat as another user. As a normal user, it has it's own email and password and it can receive and respond other users through TextMe message chat.
 
-## Technologies used
+# Index
+
+- [OpenAI Microservice](#openai-microservice)
+- [Index](#index)
+- [Technologies used](#technologies-used)
+  - [OpenAI Microservice Services overview](#openai-microservice-services-overview)
+- [Getting started](#getting-started)
+  - [Installations](#installations)
+  - [Environmental Variables](#environmental-variables)
+  - [Running project](#running-project)
+  - [Building](#building)
+    - [Docker](#docker)
+- [Links](#links)
+
+# Technologies used
 
 - **Fastify**: Used to build the OpenAI microservice that works as an used in the TextMe application for the users to interact with an AI friend.
 - **RabbitMQ**: Used to queue the OpenAI microservice messaging requests sent by the users.
@@ -41,7 +55,7 @@ flowchart LR
 
 # Getting started
 
-## Instalations
+## Installations
 
 First you need to install the dependencies of the project.
 
@@ -59,7 +73,7 @@ npm i
 
 Create a `.env` file in root project. Fill all the keys of the content below with their respective values.
 
-```text
+```env
 # Environment
 NODE_ENV=development
 
@@ -86,6 +100,12 @@ RABBITMQ_PASSWORD=
 OPENAI_KEY=
 OPENAI_ORGANIZATION=
 OPENAI_PROJECT=
+
+# Providers
+AI_PROVIDER=
+CACHE_PROVIDER=
+QUEUE_PROVIDER=
+SOCKET_PROVIDER=
 ```
 
 Define the user ID, email and password for login in TextMe. And define your OpenAI key. If you use the default created by the TextMe Server seed, you can use the credentials:
@@ -108,6 +128,46 @@ npm run start:dev
 ```
 
 The OpenAI Microservice will be running at `http://localhost:3001`
+
+## Building
+
+To build locally you can run:
+
+```bash
+npm run build
+```
+
+or
+
+```bash
+yarn build
+```
+
+### Docker
+
+For production purposes, you must create a `.env.production` file on `openai-microservice` folder, so that the docker compose file can use it as the application environment file. Create this file and update with production variable values.
+
+`OBS:` Remember that if you are going to use docker, the services names should be the name of their respective containers and not the default `localhost`. This means:
+
+```diff
+// Instead of define the websocket server URL like this:
+- http://localhost:3333
+
+// You should define the websocket server URL like this:
++ http://server:3333
+```
+
+Before running this microservice on docker, assert that the TextMe server is running well, so that the microservice will be able to connect to the WebSocket server. To run on docker you can just run:
+
+```bash
+docker compose up -d
+```
+
+if you want to run on an specific group of containers run
+
+```bash
+docker compose -p group_name up -d
+```
 
 # Links
 

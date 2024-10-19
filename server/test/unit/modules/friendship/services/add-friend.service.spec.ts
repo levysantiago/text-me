@@ -1,9 +1,12 @@
 import { FriendNotFoundError } from '@modules/friendship/errors/friend-not-found.error';
+import { UsersAlreadyFriendsError } from '@modules/friendship/errors/users-already-friends.error';
+import { Friendship } from '@modules/friendship/infra/db/entities/friendship';
 import { FriendshipsRepository } from '@modules/friendship/repositories/friendships.repository';
 import { AddFriendService } from '@modules/friendship/services/add-friend.service';
 import { User } from '@modules/user/infra/db/entities/user';
 import { UsersRepository } from '@modules/user/repositories/users-repository';
 import { Test } from '@nestjs/testing';
+import { fakeFriendshipObject } from '@test/unit/mock/fake-friendship-object.mock';
 import { fakeUserObject } from '@test/unit/mock/fake-user-object.mock';
 
 describe('AddFriendService', () => {
@@ -28,6 +31,7 @@ describe('AddFriendService', () => {
 
     const fakeFriendshipsRepository = {
       create: jest.fn().mockResolvedValue(undefined),
+      findByUsers: jest.fn().mockResolvedValue(null)
     };
 
     // Create testing module
@@ -91,6 +95,12 @@ describe('AddFriendService', () => {
       jest.spyOn(usersRepository, 'findByEmail').mockResolvedValueOnce(null);
       const promise = sut.execute(params);
       expect(promise).rejects.toThrow(new FriendNotFoundError());
+    });
+
+    it('should throw UsersAlreadyFriendsError if FriendshipsRepository::findByUsers returns a valid friendship', async () => {
+      jest.spyOn(friendshipsRepository, 'findByUsers').mockResolvedValueOnce(new Friendship(fakeFriendshipObject));
+      const promise = sut.execute(params);
+      expect(promise).rejects.toThrow(new UsersAlreadyFriendsError());
     });
   });
 });

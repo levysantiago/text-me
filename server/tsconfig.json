@@ -23,5 +23,7 @@
       "@shared/*": ["./src/shared/*"],
       "@test/*": ["./test/*"]
     }
-  }
+  },
+  "include": ["**/*spec.ts", "**/*.json", "**/*.ts"],
+  "exclude": ["node_modules", "dist", "package.json"]
 }

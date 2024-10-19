@@ -10,11 +10,8 @@ services:
     volumes:
       - ./:/usr/text-me/openai-microservice
       - ./entrypoint.sh:/entrypoint.sh
-    environment:
-      # TextMe websocket server
-      WEBSOCKET_SERVER: 'http://server:3333'
-      REDIS_HOST: "redis"
-      RABBITMQ_HOST: "rabbitmq"
+    env_file:
+      - ./.env.production
     networks: 
       - default
 

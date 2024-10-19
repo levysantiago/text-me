@@ -47,7 +47,7 @@ describe('AuthService', () => {
 
     it('should be able to authenticate user', async () => {
       const user = await sut.execute(params);
-      expect(user).toEqual({ access_token: 'fake-token' });
+      expect(user).toEqual({ data: {access_token: 'fake-token'} });
     });
 
     it('should call UsersRepository::findByEmail with right parameters', async () => {

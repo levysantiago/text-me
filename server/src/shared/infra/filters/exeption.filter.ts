@@ -4,9 +4,10 @@ import {
   ArgumentsHost,
   HttpException,
 } from '@nestjs/common';
+import { AppValidationError } from '@shared/resources/errors/app-validation.error';
 import { AppError } from '@shared/resources/errors/app.error';
 import { ErrorMessageManager } from '@shared/resources/errors/error-message-manager';
-import { IErrorMessages } from '@shared/resources/errors/types/ierror-message-id';
+import { IErrorMessages } from '@shared/resources/errors/types/ierror-messages';
 import { ILocale } from '@shared/resources/types/ilocale';
 import { Request, Response } from 'express';
 
@@ -16,16 +17,31 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    const locale: ILocale = (request.headers['Accept-Language'] || 'en') as any;
+    const locale: ILocale = (request.headers['accept-language'] || 'en') as any;
     const status = exception.getStatus();
-    const errorMessages = ErrorMessageManager.getMessages(locale);
+    const errorMessages = ErrorMessageManager.getMessages<IErrorMessages>(
+      'errors',
+      locale,
+    );
 
     if (exception instanceof AppError) {
+      return response
+        .status(status)
+        .json(exception.toJson(request.url, locale));
+    }
+
+    if (exception instanceof AppValidationError) {
+      return response
+        .status(exception.getStatus())
+        .json(exception.toJson(request.url, locale));
+    }
+
+    if (status === 404) {
       return response.status(status).json({
-        statusCode: status,
-        error: exception.messageId,
-        message: errorMessages[exception.messageId],
-        reason: exception.reason,
+        statusCode: 404,
+        error: 'ROUTE_NOT_FOUND',
+        message: errorMessages.ROUTE_NOT_FOUND,
+        reason: exception.message,
         timestamp: new Date().toISOString(),
         path: request.url,
       });

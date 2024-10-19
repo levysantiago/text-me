@@ -1,0 +1,11 @@
+{
+  "INTERNAL_SERVER_ERROR": "Ocorreu um erro inesperado. Aguarde alguns minutos ou entre em contato com o suporte.",
+  "RESOURCE_NOT_FOUND_ERROR": "O recurso que você está tentando encontrar não foi encontrado.",
+  "EMAIL_ALREADY_EXISTS_ERROR": "Este e-mail já está registrado, tente fazer login.",
+  "MESSAGES_NOT_FOUND_ERROR": "Não foi possível encontrar mensagens do usuário.",
+  "INVALID_EMAIL_OR_PASSWORD_ERROR": "E-mail ou senha inválidos.",
+  "VALIDATION_ERROR": "Erro de validação.",
+  "USERS_ALREADY_FRIENDS_ERROR": "Os usuários já são amigos.",
+  "UNAUTHORIZED": "Operação não autorizada, por favor, verifique se você está logado.",
+  "ROUTE_NOT_FOUND": "Esta rota não existe neste servidor."
+}

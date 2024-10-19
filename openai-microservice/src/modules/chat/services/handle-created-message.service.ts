@@ -73,20 +73,11 @@ export class HandleCreatedMessageService {
           toUserId,
         })
       } catch (err) {
-        // Retrieving access token
-        const accessToken = await this.cacheProvider.retrieve('access_token')
-        if (!accessToken) {
-          console.log(new MicroserviceNotLoggedError())
-        }
-
-        if (accessToken) {
-          // Emitting error Message to user
-          this.socketProvider.emit('newMessage', {
-            toUserId: fromUserId,
-            content: ErrorMessageManager.getUserExcuseMessage(),
-            access_token: accessToken,
-          })
-        }
+        // Emitting error Message to user
+        this.socketProvider.emit('newMessage', {
+          toUserId: fromUserId,
+          content: ErrorMessageManager.getUserExcuseMessage(),
+        })
       }
     }
   }

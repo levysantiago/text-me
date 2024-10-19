@@ -5,14 +5,13 @@ services:
     container_name: "server"
     image: node:18.16
     entrypoint: ["sh", "./entrypoint.sh"]
+    env_file:
+      - ./.env.production
     ports:
-      - 3333:3333
+      - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
       - ./:/usr/text-me/server
       - ./entrypoint.sh:/entrypoint.sh
-    environment:
-      JWT_SECRET: secret
-      DATABASE_URL: postgresql://docker:docker@postgresql:5432/textmedb?schema=public
     networks: 
       - default
 

@@ -3,6 +3,7 @@ import { ArgumentsHost, HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { HttpExceptionFilter } from '@shared/infra/filters/exeption.filter';
 import { ErrorMessageManager } from '@shared/resources/errors/error-message-manager';
+import { IErrorMessages } from '@shared/resources/errors/types/ierror-messages';
 
 describe('Exception Filter', () => {
   let sut: HttpExceptionFilter;
@@ -31,7 +32,7 @@ describe('Exception Filter', () => {
     INVALID_EMAIL_OR_PASSWORD_ERROR: '3',
     MESSAGES_NOT_FOUND_ERROR: '4',
     RESOURCE_NOT_FOUND_ERROR: '5',
-  };
+  } as any as IErrorMessages;
 
   beforeAll(() => {
     jest
@@ -60,7 +61,7 @@ describe('Exception Filter', () => {
     it('should be able to handle AppError', async () => {
       const spyStatus = fakeResponse.status;
       const spyJson = fakeResponseJsonFunc;
-      sut.catch(exception, fakeHost);
+      await sut.catch(exception, fakeHost);
 
       expect(spyStatus).toBeCalledWith(400);
       expect(spyJson).toBeCalledWith({
@@ -101,13 +102,13 @@ describe('Exception Filter', () => {
           getRequest: () => fakeRequestNoHeaders,
         }),
       } as any as ArgumentsHost);
-      expect(spy).toBeCalledWith('en');
+      expect(spy).toBeCalledWith("errors", 'en');
     });
 
     it('should be able to define "en" as default locale', async () => {
       const spy = jest.spyOn(ErrorMessageManager, 'getMessages');
       sut.catch(exception, fakeHost);
-      expect(spy).toBeCalledWith('en');
+      expect(spy).toBeCalledWith("errors", 'en');
     });
   });
 });

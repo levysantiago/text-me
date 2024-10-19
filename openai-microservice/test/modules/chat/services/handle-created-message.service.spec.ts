@@ -122,7 +122,6 @@ describe('HandleCreatedMessageService', () => {
       expect(spy).toHaveBeenCalledWith('newMessage', {
         toUserId: 'fake_from_user_id',
         content: 'fake_excuse_message',
-        access_token: 'fake_access_token',
       })
     })
   })

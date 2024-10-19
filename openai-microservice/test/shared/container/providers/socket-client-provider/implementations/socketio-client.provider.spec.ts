@@ -54,7 +54,7 @@ describe('SocketIoClientProvider', () => {
       const spy = jest.spyOn(socketLib, 'io')
       await sut.connect()
       expect(spy).toHaveBeenCalledWith(env.WEBSOCKET_SERVER, {
-        query: { access_token: 'fake_access_token' },
+        extraHeaders: { authorization: 'Bearer fake_access_token' },
       })
     })
   })

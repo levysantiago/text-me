@@ -72,12 +72,6 @@ describe('SendAiResponseService', () => {
       expect(promise).resolves.toBeUndefined()
     })
 
-    it('should be able to call CacheProvider::retrieve with right parameters', async () => {
-      const spy = jest.spyOn(cacheProvider, 'retrieve')
-      await sut.execute(params)
-      expect(spy).toHaveBeenCalledWith('access_token')
-    })
-
     it('should be able to call GetUpdatedContextService::execute with right parameters', async () => {
       const spy = jest.spyOn(getUpdatedContextService, 'execute')
       await sut.execute(params)
@@ -92,7 +86,6 @@ describe('SendAiResponseService', () => {
       await sut.execute(params)
       expect(spy).toHaveBeenNthCalledWith(1, 'typing', {
         toUserId: params.fromUserId,
-        access_token: 'fake_access_token',
       })
     })
 
@@ -102,7 +95,6 @@ describe('SendAiResponseService', () => {
       expect(spy).toHaveBeenNthCalledWith(2, 'newMessage', {
         toUserId: params.fromUserId,
         content: 'message',
-        access_token: 'fake_access_token',
       })
     })
 
@@ -131,12 +123,6 @@ describe('SendAiResponseService', () => {
       )
     })
 
-    it('should throw error if access token not valid', async () => {
-      jest.spyOn(cacheProvider, 'retrieve').mockResolvedValueOnce(null)
-      const promise = sut.execute(params)
-      expect(promise).rejects.toEqual(new Error())
-    })
-
     it('should throw error and emit event to user if a service throws', async () => {
       jest
         .spyOn(getUpdatedContextService, 'execute')
@@ -148,7 +134,6 @@ describe('SendAiResponseService', () => {
         expect(spy).toHaveBeenCalledWith('newMessage', {
           toUserId: params.fromUserId,
           content: 'fake_excuse_message',
-          access_token: 'fake_access_token',
         })
       })
     })

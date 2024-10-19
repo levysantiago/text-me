@@ -1,8 +1,9 @@
-import { OnModuleInit } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import {
   ConnectedSocket,
   MessageBody,
+  OnGatewayConnection,
+  OnGatewayDisconnect,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
@@ -15,37 +16,29 @@ import { GetFriendsService } from '@modules/friendship/services/get-friends.serv
 import { VisualizeMessagesService } from '@modules/chat/services/visualize-messages.service';
 import { GetUserService } from '@modules/user/services/get-user.service';
 import { AddFriendService } from '@modules/friendship/services/add-friend.service';
+import { WsClientsHelper } from './helpers/ws-clients.helper';
+import { UnauthorizedError } from '@shared/infra/errors/unauthorized.error';
+import { ILocale } from '@shared/resources/types/ilocale';
+import { AppError } from '@shared/resources/errors/app.error';
+import { InternalServerError } from '@shared/infra/errors/internal-server.error';
 
 interface INewMessageBody {
   toUserId: string;
   content: string;
-  access_token: string;
 }
 
 interface IVisualizeChatBody {
   fromUserId: string;
-  access_token: string;
 }
 
 interface ITypingBody {
   toUserId: string;
-  access_token: string;
-}
-
-interface IClientData {
-  [x: string]: {
-    socketId: string;
-    interval: NodeJS.Timer;
-    lastTypingTime: Date | undefined;
-  };
 }
 
 @WebSocketGateway({ cors: { origin: 'http://localhost:3000' } })
-export class EventsGateway implements OnModuleInit {
+export class EventsGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
   private server: Server;
-
-  private clientsStateData: IClientData;
 
   constructor(
     private createMessageService: CreateMessageService,
@@ -54,32 +47,51 @@ export class EventsGateway implements OnModuleInit {
     private getUserService: GetUserService,
     private addFriendService: AddFriendService,
     private jwtService: JwtService,
-  ) {
-    this.clientsStateData = {};
+  ) {}
+
+  handleConnection(client: Socket, ...args: any[]) {
+    let defaultLocale: ILocale = 'en';
+    try {
+      // Capture access token
+      const accessTokenHeader = client.handshake.headers[
+        'authorization'
+      ] as string;
+      const accessToken = accessTokenHeader
+        ? accessTokenHeader.replace('Bearer ', '')
+        : '';
+
+      // Capture locale preference
+      const locale = client.handshake.headers['accept-language'] as string;
+
+      // Define locale
+      if (locale === 'en' || locale === 'pt') {
+        defaultLocale = locale;
+      }
+
+      // Validate access token
+      const { sub: userId } = this.jwtService.verify(accessToken, {
+        secret: env.JWT_SECRET,
+      });
+
+      // Save client data to cache
+      WsClientsHelper.save({
+        clientId: client.id,
+        locale: defaultLocale,
+        userId: userId,
+        token: accessToken,
+      });
+    } catch (e) {
+      console.log(e);
+
+      const appError = new UnauthorizedError();
+      client.emit('connectionError', appError.toJson('/', defaultLocale));
+
+      client.disconnect();
+    }
   }
 
-  /**
-   * Initiating connection when module is initialized
-   */
-  onModuleInit() {
-    this.server.on('connection', (socket: Socket) => {
-      // console.log(socket);
-      // console.log('connected');
-      try {
-        const accessToken = socket.handshake.query['access_token'] as string;
-        const { sub: userId } = this.jwtService.verify(accessToken, {
-          secret: env.JWT_SECRET,
-        });
-
-        this.clientsStateData[userId] = {
-          socketId: socket.id,
-          interval: undefined,
-          lastTypingTime: undefined,
-        };
-      } catch (e) {
-        console.log(e);
-      }
-    });
+  handleDisconnect(client: any) {
+    WsClientsHelper.delete(client.id);
   }
 
   /**
@@ -93,11 +105,12 @@ export class EventsGateway implements OnModuleInit {
   @SubscribeMessage('newMessage')
   async onNewMessage(
     @MessageBody() body: INewMessageBody,
-    @ConnectedSocket() fromClient: Socket,
+    @ConnectedSocket() client: Socket,
   ) {
+    const clientData = WsClientsHelper.findByClientId(client.id);
     try {
       // Verifying access token
-      const { sub: fromUserId } = this.jwtService.verify(body.access_token, {
+      const { sub: fromUserId } = this.jwtService.verify(clientData.token, {
         secret: env.JWT_SECRET,
       });
 
@@ -118,7 +131,7 @@ export class EventsGateway implements OnModuleInit {
       });
 
       // Emit event for user that sent message
-      fromClient.emit('handleCreatedMessage', {
+      client.emit('handleCreatedMessage', {
         fromUserId,
         toUserId: body.toUserId,
         content: body.content,
@@ -144,15 +157,14 @@ export class EventsGateway implements OnModuleInit {
       }
 
       // Getting the user receiver socket id
-      const receiverClientData = this.clientsStateData[body.toUserId];
+      const receiverClientData = WsClientsHelper.findByUserId(body.toUserId);
       if (receiverClientData) {
-        const receiverSocketId = receiverClientData.socketId;
+        const receiverSocketId = receiverClientData.clientId;
         // Emit event for user that received message
         this.server.to(receiverSocketId).emit('handleCreatedMessage', {
           fromUserId,
           toUserId: body.toUserId,
           content: body.content,
-          role,
         });
         // Emitting event to user receiver that his friend stopped typing
         this.server.to(receiverSocketId).emit('friendStoppedTyping', {
@@ -160,12 +172,27 @@ export class EventsGateway implements OnModuleInit {
         });
       }
       // Clearing typing verifier interval
-      clearInterval(this.clientsStateData[fromUserId].interval);
+      clearInterval(clientData.interval);
       // Resetting interval and lastTypingTime
-      this.clientsStateData[fromUserId].interval = undefined;
-      this.clientsStateData[fromUserId].lastTypingTime = undefined;
-    } catch (e) {
-      console.log(e);
+      WsClientsHelper.update(client.id, {
+        interval: null,
+        lastTypingTime: null,
+      });
+    } catch (err) {
+      if (err instanceof AppError) {
+        client.emit(
+          'newMessageError',
+          err.toJson('/', clientData.locale || 'en'),
+        );
+      }
+
+      console.log(err);
+
+      const defaultError = new InternalServerError();
+      client.emit(
+        'newMessageError',
+        defaultError.toJson('/', clientData.locale || 'en'),
+      );
     }
   }
 
@@ -175,10 +202,14 @@ export class EventsGateway implements OnModuleInit {
    * @param body The data needed to execute the function.
    */
   @SubscribeMessage('visualizeChat')
-  async onVisualizeMessage(@MessageBody() body: IVisualizeChatBody) {
+  async onVisualizeMessage(
+    @MessageBody() body: IVisualizeChatBody,
+    @ConnectedSocket() client,
+  ) {
+    const clientData = WsClientsHelper.findByClientId(client.id);
     try {
       // Verifying access token
-      const { sub: userId } = this.jwtService.verify(body.access_token, {
+      const { sub: userId } = this.jwtService.verify(clientData.token, {
         secret: env.JWT_SECRET,
       });
 
@@ -187,8 +218,21 @@ export class EventsGateway implements OnModuleInit {
         fromUserId: body.fromUserId,
         userId,
       });
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      if (err instanceof AppError) {
+        client.emit(
+          'visualizeChatError',
+          err.toJson('/', clientData.locale || 'en'),
+        );
+      }
+
+      console.log(err);
+
+      const defaultError = new InternalServerError();
+      client.emit(
+        'visualizeChatError',
+        defaultError.toJson('/', clientData.locale || 'en'),
+      );
     }
   }
 
@@ -199,23 +243,29 @@ export class EventsGateway implements OnModuleInit {
    * @param body The data needed to execute the function
    */
   @SubscribeMessage('typing')
-  async onChatTyping(@MessageBody() body: ITypingBody) {
+  async onChatTyping(
+    @MessageBody() body: ITypingBody,
+    @ConnectedSocket() client,
+  ) {
+    const clientData = WsClientsHelper.findByClientId(client.id);
     try {
       // Verifying access token
-      const { sub: userId } = this.jwtService.verify(body.access_token, {
+      const { sub: userId } = this.jwtService.verify(clientData.token, {
         secret: env.JWT_SECRET,
       });
 
       // If the lastTypingTime exists, we redefine it as current date
-      if (this.clientsStateData[userId].lastTypingTime) {
-        this.clientsStateData[userId].lastTypingTime = new Date();
+      if (clientData.lastTypingTime) {
+        WsClientsHelper.update(client.id, {
+          lastTypingTime: new Date(),
+        });
       }
 
       // Emitting event for user that will receive the message to warn that
       // his/her friend is typing
-      const receiverClientData = this.clientsStateData[body.toUserId];
+      const receiverClientData = WsClientsHelper.findByUserId(body.toUserId);
       if (receiverClientData) {
-        const receiverSocketId = receiverClientData.socketId;
+        const receiverSocketId = receiverClientData.clientId;
         this.server.to(receiverSocketId).emit('friendIsTyping', {
           fromUserId: userId,
         });
@@ -224,13 +274,13 @@ export class EventsGateway implements OnModuleInit {
       // If there is no lastTypingTime, we start an interval to keep verifying
       // if user is still typing. The lastTypingTime will keep being updated
       // each time the user types something.
-      if (!this.clientsStateData[userId].lastTypingTime) {
-        this.clientsStateData[userId].lastTypingTime = new Date();
+      if (!clientData.lastTypingTime) {
+        WsClientsHelper.update(client.id, {
+          lastTypingTime: new Date(),
+        });
         const interval = setInterval(() => {
           // Transform typing time to Moment instance
-          const typingTimeMoment = moment(
-            this.clientsStateData[userId].lastTypingTime,
-          );
+          const typingTimeMoment = moment(clientData.lastTypingTime);
 
           // Get current date as moment instance
           const currentDateMoment = moment(new Date());
@@ -248,9 +298,12 @@ export class EventsGateway implements OnModuleInit {
             // After the user stopped typing, the interval emits the event
             // "friendStoppedTyping" to warn his/her friend that he/she
             // stopped typing.
-            const receiverClientData = this.clientsStateData[body.toUserId];
+
+            const receiverClientData = WsClientsHelper.findByUserId(
+              body.toUserId,
+            );
             if (receiverClientData) {
-              const receiverSocketId = receiverClientData.socketId;
+              const receiverSocketId = receiverClientData.clientId;
               this.server.to(receiverSocketId).emit('friendStoppedTyping', {
                 fromUserId: userId,
               });
@@ -258,16 +311,30 @@ export class EventsGateway implements OnModuleInit {
             // Clearing the interval
             clearInterval(interval);
             // Resetting the userIntervals control info
-            this.clientsStateData[userId].lastTypingTime = undefined;
-            this.clientsStateData[userId].interval = undefined;
+            WsClientsHelper.update(client.id, {
+              interval: null,
+              lastTypingTime: null,
+            });
           }
         }, 1000);
 
         // Saving the interval id in state
-        this.clientsStateData[userId].interval = interval;
+        WsClientsHelper.update(client.id, {
+          interval,
+        });
       }
-    } catch (e) {
-      console.log(e);
+    } catch (err) {
+      if (err instanceof AppError) {
+        client.emit('typingError', err.toJson('/', clientData.locale || 'en'));
+      }
+
+      console.log(err);
+
+      const defaultError = new InternalServerError();
+      client.emit(
+        'typingError',
+        defaultError.toJson('/', clientData.locale || 'en'),
+      );
     }
   }
 }

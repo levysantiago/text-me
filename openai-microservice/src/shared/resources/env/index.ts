@@ -35,6 +35,12 @@ const envSchema = z.object({
   OPENAI_KEY: z.string(),
   OPENAI_ORGANIZATION: z.string(),
   OPENAI_PROJECT: z.string(),
+
+  // Providers
+  AI_PROVIDER: z.enum(['fakeAi', 'openAi']),
+  CACHE_PROVIDER: z.enum(['local', 'redis']),
+  QUEUE_PROVIDER: z.enum(['rabbitmq']),
+  SOCKET_PROVIDER: z.enum(['socketio']),
 })
 
 const _env = envSchema.safeParse(process.env)
