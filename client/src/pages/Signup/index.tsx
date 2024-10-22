@@ -1,52 +1,52 @@
 /* eslint-disable no-undef */
-import { WebsiteContainer } from 'templates/WebsiteContainer'
+import { WebsiteContainer } from "templates/WebsiteContainer";
 import {
   ButtonContainer,
   InputTitleContainer,
   InputsTitle,
   Title,
   TitleContainer,
-} from './styles'
-import { Input } from 'components/Input'
-import { DefaultButton } from 'components/buttons/DefaultButton'
-import { useContext, useEffect, useState } from 'react'
-import { signupService } from 'services/signupService'
-import { useNavigate } from 'react-router-dom'
-import { AppContext } from 'components/context/AppContext'
-import { HollowButton } from 'components/buttons/HollowButton'
+} from "./styles";
+import { Input } from "components/Input";
+import { DefaultButton } from "components/buttons/DefaultButton";
+import { useContext, useEffect, useState } from "react";
+import { signupService } from "services/signupService";
+import { useNavigate } from "react-router-dom";
+import { AppContext } from "components/context/AppContext";
+import { HollowButton } from "components/buttons/HollowButton";
 
 export default function Signup() {
-  const { isLogged } = useContext(AppContext)
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [repeatPassword, setRepeatPassword] = useState('')
-  const navigate = useNavigate()
+  const { isLogged } = useContext(AppContext);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isLogged) {
-      navigate('/')
+      navigate("/");
     }
-  }, [isLogged])
+  }, [isLogged]);
 
   async function onSubmit() {
     if (!name || !email || !password) {
-      alert('Fill all the fields')
-      return
+      alert("Fill all the fields");
+      return;
     }
 
     if (password !== repeatPassword) {
-      alert('Passwords are not the same')
-      return
+      alert("Passwords are not the same");
+      return;
     }
 
     try {
-      await signupService({ name, email, password })
-      alert('User registered!')
-      navigate('/login')
+      await signupService({ name, email, password });
+      alert("User registered!");
+      navigate("/login");
     } catch (e) {
-      console.log(e)
-      alert('Signup failed')
+      console.log(e);
+      alert("Signup failed");
     }
   }
 
@@ -63,7 +63,7 @@ export default function Signup() {
           type="text"
           value={name}
           onChange={(e) => {
-            setName(e.target.value)
+            setName(e.target.value);
           }}
         />
 
@@ -72,7 +72,7 @@ export default function Signup() {
           type="email"
           value={email}
           onChange={(e) => {
-            setEmail(e.target.value)
+            setEmail(e.target.value);
           }}
         />
 
@@ -81,7 +81,7 @@ export default function Signup() {
           type="password"
           value={password}
           onChange={(e) => {
-            setPassword(e.target.value)
+            setPassword(e.target.value);
           }}
         />
 
@@ -90,7 +90,7 @@ export default function Signup() {
           type="password"
           value={repeatPassword}
           onChange={(e) => {
-            setRepeatPassword(e.target.value)
+            setRepeatPassword(e.target.value);
           }}
         />
         <ButtonContainer>
@@ -100,11 +100,11 @@ export default function Signup() {
           <HollowButton
             title="Login instead"
             onClick={() => {
-              navigate('/login')
+              navigate("/login");
             }}
           />
         </ButtonContainer>
       </InputTitleContainer>
     </WebsiteContainer>
-  )
+  );
 }

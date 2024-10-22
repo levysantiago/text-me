@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState } from "react";
 import {
   ContactName,
   Container,
@@ -7,14 +7,14 @@ import {
   MessagesAmountContainer,
   MessagesAmountText,
   ProfileImage,
-} from './styles'
-import { createAvatar } from 'lib/create-avatar'
+} from "./styles";
+import { createAvatar } from "lib/create-avatar";
 
 interface IMessageItemProps {
-  contactName: string
-  messageContent: string
-  unseenMessagesAmount?: number
-  onClick?: () => void
+  contactName: string;
+  messageContent: string;
+  unseenMessagesAmount?: number;
+  onClick?: () => void;
 }
 
 export function MessageItem({
@@ -23,14 +23,14 @@ export function MessageItem({
   messageContent,
   unseenMessagesAmount,
 }: IMessageItemProps) {
-  const [avatar] = useState(createAvatar(contactName))
+  const [avatar] = useState(createAvatar(contactName));
 
   return (
     <Container type="button" onClick={onClick}>
       <ProfileImage src={avatar} alt="avatar" />
       <ContentContainer>
         <ContactName>{contactName}</ContactName>
-        <div style={{ display: 'flex', flex: '2' }}>
+        <div style={{ display: "flex", flex: "2" }}>
           <MessagePreview>{messageContent}</MessagePreview>
         </div>
       </ContentContainer>
@@ -41,5 +41,5 @@ export function MessageItem({
         </MessagesAmountContainer>
       ) : null}
     </Container>
-  )
+  );
 }

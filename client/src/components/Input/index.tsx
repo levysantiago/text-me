@@ -1,5 +1,5 @@
-import { DetailedHTMLProps, InputHTMLAttributes } from 'react'
-import { InputContainer, InputItem } from './styles'
+import { DetailedHTMLProps, InputHTMLAttributes } from "react";
+import { InputContainer, InputItem } from "./styles";
 
 interface IInputProps
   extends DetailedHTMLProps<
@@ -8,7 +8,7 @@ interface IInputProps
     // eslint-disable-next-line no-undef
     HTMLInputElement
   > {
-  placeholder?: string
+  placeholder?: string;
 }
 
 export function Input({ placeholder, ...inputProps }: IInputProps) {
@@ -16,5 +16,5 @@ export function Input({ placeholder, ...inputProps }: IInputProps) {
     <InputContainer>
       <InputItem placeholder={placeholder} {...inputProps} />
     </InputContainer>
-  )
+  );
 }

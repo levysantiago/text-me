@@ -1,15 +1,15 @@
 /* eslint-disable no-undef */
-import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react'
-import { ButtonContainer, Title } from './styles'
+import { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
+import { ButtonContainer, Title } from "./styles";
 
 interface IHollowButtonProps
   extends DetailedHTMLProps<
     ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   > {
-  title: string
-  backgroundColor?: string
-  titleColor?: string
+  title: string;
+  backgroundColor?: string;
+  titleColor?: string;
 }
 
 export function HollowButton({ title, ...buttonProps }: IHollowButtonProps) {
@@ -17,5 +17,5 @@ export function HollowButton({ title, ...buttonProps }: IHollowButtonProps) {
     <ButtonContainer {...buttonProps}>
       <Title>{title}</Title>
     </ButtonContainer>
-  )
+  );
 }
