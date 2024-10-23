@@ -16,18 +16,32 @@ Here is a demo of how to talk with the AI assistant.
 <img src="https://github.com/levysantiago/text-me/blob/main/assets/textme_demo_openai.gif" alt="TextMe application OpenAI Demo" width="700px">
 </div>
 
-## Main Pages
+## TextMe Screenshots
 
 <div align="center" style="display: flex;flex-direction: row; width:100%;">
-  <div align="center" style="display: flex;flex-direction: row;">
-    <p>SIGNUP</p>
+  <a align="center" style="display: flex;flex-direction: column;">
     <img src="https://github.com/levysantiago/text-me/blob/main/assets/signup.png" alt="TextMe application Demo" width="300px">
-  </div>
+  </a>
   
-  <div align="center" style="display: flex;flex-direction: row;">
-    <p>LOGIN</p>
+  <a align="center" style="display: flex;flex-direction: column;">
     <img src="https://github.com/levysantiago/text-me/blob/main/assets/login.png" alt="TextMe application Demo" width="300px">
-  </div>
+  </a>
+
+  <a align="center" style="display: flex;flex-direction: column;">
+    <img src="https://github.com/levysantiago/text-me/blob/main/assets/messages.png" alt="TextMe application Demo" width="300px">
+  </a>
+
+  <a align="center" style="display: flex;flex-direction: column;">
+    <img src="https://github.com/levysantiago/text-me/blob/main/assets/add-friend.png" alt="TextMe application Demo" width="300px">
+  </a>
+
+  <a align="center" style="display: flex;flex-direction: column;">
+    <img src="https://github.com/levysantiago/text-me/blob/main/assets/chat.png" alt="TextMe application Demo" width="300px">
+  </a>
+
+  <a align="center" style="display: flex;flex-direction: column;">
+    <img src="https://github.com/levysantiago/text-me/blob/main/assets/chat2.png" alt="TextMe application Demo" width="300px">
+  </a>
 </div>
 
 ## Technologies used
