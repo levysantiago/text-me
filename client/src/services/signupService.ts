@@ -13,7 +13,7 @@ export const signupService = async ({
 }: ISignupServiceProps): Promise<void> => {
   // Executing sign in route
   const response = await server.post("/user", { name, email, password });
-  if (response.status !== 200) {
+  if (response.status !== 201) {
     throw new Error("Failed to sign in");
   }
 };
