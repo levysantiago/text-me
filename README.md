@@ -2,8 +2,32 @@
 
 The TextMe is a messaging chat application that allows texting with your friends and also with a AI assistant.
 
+## Registry and Messaging
+Here is a demo from Signing up to texting a friend.
+
 <div align="center" style="display: flex;">
 <img src="https://github.com/levysantiago/text-me/blob/main/assets/textme_demo_chat.gif" alt="TextMe application Demo" width="700px">
+</div>
+
+## OpenAI Assistant
+Here is a demo of how to talk with the AI assistant.
+
+<div align="center" style="display: flex;">
+<img src="https://github.com/levysantiago/text-me/blob/main/assets/textme_demo_openai.gif" alt="TextMe application OpenAI Demo" width="700px">
+</div>
+
+## Main Pages
+
+<div align="center" style="display: flex;flex-direction: row; width:100%;">
+  <div align="center" style="display: flex;flex-direction: row;">
+    <p>SIGNUP</p>
+    <img src="https://github.com/levysantiago/text-me/blob/main/assets/signup.png" alt="TextMe application Demo" width="300px">
+  </div>
+  
+  <div align="center" style="display: flex;flex-direction: row;">
+    <p>LOGIN</p>
+    <img src="https://github.com/levysantiago/text-me/blob/main/assets/login.png" alt="TextMe application Demo" width="300px">
+  </div>
 </div>
 
 ## Technologies used
