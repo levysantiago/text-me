@@ -1,13 +1,13 @@
 /* eslint-disable no-undef */
-import { ButtonHTMLAttributes, DetailedHTMLProps } from 'react'
-import { ButtonContainer, Title } from './styles'
+import { ButtonHTMLAttributes, DetailedHTMLProps } from "react";
+import { ButtonContainer, Title } from "./styles";
 
 interface IDefaultButtonProps
   extends DetailedHTMLProps<
     ButtonHTMLAttributes<HTMLButtonElement>,
     HTMLButtonElement
   > {
-  title: string
+  title: string;
 }
 
 export function DefaultButton({ title, ...buttonProps }: IDefaultButtonProps) {
@@ -15,5 +15,5 @@ export function DefaultButton({ title, ...buttonProps }: IDefaultButtonProps) {
     <ButtonContainer {...buttonProps}>
       <Title>{title}</Title>
     </ButtonContainer>
-  )
+  );
 }

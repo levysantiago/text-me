@@ -3,7 +3,7 @@
 The TextMe is a messaging chat application that allows texting with your friends and also with a AI assistant.
 
 <div align="center" style="display: flex;">
-<img src="https://github.com/levysantiago/text-me/blob/main/assets/demo.gif" alt="TextMe application Demo" width="700px">
+<img src="https://github.com/levysantiago/text-me/blob/main/assets/textme_demo_chat.gif" alt="TextMe application Demo" width="700px">
 </div>
 
 ## Technologies used

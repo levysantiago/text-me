@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import styled from "@emotion/styled";
 
 export const Container = styled.button`
   position: relative;
@@ -15,21 +15,21 @@ export const Container = styled.button`
   &:hover {
     background-color: #303540;
   }
-`
+`;
 
 export const ProfileImage = styled.img`
   width: 30px;
   height: 30px;
   /* background-color: #000; */
   border-radius: 100%;
-`
+`;
 
 export const ProfileImageDefault = styled.div`
   width: 30px;
   height: 30px;
   background-color: #000;
   border-radius: 100%;
-`
+`;
 
 export const ContentContainer = styled.div`
   width: 100%;
@@ -37,14 +37,14 @@ export const ContentContainer = styled.div`
   flex-direction: column;
   gap: 5px;
   flex: 1;
-`
+`;
 
 export const ContactName = styled.span`
   font-family: Roboto, sans-serif;
   font-weight: 500;
   font-size: 12px;
   color: #fafafa;
-`
+`;
 
 export const MessagePreview = styled.span`
   font-family: Roboto, sans-serif;
@@ -56,14 +56,14 @@ export const MessagePreview = styled.span`
   white-space: nowrap;
   overflow: hidden;
   width: 200px;
-`
+`;
 
 export const MessagesAmountText = styled.span`
   font-family: Roboto, sans-serif;
   font-weight: 400;
   font-size: 10px;
   color: #fafafa;
-`
+`;
 
 export const MessagesAmountContainer = styled.div`
   position: absolute;
@@ -77,4 +77,4 @@ export const MessagesAmountContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-`
+`;

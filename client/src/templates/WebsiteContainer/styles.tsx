@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import styled from "@emotion/styled";
 
 export const Container = styled.div`
   display: flex;
@@ -6,7 +6,7 @@ export const Container = styled.div`
   align-items: center;
   position: absolute;
   inset: 0px;
-`
+`;
 
 export const Main = styled.main`
   width: 350px;
@@ -21,4 +21,4 @@ export const Main = styled.main`
   @media (max-width: 350px) {
     width: 100%;
   }
-`
+`;
