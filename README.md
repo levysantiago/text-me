@@ -2,8 +2,46 @@
 
 The TextMe is a messaging chat application that allows texting with your friends and also with a AI assistant.
 
+## Registry and Messaging
+Here is a demo from Signing up to texting a friend.
+
 <div align="center" style="display: flex;">
 <img src="https://github.com/levysantiago/text-me/blob/main/assets/textme_demo_chat.gif" alt="TextMe application Demo" width="700px">
+</div>
+
+## OpenAI Assistant
+Here is a demo of how to talk with the AI assistant.
+
+<div align="center" style="display: flex;">
+<img src="https://github.com/levysantiago/text-me/blob/main/assets/textme_demo_openai.gif" alt="TextMe application OpenAI Demo" width="700px">
+</div>
+
+## TextMe Screenshots
+
+<div align="center" style="display: flex;flex-direction: row; width:100%;">
+  <a align="center" style="display: flex;flex-direction: column;">
+    <img src="https://github.com/levysantiago/text-me/blob/main/assets/signup.png" alt="TextMe application Demo" width="300px">
+  </a>
+  
+  <a align="center" style="display: flex;flex-direction: column;">
+    <img src="https://github.com/levysantiago/text-me/blob/main/assets/login.png" alt="TextMe application Demo" width="300px">
+  </a>
+
+  <a align="center" style="display: flex;flex-direction: column;">
+    <img src="https://github.com/levysantiago/text-me/blob/main/assets/messages.png" alt="TextMe application Demo" width="300px">
+  </a>
+
+  <a align="center" style="display: flex;flex-direction: column;">
+    <img src="https://github.com/levysantiago/text-me/blob/main/assets/add-friend.png" alt="TextMe application Demo" width="300px">
+  </a>
+
+  <a align="center" style="display: flex;flex-direction: column;">
+    <img src="https://github.com/levysantiago/text-me/blob/main/assets/chat.png" alt="TextMe application Demo" width="300px">
+  </a>
+
+  <a align="center" style="display: flex;flex-direction: column;">
+    <img src="https://github.com/levysantiago/text-me/blob/main/assets/chat2.png" alt="TextMe application Demo" width="300px">
+  </a>
 </div>
 
 ## Technologies used
