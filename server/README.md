@@ -26,7 +26,7 @@ This is the server side of TextMe application. It was build in TypeScript and Ne
 - **Prisma:** ORM to manage communication with Database
 - **PostgreSQL:** Database to store users and messages data.
 - **Swagger:** For HTTP routes documentation (`/docs`).
-- **Postman:** For HTTP and WebSocket [routes documentation](https://levysdev.postman.co/workspace/TextMe~f2fdf013-d5e6-4438-92a2-de2d81d93202/overview).
+- **Postman:** For HTTP and WebSocket [routes documentation](https://www.postman.com/levysdev/workspace/textme).
 
 # Getting started
 
@@ -175,7 +175,7 @@ docker compose -p group_name up -d
 
 After running the server you will be able to see the HTTP API Swagger documentation on `http://localhost:3333/docs`.
 
-You can also read and interact with the HTTP and WebSocket routes on [Postman workspace](https://levysdev.postman.co/workspace/TextMe~f2fdf013-d5e6-4438-92a2-de2d81d93202/overview).
+You can also read and interact with the HTTP and WebSocket routes on [Postman workspace](https://www.postman.com/levysdev/workspace/textme).
 
 
 # Links
